@@ -1,0 +1,66 @@
+{
+  "nodes": {
+    "flake-skills": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1777236675,
+        "narHash": "sha256-z9ujFomZNhPfVCy0UTGz7H4424H5FOg7bkG/uaENQsU=",
+        "owner": "nhooey",
+        "repo": "flake-skills",
+        "rev": "71a239972a5098e4c6d42edb64ded47692549fea",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nhooey",
+        "repo": "flake-skills",
+        "type": "github"
+      }
+    },
+    "humanizer-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1775020197,
+        "narHash": "sha256-3yO13MKUK/zF36Sq+CACMM401BhtmYz5cZmC5FX4VQw=",
+        "owner": "blader",
+        "repo": "humanizer",
+        "rev": "8b3a17889fbf12bedae20974a3c9f9de746ed754",
+        "type": "github"
+      },
+      "original": {
+        "owner": "blader",
+        "repo": "humanizer",
+        "rev": "8b3a17889fbf12bedae20974a3c9f9de746ed754",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1776877367,
+        "narHash": "sha256-EHq1/OX139R1RvBzOJ0aMRT3xnWyqtHBRUBuO1gFzjI=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "0726a0ecb6d4e08f6adced58726b95db924cef57",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "flake-skills": "flake-skills",
+        "humanizer-src": "humanizer-src",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

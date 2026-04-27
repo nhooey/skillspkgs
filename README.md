@@ -1,121 +1,78 @@
 # skillpkgs
 
-[![Built with Garnix](https://img.shields.io/endpoint?url=https%3A%2F%2Fgarnix.io%2Fapi%2Fbadges%2Fnhooey%2Fskillspkgs&label=Garnix)](https://garnix.io/repo/nhooey/skillspkgs)
+[![Built with Garnix](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fgarnix.io%2Fapi%2Fbadges%2Fnhooey%2Fskillspkgs)](https://garnix.io/repo/nhooey/skillspkgs)
 
-Library and curated collection for packaging [Claude Code Agent Skills](https://docs.claude.com/) as Nix flakes.
+Directory of per-skill flake wrappers around third-party [Claude Code Agent Skills](https://docs.claude.com/) hosted in upstream repositories that don't ship Nix flakes themselves.
 
-## Quick start
+Each subdirectory under `pkgs/` is a thin wrapper that:
 
-Initialise a new skills repo from the bundled template:
+- pins an upstream repo by `(owner, rev, hash)`,
+- delegates the actual skill build + install/uninstall/preview/reap apps to [`nhooey/flake-skills`](https://github.com/nhooey/flake-skills) via `lib.mkSkillFlake`,
+- can be installed independently as a standalone flake, no aggregation step required.
+
+For first-party skill content (skills you author yourself), use [`nhooey/skills-nix`](https://github.com/nhooey/skills-nix) as a reference, or `nix flake init -t github:nhooey/skillspkgs` to scaffold a new first-party-skills repo using `flake-skills.lib.mkAllSkillsFlake`. **This** repo is intentionally for wrappers only.
+
+## Quick start — install one skill
 
 ```bash
-nix flake init -t github:nhooey/skillspkgs
+nix run github:nhooey/skillspkgs?dir=pkgs/humanizer#install
 ```
 
-You get a 10-line `flake.nix`, an `skills/example-skill/` placeholder, and a README:
+That symlinks the skill into `~/.claude/skills/humanizer/`, registers a per-user GC root so the store path won't be garbage-collected, and writes an entry into `~/.claude/skills/.flake-skills-lock.json`. Other apps available per skill (from `flake-skills`):
+
+```bash
+nix run github:nhooey/skillspkgs?dir=pkgs/humanizer            # preview (read-only, default)
+nix run github:nhooey/skillspkgs?dir=pkgs/humanizer#install    # install (symlink + GC root)
+nix run github:nhooey/skillspkgs?dir=pkgs/humanizer#install -- --profile  # via nix profile
+nix run github:nhooey/skillspkgs?dir=pkgs/humanizer#uninstall  # remove
+nix run github:nhooey/skillspkgs?dir=pkgs/humanizer#reap       # clean up dead managed entries
+nix build github:nhooey/skillspkgs?dir=pkgs/humanizer          # produce ./result
+```
+
+## Quick start — declarative install via home-manager
 
 ```nix
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     skillpkgs.url = "github:nhooey/skillspkgs";
+    humanizer.url = "github:nhooey/skillspkgs?dir=pkgs/humanizer";
   };
-  outputs = inputs: inputs.skillpkgs.lib.mkSkillsFlake {
-    inherit inputs;
-    src = ./.;
-  };
-}
-```
-
-Drop your skills under `./skills/<name>/SKILL.md`, then `nix build` and
-`nix run .#install` to copy them into `~/.claude/skills`.
-
-## What this is
-
-skillpkgs is shaped like a tiny `nixpkgs`: it ships both a **library** for
-turning a directory of Agent Skills into a Nix flake, and a **collection**
-of wrappers around third-party skills hosted upstream.
-
-- **`lib/`** — `mkSkill`, `mkSkillsFlake`, `discoverSkills`. Used by your
-  repo and by skillpkgs itself.
-- **`pkgs/`** — wrappers for third-party skills. Each wrapper vendors only
-  metadata (URL + rev + sha256), not source.
-- **`modules/`** — home-manager and (stub) NixOS modules.
-- **`templates/`** — the `nix flake init` starting point.
-- **`checks/`** — the SKILL.md frontmatter validator.
-
-## Using the library
-
-```nix
-{
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    skillpkgs.url = "github:nhooey/skillspkgs";
-  };
-  outputs = inputs: inputs.skillpkgs.lib.mkSkillsFlake {
-    inherit inputs;
-    src = ./.;
+  outputs = { skillpkgs, humanizer, ... }: {
+    homeConfigurations.<name> = home-manager.lib.homeManagerConfiguration {
+      modules = [
+        skillpkgs.homeManagerModules.default
+        ({ pkgs, ... }: {
+          programs.agent-skills = {
+            enable = true;
+            skills = [
+              humanizer.packages.${pkgs.system}.default
+            ];
+          };
+        })
+      ];
+    };
   };
 }
 ```
 
-This auto-discovers every folder containing a `SKILL.md` under `./skills/`,
-builds them, and exposes:
+The home-manager module symlinks every skill listed in `programs.agent-skills.skills` into `programs.agent-skills.target` (default `~/.claude/skills`).
 
-- `packages.<system>.<skill-name>` — one derivation per skill.
-- `packages.<system>.default` — `symlinkJoin` of the whole set.
-- `apps.<system>.install` — copy the bundle into `~/.claude/skills` (or `$1`).
-- `checks.<system>.skills-valid` — runs the SKILL.md validator.
-- `homeManagerModules.default` — see below.
+## What this repo is for
 
-A skill folder can ship an optional `skill.nix` sidecar to declare runtime
-dependencies for any helper scripts in `scripts/`:
+A wrapper layer for **upstream** skill projects whose authors don't (yet) ship a flake themselves and won't accept a Nix-related PR. The wrappers vendor only metadata — `(github:<owner>/<repo>, rev, hash)` — and `flake-skills` does the actual derivation work.
 
-```nix
-{ pkgs, ... }:
-{
-  runtimeInputs = [ pkgs.jq pkgs.curl ];
-}
-```
+PRs that fall outside that charter get closed. See [`pkgs/README.md`](./pkgs/README.md).
 
-## Using the collection
+## How it relates to other repos
 
-```nix
-inputs.skillpkgs.url = "github:nhooey/skillspkgs";
-# ...
-environment.systemPackages = [ inputs.skillpkgs.packages.${system}.default ];
-```
+- **[`nhooey/flake-skills`](https://github.com/nhooey/flake-skills)** — the library. Provides `mkSkillFlake` and `mkAllSkillsFlake`. Both `skillspkgs` (this repo) and `skills-nix` consume it.
+- **[`nhooey/skills-nix`](https://github.com/nhooey/skills-nix)** — first-party skill content the author maintains. Uses `mkAllSkillsFlake`.
+- **`nhooey/skillspkgs`** (this repo) — third-party wrappers. Each `pkgs/<name>/flake.nix` calls `mkSkillFlake` with `src` pointing at a `fetchFromGitHub` flake input.
 
-Or pull a single wrapper: `inputs.skillpkgs.packages.${system}.<skill-name>`.
+## Adding a wrapper
 
-## Adding a third-party skill to the collection
-
-See [`pkgs/README.md`](./pkgs/README.md) for the contributor checklist
-(folder layout, what `default.nix` should look like, the metadata-only
-vendoring rule, and how to compute the sha256).
-
-## Why copy, not symlink
-
-Claude Code reads skill files directly from `~/.claude/skills/<name>/` and
-does not follow symlinks across the skill boundary — symlinked installs
-surface as missing or unreadable skills. So both `apps.install` and the
-home-manager activation copy the bundle into place rather than symlinking
-it. The cost is a few hundred kilobytes per skill, duplicated across
-generations. The benefit is that skills actually load.
+See [`pkgs/README.md`](./pkgs/README.md). The template is a ~20-line `flake.nix` per wrapper.
 
 ## CI
 
-[Garnix](https://garnix.io) is the gating CI for this repo. Configuration
-lives in [`garnix.yaml`](./garnix.yaml) and currently builds:
-
-- `packages.{x86_64,aarch64}-linux.*` — every wrapper plus the bundled `default`.
-- `checks.{x86_64,aarch64}-linux.*` — the SKILL.md validator against `examples/basic`.
-- `devShells.{x86_64,aarch64}-linux.default` — keeps the contributor shell evaluable.
-- `homeManagerModules.default` — eval-only, catches type errors in the module.
-
-Garnix has no Darwin builders, so Darwin attrs are deliberately excluded;
-they still evaluate locally via `nix flake check` on a Mac.
-
-To enable Garnix on a fork, install the [Garnix GitHub app](https://garnix.io)
-on the repository and (recommended) add a branch protection rule on `main`
-requiring the `garnix` status check to pass before merge.
+[Garnix](https://garnix.io) builds the root flake's `devShells.default` and evaluates `homeManagerModules.default` on `x86_64-linux` and `aarch64-linux`. Per-skill flakes are not currently covered by CI here — they'd need a separate Garnix configuration per `?dir=...` URL. Contributions welcome.
