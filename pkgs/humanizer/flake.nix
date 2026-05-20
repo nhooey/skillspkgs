@@ -6,7 +6,7 @@
     flake-skills.url = "github:nhooey/flake-skills";
     flake-skills.inputs.nixpkgs.follows = "nixpkgs";
     humanizer-src = {
-      url = "github:blader/humanizer/8b3a17889fbf12bedae20974a3c9f9de746ed754";
+      url = "github:blader/humanizer";
       flake = false;
     };
   };

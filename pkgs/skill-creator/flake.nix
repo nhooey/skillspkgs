@@ -6,7 +6,7 @@
     flake-skills.url = "github:nhooey/flake-skills";
     flake-skills.inputs.nixpkgs.follows = "nixpkgs";
     anthropics-skills-src = {
-      url = "github:anthropics/skills/5128e1865d670f5d6c9cef000e6dfc4e951fb5b9";
+      url = "github:anthropics/skills";
       flake = false;
     };
   };
