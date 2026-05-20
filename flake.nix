@@ -19,6 +19,18 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
+    # Library used to build the inlined third-party skills (humanizer,
+    # skill-creator) below. The local sub-flakes under `pkgs/*/flake.nix`
+    # remain on disk and stay consumable standalone via
+    # `github:nhooey/skillspkgs?dir=pkgs/<name>`, but we no longer
+    # reference them as `path:` inputs from this top-level flake —
+    # Garnix's evaluator rejects `path:` flake inputs when this flake
+    # is consumed transitively (e.g. from nur-packages).
+    flake-skills = {
+      url = "github:nhooey/flake-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nix-gstack = {
       url = "github:nhooey/nix-gstack";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -34,22 +46,40 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    humanizer = {
-      url = "path:./pkgs/humanizer";
-      inputs.nixpkgs.follows = "nixpkgs";
+    # Third-party skill sources, fetched directly so we can build them
+    # inline below without going through a `path:` sub-flake.
+    humanizer-src = {
+      url = "github:blader/humanizer";
+      flake = false;
     };
 
-    skill-creator = {
-      url = "path:./pkgs/skill-creator";
-      inputs.nixpkgs.follows = "nixpkgs";
+    anthropics-skills-src = {
+      url = "github:anthropics/skills";
+      flake = false;
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+      flake-skills,
+      humanizer-src,
+      anthropics-skills-src,
+      ...
+    }@inputs:
     let
       # Inputs that power this flake itself, not downstream package repos.
       # Everything else in `inputs` is treated as an aggregated repo.
-      infrastructureInputs = [ "self" "nixpkgs" "flake-utils" ];
+      infrastructureInputs = [
+        "self"
+        "nixpkgs"
+        "flake-utils"
+        "flake-skills"
+        "humanizer-src"
+        "anthropics-skills-src"
+      ];
 
       aggregatedInputs = builtins.removeAttrs inputs infrastructureInputs;
 
@@ -74,6 +104,36 @@
           )
           { }
           (builtins.attrNames aggregatedInputs);
+
+      # Inlined third-party skills. Equivalent to the sub-flakes under
+      # `pkgs/humanizer/` and `pkgs/skill-creator/` (which remain on disk
+      # for standalone `?dir=` consumption) but built directly here so
+      # they don't need to be wired as `path:` flake inputs.
+      humanizerFor =
+        system:
+        (flake-skills.lib.mkSkillFlake {
+          inherit nixpkgs;
+          skillName = "humanizer";
+          packageName = "agent-skill-humanizer";
+          src = humanizer-src;
+        }).packages.${system}.default;
+
+      skillCreatorFor =
+        system:
+        (flake-skills.lib.mkSkillFlake {
+          inherit nixpkgs;
+          skillName = "skill-creator";
+          packageName = "agent-skill-creator";
+          src = "${anthropics-skills-src}/skills/skill-creator";
+          # SKILL.md references content under these subdirs; mkSkillFlake
+          # ships only SKILL.md / references / scripts by default, so opt
+          # them in explicitly.
+          extraDirs = [
+            "agents"
+            "assets"
+            "eval-viewer"
+          ];
+        }).packages.${system}.default;
     in
     {
       homeManagerModules.default = import ./lib/home-manager-module.nix;
@@ -91,7 +151,11 @@
           packages = [ pkgs.nixpkgs-fmt pkgs.python3 pkgs.jq ];
         };
 
-        packages = aggregatedFor "packages" system;
+        packages = (aggregatedFor "packages" system) // {
+          agent-skill-humanizer = humanizerFor system;
+          agent-skill-creator = skillCreatorFor system;
+        };
+
         legacyPackages = aggregatedFor "legacyPackages" system;
       });
 }

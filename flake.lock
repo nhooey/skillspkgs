@@ -61,16 +61,15 @@
     "flake-skills": {
       "inputs": {
         "nixpkgs": [
-          "humanizer",
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1779249471,
-        "narHash": "sha256-QQYRo018q0vYJXgXRTqpAfPclvrJ8cN0Zu1RnHjAS4E=",
+        "lastModified": 1779286789,
+        "narHash": "sha256-fZet5n1mTOTR9L2dOX088jrhrOfBVdulZkMb0YvygO4=",
         "owner": "nhooey",
         "repo": "flake-skills",
-        "rev": "26b88a8e4af31a0867bdd815eca672d55c06708d",
+        "rev": "4d425104d763f1893a906dfbb4e86daab1c941ec",
         "type": "github"
       },
       "original": {
@@ -80,27 +79,6 @@
       }
     },
     "flake-skills_2": {
-      "inputs": {
-        "nixpkgs": [
-          "skill-creator",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1779249471,
-        "narHash": "sha256-QQYRo018q0vYJXgXRTqpAfPclvrJ8cN0Zu1RnHjAS4E=",
-        "owner": "nhooey",
-        "repo": "flake-skills",
-        "rev": "26b88a8e4af31a0867bdd815eca672d55c06708d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nhooey",
-        "repo": "flake-skills",
-        "type": "github"
-      }
-    },
-    "flake-skills_3": {
       "inputs": {
         "nixpkgs": [
           "skills-git",
@@ -121,7 +99,7 @@
         "type": "github"
       }
     },
-    "flake-skills_4": {
+    "flake-skills_3": {
       "inputs": {
         "nixpkgs": [
           "skills-nix",
@@ -159,24 +137,6 @@
         "repo": "flake-utils",
         "type": "github"
       }
-    },
-    "humanizer": {
-      "inputs": {
-        "flake-skills": "flake-skills",
-        "humanizer-src": "humanizer-src",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "path": "./pkgs/humanizer",
-        "type": "path"
-      },
-      "original": {
-        "path": "./pkgs/humanizer",
-        "type": "path"
-      },
-      "parent": []
     },
     "humanizer-src": {
       "flake": false,
@@ -236,36 +196,19 @@
     },
     "root": {
       "inputs": {
+        "anthropics-skills-src": "anthropics-skills-src",
+        "flake-skills": "flake-skills",
         "flake-utils": "flake-utils",
-        "humanizer": "humanizer",
+        "humanizer-src": "humanizer-src",
         "nix-gstack": "nix-gstack",
         "nixpkgs": "nixpkgs",
-        "skill-creator": "skill-creator",
         "skills-git": "skills-git",
         "skills-nix": "skills-nix"
       }
     },
-    "skill-creator": {
-      "inputs": {
-        "anthropics-skills-src": "anthropics-skills-src",
-        "flake-skills": "flake-skills_2",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "path": "./pkgs/skill-creator",
-        "type": "path"
-      },
-      "original": {
-        "path": "./pkgs/skill-creator",
-        "type": "path"
-      },
-      "parent": []
-    },
     "skills-git": {
       "inputs": {
-        "flake-skills": "flake-skills_3",
+        "flake-skills": "flake-skills_2",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -286,17 +229,17 @@
     },
     "skills-nix": {
       "inputs": {
-        "flake-skills": "flake-skills_4",
+        "flake-skills": "flake-skills_3",
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1779287619,
-        "narHash": "sha256-gfpM3A7tsr7bpeoHU8Bx8GECKjVXFoKQV/M7fXgQ2Rg=",
+        "lastModified": 1779295308,
+        "narHash": "sha256-WdnOhpglQtPbczv/I6r5ilArTZ6fgLA8AijtY2FmU6I=",
         "owner": "nhooey",
         "repo": "skills-nix",
-        "rev": "d422ae3b8a6a772a09f87d0cc41f4e57b8f32a9a",
+        "rev": "2602e6e9f5e58c684edc58d48ec73d10b31b522f",
         "type": "github"
       },
       "original": {
