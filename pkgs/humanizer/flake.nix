@@ -15,6 +15,7 @@
     flake-skills.lib.mkSkillFlake {
       inherit nixpkgs;
       skillName = "humanizer";
+      packageName = "agent-skill-humanizer";
       src = humanizer-src;
     };
 }

@@ -15,6 +15,7 @@
     flake-skills.lib.mkSkillFlake {
       inherit nixpkgs;
       skillName = "skill-creator";
+      packageName = "agent-skill-creator";
       src = "${anthropics-skills-src}/skills/skill-creator";
       # SKILL.md references content under these subdirs; mkSkillFlake
       # ships only SKILL.md/references/scripts by default, so opt them

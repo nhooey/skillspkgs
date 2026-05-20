@@ -33,6 +33,16 @@
       url = "github:nhooey/skills-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    humanizer = {
+      url = "path:./pkgs/humanizer";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    skill-creator = {
+      url = "path:./pkgs/skill-creator";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }@inputs:
