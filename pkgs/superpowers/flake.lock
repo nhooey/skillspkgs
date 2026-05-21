@@ -1,0 +1,65 @@
+{
+  "nodes": {
+    "flake-skills": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1779335298,
+        "narHash": "sha256-yBcoPVBKXoONDPX9J49WWGjN6e9D1+/MEaexLyJXKpQ=",
+        "owner": "nhooey",
+        "repo": "flake-skills",
+        "rev": "2a9e837af11d1e22ff9ddaec6c33dc3ba7638dc5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nhooey",
+        "repo": "flake-skills",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1778869304,
+        "narHash": "sha256-30sZNZoA1cqF5JNO9fVX+wgiQYjB7HJqqJ4ztCDeBZE=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "d233902339c02a9c334e7e593de68855ad26c4cb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "flake-skills": "flake-skills",
+        "nixpkgs": "nixpkgs",
+        "superpowers-src": "superpowers-src"
+      }
+    },
+    "superpowers-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1777932301,
+        "narHash": "sha256-3E3rO6hR87JUfS3XV1Eaoz6SDWOftleWvN9UPNFEMjw=",
+        "owner": "obra",
+        "repo": "superpowers",
+        "rev": "f2cbfbefebbfef77321e4c9abc9e949826bea9d7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "obra",
+        "repo": "superpowers",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
