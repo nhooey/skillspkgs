@@ -36,14 +36,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # `flake-skills.follows` keeps these sub-flakes on the same flake-skills
+    # rev as skillspkgs itself. Without it, consumers (e.g. nur-packages)
+    # see multiple flake-skills nodes in their lock, and the home-manager
+    # activation module (loaded from one rev) and the skill derivations
+    # (built under another) can drift on their `passthru` contract — e.g.
+    # `flakeSkillName missing` at `darwin-rebuild switch` time.
     skills-git = {
       url = "github:nhooey/skills-git";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-skills.follows = "flake-skills";
     };
 
     skills-nix = {
       url = "github:nhooey/skills-nix";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-skills.follows = "flake-skills";
     };
 
     # Third-party skill sources, fetched directly so we can build them
