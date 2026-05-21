@@ -123,11 +123,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1779252681,
-        "narHash": "sha256-KpLGBeC0SPw46Qit1GKJxoTCdhZoACU60c6ZGyrHGgQ=",
+        "lastModified": 1779376585,
+        "narHash": "sha256-qYRgyQICFdxwDoHG3dsCZsYWRHbC+RYJ3KmkqztVPOA=",
         "owner": "nhooey",
         "repo": "nix-gstack",
-        "rev": "a47bd25b624e17c0434b0aeb487ba29deda3f42b",
+        "rev": "e5b3522dddd8996c1b991a0c72ad73c7982396fd",
         "type": "github"
       },
       "original": {
