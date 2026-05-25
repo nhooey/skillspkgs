@@ -197,11 +197,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779347799,
-        "narHash": "sha256-z1pBFeF48CJ55Xwz/btXzUWm8cI/JxtQCplpVeR9rLk=",
+        "lastModified": 1779641415,
+        "narHash": "sha256-9dLzIn3I7heOGHAEhVTQ6SzIUwMRTklkeFZduu7IOEI=",
         "owner": "nhooey",
         "repo": "skills-nix",
-        "rev": "88daffeda89245f99a1bc1550e83015c7455ae8f",
+        "rev": "d974354ae78a4ed704b1fc38da107e72d52ad618",
         "type": "github"
       },
       "original": {
