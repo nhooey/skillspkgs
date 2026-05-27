@@ -131,7 +131,7 @@
         (flake-skills.lib.mkSkillFlake {
           inherit nixpkgs;
           skillName = "skill-creator";
-          packageName = "agent-skill-creator";
+          packageName = "agent-skill-skill-creator";
           src = "${anthropics-skills-src}/skills/skill-creator";
           # SKILL.md references content under these subdirs; mkSkillFlake
           # ships only SKILL.md / references / scripts by default, so opt
@@ -161,7 +161,7 @@
 
         packages = (aggregatedFor "packages" system) // {
           agent-skill-humanizer = humanizerFor system;
-          agent-skill-creator = skillCreatorFor system;
+          agent-skill-skill-creator = skillCreatorFor system;
         };
 
         legacyPackages = aggregatedFor "legacyPackages" system;
