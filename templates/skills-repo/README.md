@@ -13,23 +13,25 @@ A first-party Claude Code skills repo built with [`nhooey/flake-skills`](https:/
    ```
 3. Preview what will be installed (read-only):
    ```
-   nix run .
+   nix run . -- --scope=personal
    ```
 4. Install into `~/.claude/skills/` (symlinks + per-user GC roots):
    ```
-   nix run .#install
+   nix run .#install -- --scope=personal
    ```
 
 Other apps:
 
 ```
-nix run .#install -- --profile   # install via `nix profile install`
-nix run .#uninstall              # remove all skills
-nix run .#uninstall -- <name>    # remove one
-nix run .#reap                   # remove broken managed entries
-nix run .#reconcile              # install declared set, sweep strays
-nix build .#all                  # symlinkJoin'd derivation for every skill
-nix build .#<skill-name>         # single skill derivation
+nix run .#install   -- --scope=personal           # install into $HOME
+nix run .#install   -- --scope=project            # install at <project>/.claude/skills/
+nix run .#install   -- --scope=custom --root=/p   # install into /p
+nix run .#uninstall -- --scope=personal           # remove all skills
+nix run .#uninstall -- --scope=personal <name>    # remove one
+nix run .#reap      -- --scope=personal           # remove broken managed entries
+nix run .#reconcile -- --scope=personal           # install declared set, sweep strays
+nix build .#all                                   # symlinkJoin'd derivation for every skill
+nix build .#<skill-name>                          # single skill derivation
 ```
 
 ## Home-manager (optional)
@@ -46,4 +48,4 @@ Skills installed via `nix run .#install` already symlink into `~/.claude/skills/
 }
 ```
 
-See [`flake-skills`'s README](https://github.com/nhooey/flake-skills) for the full reference and additional configuration options (`installRoot`, `envVarOverride`, `systems`).
+See [`flake-skills`'s README](https://github.com/nhooey/flake-skills) for the full reference and additional configuration options (`agent`, `systems`, and the install-time `--scope` flag).
