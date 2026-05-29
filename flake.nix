@@ -54,6 +54,12 @@
       inputs.flake-skills.follows = "flake-skills";
     };
 
+    coding-agent-skills = {
+      url = "github:nhooey/coding-agent-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-skills.follows = "flake-skills";
+    };
+
     # Third-party skill sources, fetched directly so we can build them
     # inline below without going through a `path:` sub-flake.
     humanizer-src = {
