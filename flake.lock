@@ -16,6 +16,29 @@
         "type": "github"
       }
     },
+    "coding-agent-skills": {
+      "inputs": {
+        "flake-skills": [
+          "flake-skills"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1779958706,
+        "narHash": "sha256-CvOrDTaRFQ1Dn4xHSqKfYUZOrQTaGS0vFm2Rh5M/0hI=",
+        "owner": "nhooey",
+        "repo": "coding-agent-skills",
+        "rev": "905af46e0a651878e35f1761ac52b5d0887d62b5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nhooey",
+        "repo": "coding-agent-skills",
+        "type": "github"
+      }
+    },
     "devshell": {
       "inputs": {
         "nixpkgs": [
@@ -155,6 +178,7 @@
     "root": {
       "inputs": {
         "anthropics-skills-src": "anthropics-skills-src",
+        "coding-agent-skills": "coding-agent-skills",
         "flake-skills": "flake-skills",
         "flake-utils": "flake-utils",
         "humanizer-src": "humanizer-src",
