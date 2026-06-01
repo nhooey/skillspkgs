@@ -11,7 +11,13 @@
     };
   };
 
-  outputs = { nixpkgs, flake-skills, anthropics-skills-src, ... }:
+  outputs =
+    {
+      nixpkgs,
+      flake-skills,
+      anthropics-skills-src,
+      ...
+    }:
     flake-skills.lib.mkSkillFlake {
       inherit nixpkgs;
       skillName = "skill-creator";
@@ -20,6 +26,10 @@
       # SKILL.md references content under these subdirs; mkSkillFlake
       # ships only SKILL.md/references/scripts by default, so opt them
       # in explicitly via extraDirs.
-      extraDirs = [ "agents" "assets" "eval-viewer" ];
+      extraDirs = [
+        "agents"
+        "assets"
+        "eval-viewer"
+      ];
     };
 }

@@ -2,7 +2,12 @@
 # ~/.claude/skills/. Each skill package is expected to expose
 # share/claude-skills/<name>/ (the layout produced by
 # flake-skills.lib.mkSkillFlake).
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.programs.agent-skills;
 in
@@ -33,17 +38,16 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.activation.installAgentSkills =
-      lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        target=${lib.escapeShellArg cfg.target}
-        run mkdir -p "$target"
-        ${lib.concatMapStringsSep "\n" (skill: ''
-          for skill_dir in ${skill}/share/claude-skills/*; do
-            [ -d "$skill_dir" ] || continue
-            name=$(basename "$skill_dir")
-            run ln -sfn "$skill_dir" "$target/$name"
-          done
-        '') cfg.skills}
-      '';
+    home.activation.installAgentSkills = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      target=${lib.escapeShellArg cfg.target}
+      run mkdir -p "$target"
+      ${lib.concatMapStringsSep "\n" (skill: ''
+        for skill_dir in ${skill}/share/claude-skills/*; do
+          [ -d "$skill_dir" ] || continue
+          name=$(basename "$skill_dir")
+          run ln -sfn "$skill_dir" "$target/$name"
+        done
+      '') cfg.skills}
+    '';
   };
 }
