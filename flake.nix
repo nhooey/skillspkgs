@@ -2,29 +2,31 @@
   description = "skillspkgs — Claude Code skills aggregator across three categories: (1) vendored third-party skills with no upstream flake, (2) first-party nhooey repos that ship their own flake, and (3) curated cross-cutting skill combinations.";
 
   # =====================================================================
-  # Three categories of skill packages (kept structurally separate below)
+  # Three categories of skill packages (each in its own file under ./sources/)
   # =====================================================================
   # 1. VENDORED third-party skills — upstream ships no Nix flake, so we
-  #    package them here from `flake = false` `*-src` inputs, built inline
-  #    (humanizer, skill-creator, superpowers). Per-skill packages land in
-  #    `packages.<sys>` under `agent-skill-<name>`.
+  #    package them here from `flake = false` `*-src` inputs. Canonical build
+  #    logic + pack data live under pkgs/<name>/ (also consumed standalone via
+  #    `?dir=`); sources/vendored.nix assembles them. Per-skill packages land
+  #    in `packages.<sys>` under `agent-skill-<name>`.
   # 2. AGGREGATED first-party repos — they ship their own flake; we merge
-  #    their `packages` / `legacyPackages` in. To add one, drop in a single
-  #    input block: every input not listed in `infrastructureInputs` (in the
-  #    `outputs` let-binding) is treated as an aggregated downstream repo, so
+  #    their `packages` / `legacyPackages` in (sources/aggregated.nix). To add
+  #    one, drop in a single input block: every input not listed in
+  #    `infrastructureInputs` is treated as an aggregated downstream repo, so
   #
   #        nix run github:nhooey/skillspkgs#<name>
   #
   #    works for any package any of your repos exposes. Last-write-wins on
   #    name collisions; rename in the source repo to disambiguate.
   # 3. COMBINATIONS — curated unions of skills already provided by (1)/(2),
-  #    built inline via `mkAggregateSkillsFlake` and exposed under their own
-  #    `combinations.<name>` output, deliberately kept OUT of `packages.<sys>`.
+  #    built inline via `mkAggregateSkillsFlake` (sources/combinations.nix) and
+  #    exposed under their own `combinations.<name>` output, deliberately kept
+  #    OUT of `packages.<sys>`.
   #
-  # Why everything in (1)/(3) is built inline rather than as `path:` /
-  # `?dir=` sub-flake inputs: Garnix's evaluator rejects `path:` flake inputs
-  # when this flake is consumed transitively (e.g. from nur-packages). The
-  # standalone sub-flakes under `pkgs/*/flake.nix` remain on disk for direct
+  # Why the per-category files are plain `import`ed Nix (not `path:` / `?dir=`
+  # sub-flake inputs): Garnix's evaluator rejects `path:` flake inputs when this
+  # flake is consumed transitively (e.g. from nur-packages). The standalone
+  # sub-flakes under `pkgs/*/flake.nix` remain on disk for direct
   # `github:nhooey/skillspkgs?dir=pkgs/<name>` consumption.
   inputs = {
     # ---- infrastructure ----
@@ -108,9 +110,9 @@
     let
       forSystems = nixpkgs.lib.genAttrs (import inputs.systems);
 
-      # ── Category 2: aggregation machinery ──────────────────────────────
       # Inputs that power this flake itself, not downstream package repos.
-      # Everything else in `inputs` is treated as an aggregated repo.
+      # Everything else in `inputs` is an aggregated category-2 repo. Keep in
+      # sync with the input declarations above.
       infrastructureInputs = [
         "self"
         "nixpkgs"
@@ -124,201 +126,25 @@
         "superpowers-src"
       ];
 
-      aggregatedInputs = builtins.removeAttrs inputs infrastructureInputs;
-
-      # Strip `default` before merging so one input's `default` doesn't
-      # silently shadow another's. Single-package flakes that only expose
-      # `default` are promoted to the input's name instead.
-      aggregatorMetaKeys = [ "default" ];
-      stripAggregatorMeta = attrs: builtins.removeAttrs attrs aggregatorMetaKeys;
-
-      aggregatedFor =
-        field: system:
-        nixpkgs.lib.foldl' (
-          acc: name:
-          let
-            attrs = aggregatedInputs.${name}.${field}.${system} or { };
-            named = stripAggregatorMeta attrs;
-            promoted = if attrs ? default && named == { } then { ${name} = attrs.default; } else { };
-          in
-          acc // promoted // named
-        ) { } (builtins.attrNames aggregatedInputs);
-
-      # ── Category 1: vendored third-party skills, built inline ──────────
-      # Equivalent to the sub-flakes under `pkgs/*/flake.nix` (kept on disk
-      # for standalone `?dir=` consumption) but built directly here so they
-      # don't need to be wired as `path:` flake inputs.
-      humanizerFor =
-        system:
-        (flake-skills.lib.mkSkillFlake {
-          inherit nixpkgs;
-          skillName = "humanizer";
-          packageName = "agent-skill-humanizer";
-          src = humanizer-src;
-        }).packages.${system}.default;
-
-      skillCreatorFor =
-        system:
-        (flake-skills.lib.mkSkillFlake {
-          inherit nixpkgs;
-          skillName = "skill-creator";
-          packageName = "agent-skill-skill-creator";
-          src = "${anthropics-skills-src}/skills/skill-creator";
-          # SKILL.md references content under these subdirs; mkSkillFlake
-          # ships only SKILL.md / references / scripts by default, so opt
-          # them in explicitly.
-          extraDirs = [
-            "agents"
-            "assets"
-            "eval-viewer"
-          ];
-        }).packages.${system}.default;
-
-      # superpowers is multi-skill; mirror `pkgs/superpowers/flake.nix`.
-      superpowersBase = flake-skills.lib.mkAllSkillsFlake {
-        inherit nixpkgs;
-        skillsDir = "${superpowers-src}/skills";
-        packagePrefix = "agent-skill-";
+      # The three source categories, each in its own file under ./sources/.
+      # Imported as plain Nix (no `path:` inputs — see the header comment).
+      vendored = import ./sources/vendored.nix {
+        inherit nixpkgs flake-skills forSystems;
+        inherit (inputs) humanizer-src anthropics-skills-src superpowers-src;
       };
-
-      # Named superpowers packs, each a `mkSkillsEnv` (carries
-      # passthru.isFlakeSkillsEnv so the home-manager module expands it back
-      # into per-skill records on activation).
-      superpowersPacks = {
-        agent-skills-superpowers-all = [
-          "brainstorming"
-          "writing-plans"
-          "writing-skills"
-          "executing-plans"
-          "subagent-driven-development"
-          "dispatching-parallel-agents"
-          "using-superpowers"
-          "test-driven-development"
-          "systematic-debugging"
-          "requesting-code-review"
-          "receiving-code-review"
-          "verification-before-completion"
-          "finishing-a-development-branch"
-          "using-git-worktrees"
-        ];
-        # Workflow & planning — what to do before coding.
-        agent-skills-superpowers-workflow = [
-          "brainstorming"
-          "writing-plans"
-          "writing-skills"
-          "executing-plans"
-          "subagent-driven-development"
-          "dispatching-parallel-agents"
-          "using-superpowers"
-        ];
-        # Development & review — how to write and evaluate code.
-        agent-skills-superpowers-review = [
-          "test-driven-development"
-          "systematic-debugging"
-          "requesting-code-review"
-          "receiving-code-review"
-        ];
-        # Finishing & integration — verifying, merging, isolating worktrees.
-        agent-skills-superpowers-integration = [
-          "verification-before-completion"
-          "finishing-a-development-branch"
-          "using-git-worktrees"
-        ];
+      aggregated = import ./sources/aggregated.nix {
+        inherit nixpkgs inputs infrastructureInputs;
       };
-
-      # The 14 individual superpowers skills (drops base's `default` /
-      # `agent-skills-all` aggregate keys via the `agent-skill-` filter).
-      superpowersSkillsFor =
-        system:
-        nixpkgs.lib.filterAttrs (
-          n: _: nixpkgs.lib.hasPrefix "agent-skill-" n
-        ) superpowersBase.packages.${system};
-
-      superpowersPacksFor =
-        system:
-        nixpkgs.lib.mapAttrs (
-          packName: skillNames:
-          flake-skills.lib.mkSkillsEnv {
-            pkgs = nixpkgs.legacyPackages.${system};
-            name = packName;
-            skills = builtins.map (n: superpowersBase.packages.${system}."agent-skill-${n}") skillNames;
-          }
-        ) superpowersPacks;
-
-      # Every vendored package exposed in `packages.<sys>`: the two single
-      # skills + superpowers' 14 skills + superpowers' named packs.
-      vendoredSkillsFor =
-        system:
-        {
-          agent-skill-humanizer = humanizerFor system;
-          agent-skill-skill-creator = skillCreatorFor system;
-        }
-        // superpowersSkillsFor system
-        // superpowersPacksFor system;
-
-      # ── Category 3: cross-cutting combinations ─────────────────────────
-      # The vendored skills above are bare packages; `mkAggregateSkillsFlake`
-      # consumes a source only via `source.packages.<system>`, so wrap each
-      # builder as a synthetic source flake. (skills-nix is a real flake
-      # input and needs no wrapper.)
-      humanizerSource = {
-        packages = forSystems (system: {
-          agent-skill-humanizer = humanizerFor system;
-        });
-      };
-      skillCreatorSource = {
-        packages = forSystems (system: {
-          agent-skill-skill-creator = skillCreatorFor system;
-        });
-      };
-      superpowersSource = {
-        packages = forSystems (system: superpowersSkillsFor system);
-      };
-
-      # The `authoring` combination: skills installed when authoring a skills
-      # repo. Mirrors skills-git/skills-authoring/flake.nix exactly (same four
-      # sources, same cherry-pick + two prefixes), differing only in that
-      # skills-nix is the live aggregated input, the vendored sources are
-      # synthetic (no `?dir=`), and the reconcile-ownership `name` is distinct.
-      authoringAgg = flake-skills.lib.mkAggregateSkillsFlake {
-        inherit nixpkgs;
+      combos = import ./sources/combinations.nix {
+        inherit
+          nixpkgs
+          flake-skills
+          forSystems
+          vendored
+          ;
         systems = import inputs.systems;
-        name = "skillspkgs-authoring";
-        packagePrefix = "agent-skill-";
-        sources = [
-          {
-            source = skills-nix;
-            skills = [
-              "nix-flakes"
-              "nix-garnix-ci"
-            ];
-          }
-          { source = humanizerSource; }
-          {
-            source = skillCreatorSource;
-            prefix = "anthropic";
-          }
-          {
-            source = superpowersSource;
-            prefix = "superpowers";
-          }
-        ];
+        inherit (inputs) skills-nix;
       };
-
-      # A single env package per combination, for home-manager consumers
-      # (`programs.agent-skills.skills = [ ... ]`). Drawn from the aggregate's
-      # already-prefixed package set, since mkSkillsEnv does not re-prefix.
-      authoringEnv =
-        system:
-        flake-skills.lib.mkSkillsEnv {
-          pkgs = nixpkgs.legacyPackages.${system};
-          name = "agent-skills-authoring";
-          skills = builtins.attrValues (
-            nixpkgs.lib.filterAttrs (
-              n: _: nixpkgs.lib.hasPrefix "agent-skill-" n
-            ) authoringAgg.packages.${system}
-          );
-        };
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import inputs.systems;
@@ -339,11 +165,7 @@
         # `reconcileScript` (declarative devShell installer), `apps`
         # (install/uninstall/preview/reap/reconcile), and a single `env`
         # package (for home-manager). Other repos import these directly.
-        combinations.authoring = forSystems (system: {
-          reconcileScript = authoringAgg.reconcileScript system;
-          apps = authoringAgg.apps.${system};
-          env = authoringEnv system;
-        });
+        inherit (combos) combinations;
       };
 
       perSystem =
@@ -353,9 +175,9 @@
         in
         {
           # Categories 2 (aggregated) + 1 (vendored), per-skill packages only.
-          packages = (aggregatedFor "packages" system) // vendoredSkillsFor system;
+          packages = (aggregated.aggregatedFor "packages" system) // vendored.vendoredSkillsFor system;
 
-          legacyPackages = aggregatedFor "legacyPackages" system;
+          legacyPackages = aggregated.aggregatedFor "legacyPackages" system;
 
           devshells.default = {
             name = "skillspkgs";
@@ -367,7 +189,7 @@
             # `nix develop`. Declarative + idempotent (owns only
             # `skillspkgs-authoring`), so re-entry won't clobber other scopes.
             devshell.startup.install-skills.text = ''
-              ${authoringAgg.reconcileScript system}
+              ${combos.reconcileScriptFor system}
             '';
             commands = [
               # dev
