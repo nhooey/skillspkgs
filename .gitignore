@@ -3,3 +3,6 @@
 /.direnv/
 /.envrc.local
 /.worktrees/
+# Skills the devShell reconciles into project scope on `nix develop`
+# (nix-store symlinks, regenerated every entry — never committed).
+/.claude/skills/
