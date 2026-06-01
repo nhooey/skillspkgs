@@ -2,15 +2,20 @@
   description = "skillspkgs — Claude Code skills aggregator across three categories: (1) vendored third-party skills with no upstream flake, (2) first-party nhooey repos that ship their own flake, and (3) curated cross-cutting skill combinations.";
 
   # =====================================================================
-  # Three categories of skill packages (each in its own file under ./sources/)
+  # Three categories of skill packages (each in its own subdir under ./sources/)
   # =====================================================================
+  # Each category lives in ./sources/<cat>/: the root imports that subdir's
+  # `default.nix` (plain Nix), while a sibling flake.{nix,lock} provides a
+  # standalone `?dir=sources/<cat>` face. The vendored/combinations default.nix
+  # auto-discover their sibling named `.nix` files, so adding a skill is mostly a
+  # matter of dropping in a new file.
   # 1. VENDORED third-party skills — upstream ships no Nix flake, so we
   #    package them here from `flake = false` `*-src` inputs. Canonical build
   #    logic + pack data live under pkgs/<name>/ (also consumed standalone via
-  #    `?dir=`); sources/vendored.nix assembles them. Per-skill packages land
-  #    in `packages.<sys>` under `agent-skill-<name>`.
+  #    `?dir=`); sources/vendored/<name>.nix assembles each. Per-skill packages
+  #    land in `packages.<sys>` under `agent-skill-<name>`.
   # 2. AGGREGATED first-party repos — they ship their own flake; we merge
-  #    their `packages` / `legacyPackages` in (sources/aggregated.nix). To add
+  #    their `packages` / `legacyPackages` in (sources/aggregated/). To add
   #    one, drop in a single input block: every input not listed in
   #    `infrastructureInputs` is treated as an aggregated downstream repo, so
   #
@@ -19,15 +24,15 @@
   #    works for any package any of your repos exposes. Last-write-wins on
   #    name collisions; rename in the source repo to disambiguate.
   # 3. COMBINATIONS — curated unions of skills already provided by (1)/(2),
-  #    built inline via `mkAggregateSkillsFlake` (sources/combinations.nix) and
-  #    exposed under their own `combinations.<name>` output, deliberately kept
+  #    built inline via `mkAggregateSkillsFlake` (sources/combinations/<name>.nix)
+  #    and exposed under their own `combinations.<name>` output, deliberately kept
   #    OUT of `packages.<sys>`.
   #
-  # Why the per-category files are plain `import`ed Nix (not `path:` / `?dir=`
-  # sub-flake inputs): Garnix's evaluator rejects `path:` flake inputs when this
-  # flake is consumed transitively (e.g. from nur-packages). The standalone
-  # sub-flakes under `pkgs/*/flake.nix` remain on disk for direct
-  # `github:nhooey/skillspkgs?dir=pkgs/<name>` consumption.
+  # Why the root imports each category's `default.nix` as plain Nix (not `path:` /
+  # `?dir=` sub-flake inputs): Garnix's evaluator rejects `path:` flake inputs when
+  # this flake is consumed transitively (e.g. from nur-packages). The standalone
+  # sub-flakes under `sources/*/flake.nix` and `pkgs/*/flake.nix` remain on disk
+  # for direct `github:nhooey/skillspkgs?dir=<path>` consumption.
   inputs = {
     # ---- infrastructure ----
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -126,16 +131,18 @@
         "superpowers-src"
       ];
 
-      # The three source categories, each in its own file under ./sources/.
-      # Imported as plain Nix (no `path:` inputs — see the header comment).
-      vendored = import ./sources/vendored.nix {
+      # The three source categories, each in its own subdirectory under
+      # ./sources/. The root imports each subdir's `default.nix` as plain Nix (no
+      # `path:` inputs — see the header comment); each subdir's sibling
+      # flake.{nix,lock} is for standalone `?dir=sources/<cat>` consumption only.
+      vendored = import ./sources/vendored {
         inherit nixpkgs flake-skills forSystems;
         inherit (inputs) humanizer-src anthropics-skills-src superpowers-src;
       };
-      aggregated = import ./sources/aggregated.nix {
+      aggregated = import ./sources/aggregated {
         inherit nixpkgs inputs infrastructureInputs;
       };
-      combos = import ./sources/combinations.nix {
+      combos = import ./sources/combinations {
         inherit
           nixpkgs
           flake-skills

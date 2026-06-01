@@ -4,6 +4,11 @@
 # which is where the input declarations must live) is treated as an aggregated
 # downstream repo; this module merges their `packages` / `legacyPackages`
 # outputs into the root flake's, per system.
+#
+# Imported as a plain Nix file by the root flake — NOT a flake input. The sibling
+# flake.nix exists only for standalone `?dir=sources/aggregated` use. There are no
+# per-item files here: adding an aggregated repo is a matter of adding its input
+# block to the root flake.nix; this folds whatever the root passes in `inputs`.
 {
   nixpkgs,
   inputs,
