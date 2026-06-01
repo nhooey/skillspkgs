@@ -11,7 +11,13 @@
     };
   };
 
-  outputs = { nixpkgs, flake-skills, humanizer-src, ... }:
+  outputs =
+    {
+      nixpkgs,
+      flake-skills,
+      humanizer-src,
+      ...
+    }:
     flake-skills.lib.mkSkillFlake {
       inherit nixpkgs;
       skillName = "humanizer";

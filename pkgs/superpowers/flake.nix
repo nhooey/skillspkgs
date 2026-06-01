@@ -23,7 +23,12 @@
   };
 
   outputs =
-    { nixpkgs, flake-skills, superpowers-src, ... }:
+    {
+      nixpkgs,
+      flake-skills,
+      superpowers-src,
+      ...
+    }:
     let
       base = flake-skills.lib.mkAllSkillsFlake {
         inherit nixpkgs;
