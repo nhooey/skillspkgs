@@ -210,7 +210,7 @@
               ${combos.combinations.authoring.${system}.reconcileScript}
             '';
             devshell.startup.install-git-skills.text = ''
-              ${inputs.skills-git.apps.${system}.reconcile.program} --scope=project
+              ${inputs.skills-git.reconcileScript system}
             '';
             commands = [
               # dev
