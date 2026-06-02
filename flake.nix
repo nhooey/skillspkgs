@@ -192,11 +192,17 @@
               {bold}{14}🚀 Entering skillspkgs dev shell{reset}
               Run {bold}menu{reset} to list available commands.
             '';
-            # Install the authoring combination at project scope on
-            # `nix develop`. Declarative + idempotent (owns only
-            # `skillspkgs-authoring`), so re-entry won't clobber other scopes.
-            devshell.startup.install-skills.text = ''
-              ${combos.reconcileScriptFor system}
+            # Install the authoring combination and the whole skills-git pack
+            # at project scope on `nix develop`. Both are declarative +
+            # idempotent and own disjoint reconcile appNames
+            # (`skillspkgs-authoring` and skills-git's `agent-skills-all`), so
+            # they coexist in one scope — each sweeps only its own strays —
+            # and re-entry won't clobber the other or other scopes.
+            devshell.startup.install-authoring-skills.text = ''
+              ${combos.combinations.authoring.${system}.reconcileScript}
+            '';
+            devshell.startup.install-git-skills.text = ''
+              ${inputs.skills-git.apps.${system}.reconcile.program} --scope=project
             '';
             commands = [
               # dev
