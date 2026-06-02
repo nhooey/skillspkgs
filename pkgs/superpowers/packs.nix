@@ -1,6 +1,6 @@
 # Canonical superpowers pack definitions (skill-name lists). Single source of
-# truth, imported by ./build.nix and (transitively, via that build) by the root
-# flake's sources/vendored.nix. Edit pack membership here and nowhere else.
+# truth, imported by ./default.nix (and transitively by the root flake's pkgs/
+# fold and the standalone faces). Edit pack membership here and nowhere else.
 {
   # All 14 skills as a single mkSkillsEnv. Same content as base's `all`
   # symlinkJoin, but with passthru.isFlakeSkillsEnv so the home-manager module

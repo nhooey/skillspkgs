@@ -12,8 +12,8 @@
 # Per-item contract — each `<name>.nix` is `itemArgs -> {`
 #   reconcileScriptFor = system: "<shell snippet>";
 #   combinations       = { <name> = forSystems (system: { reconcileScript; apps; env; }); };
-# `}`. `vendored` is sources/vendored's result; `skills-nix` is a live category-2
-# input.
+# `}`. `vendored` is the pkgs/ category fold's result; `skills-nix` is a live
+# category-2 input.
 {
   nixpkgs,
   flake-skills,

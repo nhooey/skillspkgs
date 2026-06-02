@@ -3,8 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-skills.url = "github:nhooey/flake-skills";
-    flake-skills.inputs.nixpkgs.follows = "nixpkgs";
+    flake-skills = {
+      url = "github:nhooey/flake-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     superpowers-src = {
       url = "github:obra/superpowers";
       flake = false;
@@ -18,7 +20,13 @@
       superpowers-src,
       ...
     }:
-    import ./build.nix {
-      inherit nixpkgs flake-skills superpowers-src;
+    {
+      inherit
+        (import ./default.nix {
+          inherit nixpkgs flake-skills;
+          src = superpowers-src;
+        })
+        packages
+        ;
     };
 }
