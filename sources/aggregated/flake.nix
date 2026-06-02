@@ -7,6 +7,7 @@
   # something concrete to merge and `?dir=` stays buildable + self-documenting.
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    systems.url = "github:nix-systems/default";
     flake-skills = {
       url = "github:nhooey/flake-skills";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -33,19 +34,17 @@
   };
 
   outputs =
-    { nixpkgs, ... }@inputs:
+    { nixpkgs, systems, ... }@inputs:
     let
-      forSystems = nixpkgs.lib.genAttrs [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
+      forSystems = nixpkgs.lib.genAttrs (import systems);
       aggregated = import ./default.nix {
         inherit nixpkgs inputs;
+        # `systems` powers the fanout, not a downstream repo to aggregate, so it
+        # joins the infrastructure set the fold removes before merging.
         infrastructureInputs = [
           "self"
           "nixpkgs"
+          "systems"
           "flake-skills"
         ];
       };
