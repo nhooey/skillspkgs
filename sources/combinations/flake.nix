@@ -1,12 +1,14 @@
 {
   description = "skillspkgs combinations category — curated cross-cutting unions of skills from categories 1 and 2.";
 
-  # Standalone `?dir=sources/combinations` face only. The root flake never reads
-  # this — it plain-`import`s ./default.nix, passing the in-memory `vendored`
-  # value directly. Here `vendored` is pulled via its sibling sub-flake using a
-  # relative `path:` input: safe because THIS sub-flake is never consumed
-  # transitively (only the ROOT flake is — that's the whole reason the root
-  # avoids `path:`), and it locks locally with no chicken-and-egg on the remote.
+  # Standalone `?dir=sources/combinations` face. The root flake never reads this
+  # — it plain-`import`s ./default.nix, passing the in-memory `vendored.sources`
+  # slice directly. This face IS consumed transitively (skills-git pulls it as a
+  # single input), so every input must be independently fetchable: the three
+  # category-1 skill sources are pulled as their own `github:?dir=pkgs/*` faces,
+  # NOT a relative `path:../../pkgs` input — a relative path is dropped from the
+  # archived closure under `?dir=`/transitive consumption and fails on isolated
+  # builders like Garnix (see skills-nix nix-garnix-ci skill, `[path-inputs]`).
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default";
@@ -19,10 +21,19 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-skills.follows = "flake-skills";
     };
-    vendored = {
-      url = "path:../../pkgs";
+    humanizer = {
+      url = "github:nhooey/skillspkgs?dir=pkgs/humanizer";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.systems.follows = "systems";
+      inputs.flake-skills.follows = "flake-skills";
+    };
+    skill-creator = {
+      url = "github:nhooey/skillspkgs?dir=pkgs/skill-creator";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-skills.follows = "flake-skills";
+    };
+    superpowers = {
+      url = "github:nhooey/skillspkgs?dir=pkgs/superpowers";
+      inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-skills.follows = "flake-skills";
     };
   };
@@ -33,7 +44,9 @@
       systems,
       flake-skills,
       skills-nix,
-      vendored,
+      humanizer,
+      skill-creator,
+      superpowers,
       ...
     }:
     let
@@ -44,8 +57,12 @@
           flake-skills
           forSystems
           skills-nix
-          vendored
           ;
+        vendoredSources = {
+          humanizer = humanizer;
+          "skill-creator" = skill-creator;
+          superpowers = superpowers;
+        };
         systems = import systems;
       };
     in

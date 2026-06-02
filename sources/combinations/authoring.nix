@@ -2,15 +2,17 @@
 # Mirrors skills-git/skills-authoring exactly (same four sources, cherry-pick,
 # and prefixes); `name` is the distinct reconcile-ownership appName.
 #
-# `vendored` is the vendored category's result — its synthetic `sources` feed the
-# category-1 skills here; `skills-nix` is the live category-2 input.
+# `vendoredSources` is an attrset (skill-name -> a `{ packages.<sys> = …; }`
+# source) supplied by the caller — the root flake passes its in-memory
+# `vendored.sources`; the standalone `?dir=` face passes three `github:?dir=pkgs/*`
+# faces. `skills-nix` is the live category-2 input.
 {
   nixpkgs,
   flake-skills,
   forSystems,
   systems,
   skills-nix,
-  vendored,
+  vendoredSources,
   ...
 }:
 let
@@ -26,13 +28,13 @@ let
           "nix-garnix-ci"
         ];
       }
-      { source = vendored.sources.humanizer; }
+      { source = vendoredSources.humanizer; }
       {
-        source = vendored.sources."skill-creator";
+        source = vendoredSources."skill-creator";
         prefix = "anthropic";
       }
       {
-        source = vendored.sources.superpowers;
+        source = vendoredSources.superpowers;
         prefix = "superpowers";
       }
     ];
