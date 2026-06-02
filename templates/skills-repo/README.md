@@ -30,20 +30,20 @@ nix run .#uninstall -- --scope=personal           # remove all skills
 nix run .#uninstall -- --scope=personal <name>    # remove one
 nix run .#reap      -- --scope=personal           # remove broken managed entries
 nix run .#reconcile -- --scope=personal           # install declared set, sweep strays
-nix build .#all                                   # symlinkJoin'd derivation for every skill
-nix build .#<skill-name>                          # single skill derivation
+nix build .#agent-skills-all                      # symlinkJoin'd derivation for every skill (also .#default)
+nix build .#skill-<skill-name>                    # single skill derivation (skills are prefixed `skill-`)
 ```
 
 ## Home-manager (optional)
 
-Skills installed via `nix run .#install` already symlink into `~/.claude/skills/`. If you'd rather have home-manager manage installation declaratively, use `skillpkgs.homeManagerModules.default`:
+Skills installed via `nix run .#install` already symlink into `~/.claude/skills/`. If you'd rather have home-manager manage installation declaratively, use the `homeManagerModules.default` exported by `flake-skills`:
 
 ```nix
 {
-  imports = [ inputs.skillpkgs.homeManagerModules.default ];
+  imports = [ inputs.flake-skills.homeManagerModules.default ];
   programs.agent-skills = {
     enable = true;
-    skills = [ inputs.self.packages.${pkgs.system}.<skill-name> ];
+    skills = [ inputs.self.packages.${pkgs.system}.skill-<skill-name> ];
   };
 }
 ```
