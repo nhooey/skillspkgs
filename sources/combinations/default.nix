@@ -12,7 +12,7 @@
 # Per-item contract — each `<name>.nix` is `itemArgs -> {`
 #   reconcileScriptFor = system: "<shell snippet>";
 #   combinations       = { <name> = forSystems (system: { reconcileScript; apps; env; }); };
-# `}`. `vendored` is the pkgs/ category fold's result; `skills-nix` is a live
+# `}`. `vendoredSources` is a name->source map (see authoring.nix); `skills-nix` is a live
 # category-2 input.
 {
   nixpkgs,
@@ -20,7 +20,7 @@
   forSystems,
   systems,
   skills-nix,
-  vendored,
+  vendoredSources,
 }:
 let
   inherit (nixpkgs) lib;
@@ -32,7 +32,7 @@ let
       forSystems
       systems
       skills-nix
-      vendored
+      vendoredSources
       ;
   };
 

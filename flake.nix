@@ -155,8 +155,8 @@
           nixpkgs
           flake-skills
           forSystems
-          vendored
           ;
+        vendoredSources = vendored.sources;
         systems = import inputs.systems;
         inherit (inputs) skills-nix;
       };
