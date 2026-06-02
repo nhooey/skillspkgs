@@ -3,8 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-skills.url = "github:nhooey/flake-skills";
-    flake-skills.inputs.nixpkgs.follows = "nixpkgs";
+    flake-skills = {
+      url = "github:nhooey/flake-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     anthropics-skills-src = {
       url = "github:anthropics/skills";
       flake = false;
@@ -18,8 +20,13 @@
       anthropics-skills-src,
       ...
     }:
-    import ./build.nix {
-      inherit nixpkgs flake-skills;
-      src = "${anthropics-skills-src}/skills/skill-creator";
+    {
+      inherit
+        (import ./default.nix {
+          inherit nixpkgs flake-skills;
+          src = anthropics-skills-src;
+        })
+        packages
+        ;
     };
 }

@@ -2,18 +2,20 @@
   description = "skillspkgs — Claude Code skills aggregator across three categories: (1) vendored third-party skills with no upstream flake, (2) first-party nhooey repos that ship their own flake, and (3) curated cross-cutting skill combinations.";
 
   # =====================================================================
-  # Three categories of skill packages (each in its own subdir under ./sources/)
+  # Three categories of skill packages
   # =====================================================================
-  # Each category lives in ./sources/<cat>/: the root imports that subdir's
-  # `default.nix` (plain Nix), while a sibling flake.{nix,lock} provides a
-  # standalone `?dir=sources/<cat>` face. The vendored/combinations default.nix
-  # auto-discover their sibling named `.nix` files, so adding a skill is mostly a
-  # matter of dropping in a new file.
-  # 1. VENDORED third-party skills — upstream ships no Nix flake, so we
-  #    package them here from `flake = false` `*-src` inputs. Canonical build
-  #    logic + pack data live under pkgs/<name>/ (also consumed standalone via
-  #    `?dir=`); sources/vendored/<name>.nix assembles each. Per-skill packages
-  #    land in `packages.<sys>` under `agent-skill-<name>`.
+  # `pkgs/` holds the things we build (category 1); `sources/` holds how we
+  # aggregate and combine (categories 2 and 3). The root `import`s each category's
+  # `default.nix` as plain Nix; a sibling flake.{nix,lock} provides a standalone
+  # `?dir=` face. The vendored/combinations folds auto-discover their members, so
+  # adding a skill is mostly a matter of dropping in a new file or directory.
+  # 1. VENDORED third-party skills — upstream ships no Nix flake, so we package
+  #    them here from `flake = false` `*-src` inputs. Each skill is self-contained
+  #    under pkgs/<name>/: a canonical `default.nix` (build + category contract),
+  #    a thin `flake.nix` standalone `?dir=pkgs/<name>` face, and (superpowers)
+  #    `packs.nix`. pkgs/default.nix auto-discovers and folds them; the root passes
+  #    each skill's locked source via the `srcs` map below. Per-skill packages land
+  #    in `packages.<sys>` under `agent-skill-<name>`.
   # 2. AGGREGATED first-party repos — they ship their own flake; we merge
   #    their `packages` / `legacyPackages` in (sources/aggregated/). To add
   #    one, drop in a single input block: every input not listed in
@@ -31,8 +33,8 @@
   # Why the root imports each category's `default.nix` as plain Nix (not `path:` /
   # `?dir=` sub-flake inputs): Garnix's evaluator rejects `path:` flake inputs when
   # this flake is consumed transitively (e.g. from nur-packages). The standalone
-  # sub-flakes under `sources/*/flake.nix` and `pkgs/*/flake.nix` remain on disk
-  # for direct `github:nhooey/skillspkgs?dir=<path>` consumption.
+  # sub-flakes under `pkgs/flake.nix`, `pkgs/*/flake.nix`, and `sources/*/flake.nix`
+  # remain on disk for direct `github:nhooey/skillspkgs?dir=<path>` consumption.
   inputs = {
     # ---- infrastructure ----
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -135,9 +137,15 @@
       # ./sources/. The root imports each subdir's `default.nix` as plain Nix (no
       # `path:` inputs — see the header comment); each subdir's sibling
       # flake.{nix,lock} is for standalone `?dir=sources/<cat>` consumption only.
-      vendored = import ./sources/vendored {
-        inherit nixpkgs flake-skills forSystems;
-        inherit (inputs) humanizer-src anthropics-skills-src superpowers-src;
+      vendored = import ./pkgs {
+        inherit nixpkgs flake-skills;
+        # Locked sources keyed by pkgs/<name> dir; each module slices its own
+        # subpath (e.g. skill-creator reads `skills/skill-creator`).
+        srcs = {
+          humanizer = inputs.humanizer-src;
+          "skill-creator" = inputs.anthropics-skills-src;
+          superpowers = inputs.superpowers-src;
+        };
       };
       aggregated = import ./sources/aggregated {
         inherit nixpkgs inputs infrastructureInputs;

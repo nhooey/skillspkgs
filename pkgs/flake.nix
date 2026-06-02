@@ -1,9 +1,11 @@
 {
   description = "skillspkgs vendored category — third-party Claude Code skills with no upstream Nix flake (humanizer, skill-creator, superpowers).";
 
-  # Standalone `?dir=sources/vendored` face only. The root flake never reads this
-  # — it plain-`import`s ./default.nix (see that file's header). These inputs +
-  # flake.lock pin the category for direct `github:nhooey/skillspkgs?dir=…` use.
+  # Standalone `?dir=pkgs` face for the whole vendored category. The root flake
+  # never reads this — it plain-`import`s ./default.nix (see that file's header).
+  # These inputs + flake.lock pin the category for direct `?dir=pkgs` use and back
+  # the combinations standalone face (sources/combinations/flake.nix). Individual
+  # skills also have their own thinner `?dir=pkgs/<name>` faces.
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default";
@@ -38,14 +40,12 @@
     let
       forSystems = nixpkgs.lib.genAttrs (import systems);
       vendored = import ./default.nix {
-        inherit
-          nixpkgs
-          flake-skills
-          forSystems
-          anthropics-skills-src
-          humanizer-src
-          superpowers-src
-          ;
+        inherit nixpkgs flake-skills;
+        srcs = {
+          humanizer = humanizer-src;
+          "skill-creator" = anthropics-skills-src;
+          superpowers = superpowers-src;
+        };
       };
     in
     {

@@ -20,8 +20,9 @@
       inputs.flake-skills.follows = "flake-skills";
     };
     vendored = {
-      url = "path:../vendored";
+      url = "path:../../pkgs";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
       inputs.flake-skills.follows = "flake-skills";
     };
   };

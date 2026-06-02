@@ -3,8 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-skills.url = "github:nhooey/flake-skills";
-    flake-skills.inputs.nixpkgs.follows = "nixpkgs";
+    flake-skills = {
+      url = "github:nhooey/flake-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     humanizer-src = {
       url = "github:blader/humanizer";
       flake = false;
@@ -18,8 +20,13 @@
       humanizer-src,
       ...
     }:
-    import ./build.nix {
-      inherit nixpkgs flake-skills;
-      src = humanizer-src;
+    {
+      inherit
+        (import ./default.nix {
+          inherit nixpkgs flake-skills;
+          src = humanizer-src;
+        })
+        packages
+        ;
     };
 }

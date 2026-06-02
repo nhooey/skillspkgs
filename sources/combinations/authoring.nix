@@ -28,7 +28,7 @@ let
       }
       { source = vendored.sources.humanizer; }
       {
-        source = vendored.sources.skillCreator;
+        source = vendored.sources."skill-creator";
         prefix = "anthropic";
       }
       {
