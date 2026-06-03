@@ -26,9 +26,9 @@
   #    works for any package any of your repos exposes. Last-write-wins on
   #    name collisions; rename in the source repo to disambiguate.
   # 3. COMBINATIONS — curated unions of skills already provided by (1)/(2),
-  #    built inline via `mkAggregateSkillsFlake` (sources/combinations/<name>.nix)
-  #    and exposed under their own `combinations.<name>` output, deliberately kept
-  #    OUT of `packages.<sys>`.
+  #    built via `mkCombination` (sources/combinations/<name>.nix) and exposed
+  #    under their own `combinations.<name>` output, deliberately kept OUT of
+  #    `packages.<sys>`.
   #
   # Why the root imports each category's `default.nix` as plain Nix (not `path:` /
   # `?dir=` sub-flake inputs): Garnix's evaluator rejects `path:` flake inputs when
@@ -48,7 +48,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # `flake-skills` is the builder library (mkSkillFlake / mkAllSkillsFlake /
-    # mkAggregateSkillsFlake / mkSkillsEnv) used to build categories 1 and 3.
+    # mkAggregateSkillsFlake / mkCombination / mkSkillsEnv) used to build
+    # categories 1 and 3.
     flake-skills = {
       url = "github:nhooey/flake-skills";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -160,6 +161,22 @@
         systems = import inputs.systems;
         inherit (inputs) skills-nix;
       };
+
+      # One declarative owner for the dev shell: the authoring combination
+      # spliced in AS A SOURCE (its `packages` make it re-composable) plus the
+      # whole skills-git pack, merged into a single combination. One reconcile
+      # hook converges the whole union — no more per-set hooks juggling
+      # disjoint appNames.
+      devShellSkills = flake-skills.lib.mkCombination {
+        inherit nixpkgs;
+        systems = import inputs.systems;
+        name = "skillspkgs-devshell";
+        packagePrefix = "agent-skill-";
+        sources = [
+          { source = combos.combinations.authoring; }
+          { source = inputs.skills-git; }
+        ];
+      };
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import inputs.systems;
@@ -176,10 +193,11 @@
           description = "A first-party Claude Code skills repo using flake-skills.lib.mkAllSkillsFlake";
         };
 
-        # Category 3 — kept OUT of `packages.<sys>`. Each combination exposes
-        # `reconcileScript` (declarative devShell installer), `apps`
-        # (install/uninstall/preview/reap/reconcile), and a single `env`
-        # package (for home-manager). Other repos import these directly.
+        # Category 3 — kept OUT of `packages.<sys>`. Each combination is a
+        # system-parametric mkCombination result: `reconcileScript system`
+        # (declarative devShell installer), `apps.<sys>`, `env.<sys>` (a single
+        # home-manager package), and `packages.<sys>` (so the whole combination
+        # is itself a valid `{ source = …; }`). Other repos import these directly.
         inherit (combos) combinations;
       };
 
@@ -200,17 +218,12 @@
               {bold}{14}🚀 Entering skillspkgs dev shell{reset}
               Run {bold}menu{reset} to list available commands.
             '';
-            # Install the authoring combination and the whole skills-git pack
-            # at project scope on `nix develop`. Both are declarative +
-            # idempotent and own disjoint reconcile appNames
-            # (`skillspkgs-authoring` and skills-git's `agent-skills-all`), so
-            # they coexist in one scope — each sweeps only its own strays —
-            # and re-entry won't clobber the other or other scopes.
-            devshell.startup.install-authoring-skills.text = ''
-              ${combos.combinations.authoring.${system}.reconcileScript}
-            '';
-            devshell.startup.install-git-skills.text = ''
-              ${inputs.skills-git.reconcileScript system}
+            # Install the authoring combination + the whole skills-git pack at
+            # project scope on `nix develop`, via one combination that owns the
+            # union. Declarative + idempotent: one reconcile converges the whole
+            # set under a single appName, sweeping only its own strays.
+            devshell.startup.install-skills.text = ''
+              ${devShellSkills.reconcileScript system}
             '';
             commands = [
               # dev

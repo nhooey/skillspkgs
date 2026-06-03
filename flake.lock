@@ -232,11 +232,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1780413458,
-        "narHash": "sha256-7sehiW7qaGMBfWJ4MIq9fnZWjMIxVPkt0pyCn3t0fR0=",
+        "lastModified": 1780494642,
+        "narHash": "sha256-1rxLFvBT+u4rqTkd+yAmgMAP7IlGmOOgm+/t8x5fE4w=",
         "owner": "nhooey",
         "repo": "flake-skills",
-        "rev": "922862472a0cfcd77f68c56928ab7d33f72175bc",
+        "rev": "b265e22aca5fa5cbd529fe350bc6294d38cb1fa7",
         "type": "github"
       },
       "original": {

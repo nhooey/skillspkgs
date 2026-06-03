@@ -9,16 +9,16 @@
 {
   nixpkgs,
   flake-skills,
-  forSystems,
   systems,
   skills-nix,
   vendoredSources,
   ...
 }:
 let
-  authoringAgg = flake-skills.lib.mkAggregateSkillsFlake {
+  authoring = flake-skills.lib.mkCombination {
     inherit nixpkgs systems;
     name = "skillspkgs-authoring";
+    envName = "agent-skills-authoring";
     packagePrefix = "agent-skill-";
     sources = [
       {
@@ -39,27 +39,8 @@ let
       }
     ];
   };
-
-  # A single env package for home-manager consumers, drawn from the aggregate's
-  # already-prefixed package set (mkSkillsEnv does not re-prefix).
-  authoringEnv =
-    system:
-    flake-skills.lib.mkSkillsEnv {
-      pkgs = nixpkgs.legacyPackages.${system};
-      name = "agent-skills-authoring";
-      skills = builtins.attrValues (
-        nixpkgs.lib.filterAttrs (
-          n: _: nixpkgs.lib.hasPrefix "agent-skill-" n
-        ) authoringAgg.packages.${system}
-      );
-    };
 in
 {
-  reconcileScriptFor = authoringAgg.reconcileScript;
-
-  combinations.authoring = forSystems (system: {
-    reconcileScript = authoringAgg.reconcileScript system;
-    apps = authoringAgg.apps.${system};
-    env = authoringEnv system;
-  });
+  reconcileScriptFor = authoring.reconcileScript;
+  combinations.authoring = authoring;
 }
