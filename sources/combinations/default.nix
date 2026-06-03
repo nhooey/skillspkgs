@@ -1,5 +1,5 @@
 # CATEGORY 3 — cross-cutting combinations: curated unions of skills already
-# provided by categories 1 and 2, built inline via mkAggregateSkillsFlake and
+# provided by categories 1 and 2, built via flake-skills.lib.mkCombination and
 # exposed under a `combinations.<name>` output (kept OUT of packages.<sys>).
 #
 # This default.nix auto-discovers and folds the sibling per-combination files
@@ -11,9 +11,10 @@
 #
 # Per-item contract — each `<name>.nix` is `itemArgs -> {`
 #   reconcileScriptFor = system: "<shell snippet>";
-#   combinations       = { <name> = forSystems (system: { reconcileScript; apps; env; }); };
-# `}`. `vendoredSources` is a name->source map (see authoring.nix); `skills-nix` is a live
-# category-2 input.
+#   combinations       = { <name> = <mkCombination result>; };
+# `}`, where the mkCombination result is system-parametric
+# (`{ packages; apps; reconcileScript; env; }`). `vendoredSources` is a
+# name->source map (see authoring.nix); `skills-nix` is a live category-2 input.
 {
   nixpkgs,
   flake-skills,
