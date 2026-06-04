@@ -9,5 +9,5 @@
 import ../mk-simple-vendored.nix {
   inherit nixpkgs flake-skills src;
   skillName = "humanizer";
-  packageName = "agent-skill-humanizer";
+  owner = "blader";
 }

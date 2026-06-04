@@ -18,11 +18,12 @@
 #     down. So each suite is its own mkAllSkillsFlake `skillsDir`, and the five
 #     groups (root + 4 suites) are merged here.
 #
-# Every skill is renamed `daymade-<name>` (lowercased — daymade ships one
+# `source = { owner = "daymade"; }` namespaces every package key as
+# `agent-skill-daymade-<name>`, which keeps daymade's skill-creator from
+# colliding with anthropics/skills' in the root package set. The installed
+# skill name stays bare. `renameFn` only lowercases — daymade ships one
 # uppercase dir, iOS-APP-developer, which would fail Claude Code's
-# ^[a-z0-9-]{1,64}$ name rule otherwise). The prefix also keeps daymade's
-# skill-creator from colliding with anthropics/skills' skill-creator in the
-# root package set.
+# ^[a-z0-9-]{1,64}$ name rule otherwise.
 {
   nixpkgs,
   flake-skills,
@@ -39,7 +40,7 @@ let
     toLower
     ;
 
-  renameFn = ctx: "daymade-" + toLower ctx.name;
+  renameFn = ctx: toLower ctx.name;
 
   # One mkAllSkillsFlake call per skillsDir: the repo root (38 standalone) plus
   # each suite (its nested skills). "." means the repo root itself.
@@ -55,6 +56,9 @@ let
     dir:
     flake-skills.lib.mkAllSkillsFlake {
       inherit nixpkgs renameFn;
+      source = {
+        owner = "daymade";
+      };
       skillsDir = if dir == "." then "${src}" else "${src}/${dir}";
       packagePrefix = "agent-skill-";
     };
@@ -65,28 +69,34 @@ let
   # restating a platform list (mkAllSkillsFlake fans out over nix-systems/default).
   forSystems = genAttrs (builtins.attrNames (builtins.head groups).packages);
 
-  # Each group's `packages.<sys>` carries its own generic `default` /
-  # `agent-skills-all` aggregate (covering only that group); drop both before
-  # merging so the union is exactly the `agent-skill-daymade-*` per-skill keys.
+  # Each group's `packages.<sys>` carries its own `default` /
+  # `agent-skills-daymade-all` aggregate (covering only that group); drop both
+  # before merging so the union is exactly the `agent-skill-daymade-*` per-skill
+  # keys. The canonical all-58 `agent-skills-daymade-all` pack is rebuilt from
+  # ./packs.nix below.
   dropAggregates =
     pkgs:
     removeAttrs pkgs [
       "default"
-      "agent-skills-all"
+      "agent-skills-daymade-all"
     ];
 
   mergedSkillsFor = system: foldl' (acc: g: acc // dropAggregates g.packages.${system}) { } groups;
 
   packs = import ./packs.nix;
 
-  # Pack lists hold pre-rename directory names; map each to its renamed,
-  # lowercased package key. iOS-APP-developer -> agent-skill-daymade-ios-app-developer.
+  # Each group exposes `bySkillName` (per-skill drvs keyed by bare installed
+  # name); merge them across the root + suites into one index.
+  mergedByName = system: foldl' (acc: g: acc // g.bySkillName.${system}) { } groups;
+
+  # Pack lists hold pre-rename directory names; `toLower` matches the
+  # lowercased installed name (iOS-APP-developer -> ios-app-developer).
   mkEnv =
     system: packName: skillNames:
     flake-skills.lib.mkSkillsEnv {
       pkgs = nixpkgs.legacyPackages.${system};
       name = packName;
-      skills = map (n: (mergedSkillsFor system)."agent-skill-daymade-${toLower n}") skillNames;
+      skills = map (n: (mergedByName system).${toLower n}) skillNames;
     };
 
   packPackagesFor = system: mapAttrs (packName: skillNames: mkEnv system packName skillNames) packs;
@@ -105,18 +115,18 @@ let
     }
   );
 
-  # Root view: the individual skills plus the named pack envs.
+  # The individual skills plus the named pack envs — shared by the root
+  # package set and the combinations source view. The packs are exposed to
+  # combinations too so a combination can select a pack's members via the
+  # `pack` source field; the cherry-pick filters by the singular
+  # `agent-skill-` prefix, so the plural `agent-skills-*` pack keys never
+  # leak into skill selection.
   skillsAndPacks = mapAttrs (
     _: filterAttrs (n: _: hasPrefix "agent-skill-" n || hasPrefix "agent-skills-daymade-" n)
   ) packages;
-
-  # Combinations view: the individual skills only (packs excluded).
-  skillsOnly = mapAttrs (_: filterAttrs (n: _: hasPrefix "agent-skill-" n)) (
-    forSystems mergedSkillsFor
-  );
 in
 {
   inherit packages;
   vendoredSkills = skillsAndPacks;
-  source.packages = skillsOnly;
+  source.packages = skillsAndPacks;
 }

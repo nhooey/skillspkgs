@@ -11,6 +11,6 @@
 import ../mk-simple-vendored.nix {
   inherit nixpkgs flake-skills src;
   skillName = "skill-creator";
-  packageName = "agent-skill-skill-creator";
+  owner = "anthropics";
   srcSubpath = "skills/skill-creator";
 }

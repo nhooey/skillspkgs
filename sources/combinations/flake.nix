@@ -4,7 +4,7 @@
   # Standalone `?dir=sources/combinations` face. The root flake never reads this
   # — it plain-`import`s ./default.nix, passing the in-memory `vendored.sources`
   # slice directly. This face IS consumed transitively (skills-git pulls it as a
-  # single input), so every input must be independently fetchable: the three
+  # single input), so every input must be independently fetchable: the four
   # category-1 skill sources are pulled as their own `github:?dir=pkgs/*` faces,
   # NOT a relative `path:../../pkgs` input — a relative path is dropped from the
   # archived closure under `?dir=`/transitive consumption and fails on isolated
@@ -18,6 +18,11 @@
     };
     skills-nix = {
       url = "github:nhooey/skills-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-skills.follows = "flake-skills";
+    };
+    daymade = {
+      url = "github:nhooey/skillspkgs?dir=pkgs/daymade";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-skills.follows = "flake-skills";
     };
@@ -44,6 +49,7 @@
       systems,
       flake-skills,
       skills-nix,
+      daymade,
       humanizer,
       skill-creator,
       superpowers,
@@ -59,6 +65,7 @@
           skills-nix
           ;
         vendoredSources = {
+          daymade = daymade;
           humanizer = humanizer;
           "skill-creator" = skill-creator;
           superpowers = superpowers;

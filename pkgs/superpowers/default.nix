@@ -31,6 +31,9 @@ let
 
   base = flake-skills.lib.mkAllSkillsFlake {
     inherit nixpkgs;
+    source = {
+      owner = "obra";
+    };
     skillsDir = "${src}/skills";
     packagePrefix = "agent-skill-";
   };
@@ -43,12 +46,14 @@ let
 
   packs = import ./packs.nix;
 
+  # Pack lists are bare skill names; `base.bySkillName` indexes the per-skill
+  # drvs by that stable identity, independent of the owner-namespaced keys.
   mkEnv =
     system: packName: skillNames:
     flake-skills.lib.mkSkillsEnv {
       pkgs = nixpkgs.legacyPackages.${system};
       name = packName;
-      skills = builtins.map (n: base.packages.${system}."agent-skill-${n}") skillNames;
+      skills = builtins.map (n: base.bySkillName.${system}.${n}) skillNames;
     };
 
   packPackages = forSystems (
