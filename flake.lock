@@ -11,11 +11,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1780695752,
-        "narHash": "sha256-ZqDpQUOVIArQLfaYViWJvsQUgtk/3J2TiJSPE8/AAFY=",
+        "lastModified": 1780696327,
+        "narHash": "sha256-41aUE2NzTJvZ1OSAu3g1z0V+2l2lAB24MegJ5AACt9s=",
         "owner": "nhooey",
         "repo": "agent-skill-flake",
-        "rev": "7c046d74527f8f7d232cf12724a75d18c2c02c1a",
+        "rev": "271fb64920156edae2e0c3bb70f98f4464ed58a1",
         "type": "github"
       },
       "original": {
@@ -195,11 +195,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1780694930,
-        "narHash": "sha256-u+4Aht2LimFqV3DXarcMHEL9w1ePDYusqZKSMGNEPz0=",
+        "lastModified": 1780697167,
+        "narHash": "sha256-aXkuHqAeGEnL1RVuo8WOJfsGNQIoogU0nFzHZts9vQI=",
         "owner": "nhooey",
         "repo": "git-skills",
-        "rev": "ef0ae3bc22315ae7e6e8136500407624d271a804",
+        "rev": "1ea1fd28b25ac560a8e74d7fcddb76b322069eb9",
         "type": "github"
       },
       "original": {
@@ -226,6 +226,9 @@
     },
     "nix-gstack": {
       "inputs": {
+        "agent-skill-flake": [
+          "agent-skill-flake"
+        ],
         "devshell": [
           "devshell"
         ],
@@ -243,11 +246,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779376585,
-        "narHash": "sha256-qYRgyQICFdxwDoHG3dsCZsYWRHbC+RYJ3KmkqztVPOA=",
+        "lastModified": 1780693186,
+        "narHash": "sha256-BcEK9uzC3Uocs/hq8IKep/UlkPuzIXOnhRTw3aIbu5k=",
         "owner": "nhooey",
         "repo": "nix-gstack",
-        "rev": "e5b3522dddd8996c1b991a0c72ad73c7982396fd",
+        "rev": "c8a953d9b87792d14c4e07c4f7c00c90ae16e7eb",
         "type": "github"
       },
       "original": {

@@ -96,6 +96,7 @@
       inputs.flake-parts.follows = "flake-parts";
       inputs.treefmt-nix.follows = "treefmt-nix";
       inputs.devshell.follows = "devshell";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     nix-microsoft-skills = {
       url = "github:nhooey/nix-microsoft-skills";
