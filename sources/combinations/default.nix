@@ -14,13 +14,15 @@
 #   combinations       = { <name> = <mkCombination result>; };
 # `}`, where the mkCombination result is system-parametric
 # (`{ packages; apps; reconcileScript; env; }`). `vendoredSources` is a
-# name->source map (see authoring.nix); `skills-nix` is a live category-2 input.
+# name->source map (see authoring.nix); `skills-nix` and `skills-git` are live
+# category-2 inputs.
 {
   nixpkgs,
   flake-skills,
   forSystems,
   systems,
   skills-nix,
+  skills-git,
   vendoredSources,
 }:
 let
@@ -33,6 +35,7 @@ let
       forSystems
       systems
       skills-nix
+      skills-git
       vendoredSources
       ;
   };

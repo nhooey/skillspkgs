@@ -21,6 +21,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-skills.follows = "flake-skills";
     };
+    skills-git = {
+      url = "github:nhooey/skills-git";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-skills.follows = "flake-skills";
+    };
     daymade = {
       url = "github:nhooey/skillspkgs?dir=pkgs/daymade";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -49,6 +54,7 @@
       systems,
       flake-skills,
       skills-nix,
+      skills-git,
       daymade,
       humanizer,
       skill-creator,
@@ -63,6 +69,7 @@
           flake-skills
           forSystems
           skills-nix
+          skills-git
           ;
         vendoredSources = {
           daymade = daymade;
