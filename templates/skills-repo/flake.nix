@@ -1,15 +1,15 @@
 {
-  description = "<your-name>: a Claude Code skills repo built with flake-skills.";
+  description = "<your-name>: a Claude Code skills repo built with agent-skill-flake.";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-skills.url = "github:nhooey/flake-skills";
-    flake-skills.inputs.nixpkgs.follows = "nixpkgs";
+    agent-skill-flake.url = "github:nhooey/agent-skill-flake";
+    agent-skill-flake.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
-    { nixpkgs, flake-skills, ... }:
-    flake-skills.lib.mkAllSkillsFlake {
+    { nixpkgs, agent-skill-flake, ... }:
+    agent-skill-flake.lib.mkAllSkillsFlake {
       inherit nixpkgs;
       # Owner namespaces the package keys (agent-skill-<owner>-<name>); the
       # installed skill names stay bare. Set it to your GitHub username, or

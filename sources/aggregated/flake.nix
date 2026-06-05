@@ -8,28 +8,28 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default";
-    flake-skills = {
-      url = "github:nhooey/flake-skills";
+    agent-skill-flake = {
+      url = "github:nhooey/agent-skill-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     coding-agent-skills = {
       url = "github:nhooey/coding-agent-skills";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-skills.follows = "flake-skills";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
+    git-skills = {
+      url = "github:nhooey/git-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     nix-gstack = {
       url = "github:nhooey/nix-gstack";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    skills-git = {
-      url = "github:nhooey/skills-git";
+    nix-skills = {
+      url = "github:nhooey/nix-skills";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-skills.follows = "flake-skills";
-    };
-    skills-nix = {
-      url = "github:nhooey/skills-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-skills.follows = "flake-skills";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
   };
 
@@ -45,7 +45,7 @@
           "self"
           "nixpkgs"
           "systems"
-          "flake-skills"
+          "agent-skill-flake"
         ];
       };
     in

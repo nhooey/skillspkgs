@@ -8,13 +8,13 @@
 # the root's `srcs` map.
 #
 # Per-module contract — each pkgs/<name>/default.nix is
-#   { nixpkgs, flake-skills, src } -> built // {
+#   { nixpkgs, agent-skill-flake, src } -> built // {
 #     vendoredSkills  = { <system> = { <pkgKey> = <drv>; ... }; };  # root packages.<sys>
 #     source.packages = { <system> = { agent-skill-*; ... }; };     # combinations view
 #   }
 {
   nixpkgs,
-  flake-skills,
+  agent-skill-flake,
   # Locked sources, keyed by pkgs/<name> directory name. The root passes its
   # `*-src` flake inputs here; each module slices its own subpath if needed.
   srcs,
@@ -29,7 +29,7 @@ let
     map (name: {
       inherit name;
       value = import (./. + "/${name}") {
-        inherit nixpkgs flake-skills;
+        inherit nixpkgs agent-skill-flake;
         src = srcs.${name};
       };
     }) dirs

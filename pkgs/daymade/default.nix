@@ -26,7 +26,7 @@
 # ^[a-z0-9-]{1,64}$ name rule otherwise.
 {
   nixpkgs,
-  flake-skills,
+  agent-skill-flake,
   src,
 }:
 let
@@ -54,7 +54,7 @@ let
 
   buildGroup =
     dir:
-    flake-skills.lib.mkAllSkillsFlake {
+    agent-skill-flake.lib.mkAllSkillsFlake {
       inherit nixpkgs renameFn;
       source = {
         owner = "daymade";
@@ -93,7 +93,7 @@ let
   # lowercased installed name (iOS-APP-developer -> ios-app-developer).
   mkEnv =
     system: packName: skillNames:
-    flake-skills.lib.mkSkillsEnv {
+    agent-skill-flake.lib.mkSkillsEnv {
       pkgs = nixpkgs.legacyPackages.${system};
       name = packName;
       skills = map (n: (mergedByName system).${toLower n}) skillNames;

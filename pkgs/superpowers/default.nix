@@ -14,10 +14,10 @@
 # top-level companion files outside that whitelist (e.g. systematic-debugging's
 # condition-based-waiting.md, writing-skills' anthropic-best-practices.md). The
 # core SKILL.md prose still works; to ship the extras, pass `extraFiles` to
-# mkAllSkillsFlake and bump the flake-skills rev.
+# mkAllSkillsFlake and bump the agent-skill-flake rev.
 {
   nixpkgs,
-  flake-skills,
+  agent-skill-flake,
   src,
 }:
 let
@@ -29,7 +29,7 @@ let
     recursiveUpdate
     ;
 
-  base = flake-skills.lib.mkAllSkillsFlake {
+  base = agent-skill-flake.lib.mkAllSkillsFlake {
     inherit nixpkgs;
     source = {
       owner = "obra";
@@ -50,7 +50,7 @@ let
   # drvs by that stable identity, independent of the owner-namespaced keys.
   mkEnv =
     system: packName: skillNames:
-    flake-skills.lib.mkSkillsEnv {
+    agent-skill-flake.lib.mkSkillsEnv {
       pkgs = nixpkgs.legacyPackages.${system};
       name = packName;
       skills = builtins.map (n: base.bySkillName.${system}.${n}) skillNames;

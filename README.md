@@ -8,14 +8,14 @@ A Nix aggregator for [Claude Code Agent Skills](https://docs.claude.com/), packa
 2. **Aggregated first-party repos** (`sources/aggregated/`) — `nhooey` repos that ship their own flake, merged in.
 3. **Combinations** (`sources/combinations/`) — curated unions of skills already provided by (1) and (2).
 
-The build/install/uninstall/preview/reap logic lives in [`nhooey/flake-skills`](https://github.com/nhooey/flake-skills); this repo wires it together.
+The build/install/uninstall/preview/reap logic lives in [`nhooey/agent-skill-flake`](https://github.com/nhooey/agent-skill-flake); this repo wires it together.
 
 ## Category 1 — vendored third-party wrappers (`pkgs/`)
 
 Each subdirectory under `pkgs/` is a thin wrapper that:
 
 - pins an upstream repo whose authors don't ship a Nix flake,
-- delegates the skill build + install/uninstall/preview/reap apps to `flake-skills` via `lib.mkSkillFlake`,
+- delegates the skill build + install/uninstall/preview/reap apps to `agent-skill-flake` via `lib.mkSkillFlake`,
 - can be installed independently as a standalone flake — no aggregation step required.
 
 See [`pkgs/README.md`](./pkgs/README.md) for the wrapper charter, the ~20-line `flake.nix` template, and pinning rules. That subdirectory is wrappers-only; PRs adding first-party content, forks, or multi-skill bundles there get closed.
@@ -26,7 +26,7 @@ See [`pkgs/README.md`](./pkgs/README.md) for the wrapper charter, the ~20-line `
 nix run github:nhooey/skillspkgs?dir=pkgs/humanizer#install
 ```
 
-That symlinks the skill into `~/.claude/skills/humanizer/`, registers a per-user GC root so the store path won't be garbage-collected, and writes an entry into `~/.claude/skills/.flake-skills-lock.json`. Other apps available per skill (from `flake-skills`):
+That symlinks the skill into `~/.claude/skills/humanizer/`, registers a per-user GC root so the store path won't be garbage-collected, and writes an entry into `~/.claude/skills/.flake-skills-lock.json`. Other apps available per skill (from `agent-skill-flake`):
 
 ```bash
 nix run github:nhooey/skillspkgs?dir=pkgs/humanizer            # preview (read-only, default)
@@ -87,13 +87,13 @@ Every flake **input** that isn't listed in `infrastructureInputs` (the inputs th
 <repo-name> = {
   url = "github:nhooey/<repo-name>";
   inputs.nixpkgs.follows = "nixpkgs";
-  # Add `inputs.flake-skills.follows = "flake-skills";` only if the repo
-  # depends on flake-skills — it keeps every repo on one flake-skills rev so
-  # consumers don't see multiple flake-skills nodes drift apart in their lock.
+  # Add `inputs.agent-skill-flake.follows = "agent-skill-flake";` only if the repo
+  # depends on agent-skill-flake — it keeps every repo on one agent-skill-flake rev so
+  # consumers don't see multiple agent-skill-flake nodes drift apart in their lock.
 };
 ```
 
-`nix-gstack` is an example of an aggregated input that does **not** follow `flake-skills` (it doesn't depend on it); `coding-agent-skills`, `skills-git`, and `skills-nix` do.
+`nix-gstack` is an example of an aggregated input that does **not** follow `agent-skill-flake` (it doesn't depend on it); `coding-agent-skills`, `git-skills`, and `nix-skills` do.
 
 After editing, run `nix flake lock` in each directory so both `flake.lock` files pin the new input.
 
@@ -105,12 +105,12 @@ The root uses plain `import` rather than `path:` / `?dir=` sub-flake inputs beca
 
 ## Category 3 — combinations (`sources/combinations/`)
 
-Curated unions of skills already provided by categories 1 and 2, built via `flake-skills.lib.mkCombination` in `sources/combinations/<name>.nix`. Each combination is exposed under its own `combinations.<name>` output and is deliberately kept **out** of `packages.<sys>`. Other repos can import a combination directly, or use it as a `{ source = …; }` member of a larger combination.
+Curated unions of skills already provided by categories 1 and 2, built via `agent-skill-flake.lib.mkCombination` in `sources/combinations/<name>.nix`. Each combination is exposed under its own `combinations.<name>` output and is deliberately kept **out** of `packages.<sys>`. Other repos can import a combination directly, or use it as a `{ source = …; }` member of a larger combination.
 
 ## How it relates to other repos
 
-- **[`nhooey/flake-skills`](https://github.com/nhooey/flake-skills)** — the library. Provides `mkSkillFlake`, `mkAllSkillsFlake`, `mkAggregateSkillsFlake`, `mkCombination`, and `mkSkillsEnv`. Consumed by this repo and by the first-party content repos.
-- **[`nhooey/skills-nix`](https://github.com/nhooey/skills-nix)** — first-party skill content the author maintains, using `mkAllSkillsFlake`. A good reference for authoring your own skills repo; `nix flake init -t github:nhooey/skillspkgs` scaffolds one.
+- **[`nhooey/agent-skill-flake`](https://github.com/nhooey/agent-skill-flake)** — the library. Provides `mkSkillFlake`, `mkAllSkillsFlake`, `mkAggregateSkillsFlake`, `mkCombination`, and `mkSkillsEnv`. Consumed by this repo and by the first-party content repos.
+- **[`nhooey/nix-skills`](https://github.com/nhooey/nix-skills)** — first-party skill content the author maintains, using `mkAllSkillsFlake`. A good reference for authoring your own skills repo; `nix flake init -t github:nhooey/skillspkgs` scaffolds one.
 - **`nhooey/skillspkgs`** (this repo) — aggregates all three categories above.
 
 ## CI

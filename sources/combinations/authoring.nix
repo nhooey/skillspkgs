@@ -6,24 +6,24 @@
 # `vendoredSources` is an attrset (skill-name -> a `{ packages.<sys> = …; }`
 # source) supplied by the caller — the root flake passes its in-memory
 # `vendored.sources`; the standalone `?dir=` face passes four `github:?dir=pkgs/*`
-# faces. `skills-nix` is the live category-2 input.
+# faces. `nix-skills` is the live category-2 input.
 {
   nixpkgs,
-  flake-skills,
+  agent-skill-flake,
   systems,
-  skills-nix,
+  nix-skills,
   vendoredSources,
   ...
 }:
 let
-  authoring = flake-skills.lib.mkCombination {
+  authoring = agent-skill-flake.lib.mkCombination {
     inherit nixpkgs systems;
     name = "skillspkgs-authoring";
     envName = "agent-skills-authoring";
     packagePrefix = "agent-skill-";
     sources = [
       {
-        source = skills-nix;
+        source = nix-skills;
         skills = [
           "nix-flakes"
           "nix-garnix-ci"

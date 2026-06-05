@@ -1,5 +1,5 @@
 # CATEGORY 3 — cross-cutting combinations: curated unions of skills already
-# provided by categories 1 and 2, built via flake-skills.lib.mkCombination and
+# provided by categories 1 and 2, built via agent-skill-flake.lib.mkCombination and
 # exposed under a `combinations.<name>` output (kept OUT of packages.<sys>).
 #
 # This default.nix auto-discovers and folds the sibling per-combination files
@@ -14,15 +14,15 @@
 #   combinations       = { <name> = <mkCombination result>; };
 # `}`, where the mkCombination result is system-parametric
 # (`{ packages; apps; reconcileScript; env; }`). `vendoredSources` is a
-# name->source map (see authoring.nix); `skills-nix` and `skills-git` are live
+# name->source map (see authoring.nix); `nix-skills` and `git-skills` are live
 # category-2 inputs.
 {
   nixpkgs,
-  flake-skills,
+  agent-skill-flake,
   forSystems,
   systems,
-  skills-nix,
-  skills-git,
+  nix-skills,
+  git-skills,
   vendoredSources,
 }:
 let
@@ -31,11 +31,11 @@ let
   itemArgs = {
     inherit
       nixpkgs
-      flake-skills
+      agent-skill-flake
       forSystems
       systems
-      skills-nix
-      skills-git
+      nix-skills
+      git-skills
       vendoredSources
       ;
   };

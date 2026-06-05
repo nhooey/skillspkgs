@@ -3,11 +3,11 @@
 # consumes it and ./flake.nix for the standalone `?dir=pkgs/humanizer` face.
 {
   nixpkgs,
-  flake-skills,
+  agent-skill-flake,
   src,
 }:
 import ../mk-simple-vendored.nix {
-  inherit nixpkgs flake-skills src;
+  inherit nixpkgs agent-skill-flake src;
   skillName = "humanizer";
   owner = "blader";
 }

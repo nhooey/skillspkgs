@@ -9,8 +9,8 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default";
-    flake-skills = {
-      url = "github:nhooey/flake-skills";
+    agent-skill-flake = {
+      url = "github:nhooey/agent-skill-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     anthropics-skills-src = {
@@ -31,7 +31,7 @@
     {
       nixpkgs,
       systems,
-      flake-skills,
+      agent-skill-flake,
       anthropics-skills-src,
       humanizer-src,
       superpowers-src,
@@ -40,7 +40,7 @@
     let
       forSystems = nixpkgs.lib.genAttrs (import systems);
       vendored = import ./default.nix {
-        inherit nixpkgs flake-skills;
+        inherit nixpkgs agent-skill-flake;
         srcs = {
           humanizer = humanizer-src;
           "skill-creator" = anthropics-skills-src;
