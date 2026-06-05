@@ -361,6 +361,7 @@
         "nixpkgs": "nixpkgs",
         "superpowers-src": "superpowers-src",
         "systems": "systems_2",
+        "trailofbits-skills-src": "trailofbits-skills-src",
         "treefmt-nix": "treefmt-nix_2"
       }
     },
@@ -407,6 +408,22 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "trailofbits-skills-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1780676921,
+        "narHash": "sha256-VCIy7AaKLHD4paZUDpuAKkchRbGyaw3KY/khS55ypw0=",
+        "owner": "trailofbits",
+        "repo": "skills",
+        "rev": "d5fe2e6a7896236c3102fd5477e833623ad70298",
+        "type": "github"
+      },
+      "original": {
+        "owner": "trailofbits",
+        "repo": "skills",
         "type": "github"
       }
     },
