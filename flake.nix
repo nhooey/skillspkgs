@@ -124,6 +124,10 @@
       url = "github:anthropics/skills";
       flake = false;
     };
+    caveman-src = {
+      url = "github:JuliusBrussee/caveman";
+      flake = false;
+    };
     daymade-skills-src = {
       url = "github:daymade/claude-code-skills";
       flake = false;
@@ -169,6 +173,7 @@
         "agent-skill-flake"
         "treefmt-nix"
         "anthropics-skills-src"
+        "caveman-src"
         "daymade-skills-src"
         "humanizer-src"
         "superpowers-src"
@@ -184,6 +189,7 @@
         # Locked sources keyed by pkgs/<name> dir; each module slices its own
         # subpath (e.g. skill-creator reads `skills/skill-creator`).
         srcs = {
+          caveman = inputs.caveman-src;
           daymade = inputs.daymade-skills-src;
           humanizer = inputs.humanizer-src;
           "skill-creator" = inputs.anthropics-skills-src;
