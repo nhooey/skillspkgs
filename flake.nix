@@ -189,12 +189,12 @@
         inherit (inputs) nix-skills git-skills;
       };
 
-      # One declarative owner for the dev shell: the `authoring-with-git`
-      # combination — the authoring set plus the whole git/GitHub pack, merged
-      # into a single combination that one reconcile hook converges. Defined
-      # once in sources/combinations/authoring-with-git.nix (and exposed via
-      # `combinations` for other repos), so the dev shell just reuses it.
-      devShellSkills = combos.combinations.authoring-with-git;
+      # Root-side wiring for the `skills-devshell/` sub-flake: the dev-shell
+      # skill set (skillspkgs' own `authoring-with-git` combination) is defined
+      # in that isolated sub-flake and invoked here at RUNTIME, never as a root
+      # input. skillspkgs still aggregates its skill sources for the package
+      # outputs; only the dev-shell install moved off the root.
+      devshellSkills = agent-skill-flake.lib.devshellSkillsHook { };
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import inputs.systems;
@@ -236,13 +236,11 @@
               {bold}{14}🚀 Entering skillspkgs dev shell{reset}
               Run {bold}menu{reset} to list available commands.
             '';
-            # Install the authoring combination + the whole skills-git pack at
-            # project scope on `nix develop`, via one combination that owns the
-            # union. Declarative + idempotent: one reconcile converges the whole
-            # set under a single appName, sweeping only its own strays.
-            devshell.startup.install-skills.text = ''
-              ${devShellSkills.reconcileScript system}
-            '';
+            # Reconcile the dev-shell skill set (skillspkgs' own
+            # authoring-with-git combination) at project scope on `nix develop`,
+            # by invoking the `skills-devshell/` sub-flake at RUNTIME via the
+            # hook — declarative + idempotent, and never a root input.
+            devshell.startup.install-skills.text = devshellSkills.startup;
             commands = [
               # dev
               {
@@ -257,7 +255,8 @@
                 help = "Update all flake inputs";
                 command = "nix flake update";
               }
-            ];
+            ]
+            ++ devshellSkills.commands;
             packages = [
               pkgs.jq
               pkgs.python3
