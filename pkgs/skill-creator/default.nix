@@ -5,11 +5,11 @@
 # anthropics-skills-src.
 {
   nixpkgs,
-  flake-skills,
+  agent-skill-flake,
   src,
 }:
 import ../mk-simple-vendored.nix {
-  inherit nixpkgs flake-skills src;
+  inherit nixpkgs agent-skill-flake src;
   skillName = "skill-creator";
   owner = "anthropics";
   srcSubpath = "skills/skill-creator";

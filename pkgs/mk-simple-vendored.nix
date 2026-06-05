@@ -3,7 +3,7 @@
 # skill-creator both reduce to this; superpowers stays bespoke in its own
 # default.nix (it builds many skills plus pack envs).
 #
-# `owner` is the upstream GitHub owner; flake-skills' default `namespaceFn`
+# `owner` is the upstream GitHub owner; agent-skill-flake's default `namespaceFn`
 # keys the package as `agent-skill-<owner>-<skillName>` while the installed
 # skill name stays the bare `skillName`.
 #
@@ -14,7 +14,7 @@
 # `agent-skill-*` keys for the root package set and the combinations category.
 {
   nixpkgs,
-  flake-skills,
+  agent-skill-flake,
   src,
   skillName,
   owner,
@@ -25,7 +25,7 @@
 let
   inherit (nixpkgs.lib) filterAttrs hasPrefix mapAttrs;
 
-  built = flake-skills.lib.mkSkillFlake {
+  built = agent-skill-flake.lib.mkSkillFlake {
     inherit nixpkgs skillName;
     source = { inherit owner; };
     src = if srcSubpath == null then src else "${src}/${srcSubpath}";

@@ -2,17 +2,17 @@
 
 Curated per-skill flake wrappers around third-party Agent Skills hosted in upstream repositories.
 
-Each wrapper folder is a **standalone Nix flake** that pins one upstream repo and delegates all the build/install/uninstall logic to [`nhooey/flake-skills`](https://github.com/nhooey/flake-skills) via `lib.mkSkillFlake`. There is no aggregator at the root of this repo — each wrapper stands on its own.
+Each wrapper folder is a **standalone Nix flake** that pins one upstream repo and delegates all the build/install/uninstall logic to [`nhooey/agent-skill-flake`](https://github.com/nhooey/agent-skill-flake) via `lib.mkSkillFlake`. There is no aggregator at the root of this repo — each wrapper stands on its own.
 
 ## What this collection is for
 
-Upstream skill projects whose authors don't ship a Nix flake themselves and won't accept a Nix-related PR. The wrapper here is the smallest possible flake that pins the upstream by `(github:<owner>/<repo>, rev, hash)` and lets `flake-skills` produce the install / uninstall / preview / reap apps.
+Upstream skill projects whose authors don't ship a Nix flake themselves and won't accept a Nix-related PR. The wrapper here is the smallest possible flake that pins the upstream by `(github:<owner>/<repo>, rev, hash)` and lets `agent-skill-flake` produce the install / uninstall / preview / reap apps.
 
 ## What this collection is **not** for
 
 PRs that fall under any of these get closed:
 
-- **First-party skill content.** Don't put a `SKILL.md` directly under `pkgs/<name>/` and ship the words in this repo. If you want to maintain skill content, ship it in its own GitHub repo or use [`nhooey/skills-nix`](https://github.com/nhooey/skills-nix); then submit a wrapper here.
+- **First-party skill content.** Don't put a `SKILL.md` directly under `pkgs/<name>/` and ship the words in this repo. If you want to maintain skill content, ship it in its own GitHub repo or use [`nhooey/nix-skills`](https://github.com/nhooey/nix-skills); then submit a wrapper here.
 - **Forks of upstream skills with local edits.** If you need to patch upstream behaviour, fix it upstream or maintain a fork in your own repo and wrap *that* repo.
 - **Multi-skill aggregators.** Repos that bundle many skills are a poor fit; pick a single skill out of them and wrap that.
 - **Skills that aren't reachable as a `fetchFromGitHub` snapshot.** If the source can't be pinned by `(owner, repo, rev, hash)`, it doesn't belong here.
@@ -37,16 +37,16 @@ There is intentionally **no `default.nix`** in each wrapper — `flake.nix` is t
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-skills.url = "github:nhooey/flake-skills";
-    flake-skills.inputs.nixpkgs.follows = "nixpkgs";
+    agent-skill-flake.url = "github:nhooey/agent-skill-flake";
+    agent-skill-flake.inputs.nixpkgs.follows = "nixpkgs";
     <skill>-src = {
       url = "github:<upstream-owner>/<upstream-repo>/<commit-sha>";
       flake = false;
     };
   };
 
-  outputs = { nixpkgs, flake-skills, <skill>-src, ... }:
-    flake-skills.lib.mkSkillFlake {
+  outputs = { nixpkgs, agent-skill-flake, <skill>-src, ... }:
+    agent-skill-flake.lib.mkSkillFlake {
       inherit nixpkgs;
       skillName = "<skill-name>";  # must match upstream SKILL.md frontmatter `name:`
       src = <skill>-src;

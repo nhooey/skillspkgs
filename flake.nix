@@ -47,11 +47,11 @@
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # `flake-skills` is the builder library (mkSkillFlake / mkAllSkillsFlake /
+    # `agent-skill-flake` is the builder library (mkSkillFlake / mkAllSkillsFlake /
     # mkAggregateSkillsFlake / mkCombination / mkSkillsEnv) used to build
     # categories 1 and 3.
-    flake-skills = {
-      url = "github:nhooey/flake-skills";
+    agent-skill-flake = {
+      url = "github:nhooey/agent-skill-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     treefmt-nix = {
@@ -60,30 +60,30 @@
     };
 
     # ---- CATEGORY 2: first-party repos that ship their own flake (aggregated) ----
-    # `flake-skills.follows` keeps these on the same flake-skills rev as
+    # `agent-skill-flake.follows` keeps these on the same agent-skill-flake rev as
     # skillspkgs itself. Without it, consumers (e.g. nur-packages) see multiple
-    # flake-skills nodes in their lock, and the home-manager activation module
+    # agent-skill-flake nodes in their lock, and the home-manager activation module
     # (loaded from one rev) and the skill derivations (built under another) can
     # drift on their `passthru` contract — e.g. `flakeSkillName missing` at
     # `darwin-rebuild switch` time.
     coding-agent-skills = {
       url = "github:nhooey/coding-agent-skills";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-skills.follows = "flake-skills";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
+    git-skills = {
+      url = "github:nhooey/git-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     nix-gstack = {
       url = "github:nhooey/nix-gstack";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    skills-git = {
-      url = "github:nhooey/skills-git";
+    nix-skills = {
+      url = "github:nhooey/nix-skills";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-skills.follows = "flake-skills";
-    };
-    skills-nix = {
-      url = "github:nhooey/skills-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-skills.follows = "flake-skills";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
 
     # ---- CATEGORY 1: vendored third-party sources, no upstream flake (built inline) ----
@@ -112,11 +112,11 @@
       self,
       nixpkgs,
       flake-parts,
-      flake-skills,
+      agent-skill-flake,
       anthropics-skills-src,
       humanizer-src,
       superpowers-src,
-      skills-nix,
+      nix-skills,
       ...
     }@inputs:
     let
@@ -131,7 +131,7 @@
         "flake-parts"
         "systems"
         "devshell"
-        "flake-skills"
+        "agent-skill-flake"
         "treefmt-nix"
         "anthropics-skills-src"
         "daymade-skills-src"
@@ -144,7 +144,7 @@
       # `path:` inputs — see the header comment); each subdir's sibling
       # flake.{nix,lock} is for standalone `?dir=sources/<cat>` consumption only.
       vendored = import ./pkgs {
-        inherit nixpkgs flake-skills;
+        inherit nixpkgs agent-skill-flake;
         # Locked sources keyed by pkgs/<name> dir; each module slices its own
         # subpath (e.g. skill-creator reads `skills/skill-creator`).
         srcs = {
@@ -160,12 +160,12 @@
       combos = import ./sources/combinations {
         inherit
           nixpkgs
-          flake-skills
+          agent-skill-flake
           forSystems
           ;
         vendoredSources = vendored.sources;
         systems = import inputs.systems;
-        inherit (inputs) skills-nix skills-git;
+        inherit (inputs) nix-skills git-skills;
       };
 
       # One declarative owner for the dev shell: the `authoring-with-git`
@@ -187,7 +187,7 @@
 
         templates.default = {
           path = ./templates/skills-repo;
-          description = "A first-party Claude Code skills repo using flake-skills.lib.mkAllSkillsFlake";
+          description = "A first-party Claude Code skills repo using agent-skill-flake.lib.mkAllSkillsFlake";
         };
 
         # Category 3 — kept OUT of `packages.<sys>`. Each combination is a

@@ -3,8 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-skills = {
-      url = "github:nhooey/flake-skills";
+    agent-skill-flake = {
+      url = "github:nhooey/agent-skill-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     daymade-skills-src = {
@@ -16,14 +16,14 @@
   outputs =
     {
       nixpkgs,
-      flake-skills,
+      agent-skill-flake,
       daymade-skills-src,
       ...
     }:
     {
       inherit
         (import ./default.nix {
-          inherit nixpkgs flake-skills;
+          inherit nixpkgs agent-skill-flake;
           src = daymade-skills-src;
         })
         packages

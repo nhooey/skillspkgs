@@ -1,7 +1,7 @@
 # home-manager module that symlinks a list of skill packages into
 # ~/.claude/skills/. Each skill package is expected to expose
 # share/claude-skills/<name>/ (the layout produced by
-# flake-skills.lib.mkSkillFlake).
+# agent-skill-flake.lib.mkSkillFlake).
 {
   config,
   lib,
@@ -32,7 +32,7 @@ in
       description = ''
         Skill derivations to install. Each derivation is expected to expose
         share/claude-skills/<name>/ — the layout produced by
-        flake-skills.lib.mkSkillFlake.
+        agent-skill-flake.lib.mkSkillFlake.
       '';
     };
   };

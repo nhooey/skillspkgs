@@ -1,6 +1,6 @@
 # my-skills
 
-A first-party Claude Code skills repo built with [`nhooey/flake-skills`](https://github.com/nhooey/flake-skills).
+A first-party Claude Code skills repo built with [`nhooey/agent-skill-flake`](https://github.com/nhooey/agent-skill-flake).
 
 ## Quick start
 
@@ -36,11 +36,11 @@ nix build .#skill-<skill-name>                    # single skill derivation (ski
 
 ## Home-manager (optional)
 
-Skills installed via `nix run .#install` already symlink into `~/.claude/skills/`. If you'd rather have home-manager manage installation declaratively, use the `homeManagerModules.default` exported by `flake-skills`:
+Skills installed via `nix run .#install` already symlink into `~/.claude/skills/`. If you'd rather have home-manager manage installation declaratively, use the `homeManagerModules.default` exported by `agent-skill-flake`:
 
 ```nix
 {
-  imports = [ inputs.flake-skills.homeManagerModules.default ];
+  imports = [ inputs.agent-skill-flake.homeManagerModules.default ];
   programs.agent-skills = {
     enable = true;
     skills = [ inputs.self.packages.${pkgs.system}.skill-<skill-name> ];
@@ -48,4 +48,4 @@ Skills installed via `nix run .#install` already symlink into `~/.claude/skills/
 }
 ```
 
-See [`flake-skills`'s README](https://github.com/nhooey/flake-skills) for the full reference and additional configuration options (`agent`, `systems`, and the install-time `--scope` flag).
+See [`agent-skill-flake`'s README](https://github.com/nhooey/agent-skill-flake) for the full reference and additional configuration options (`agent`, `systems`, and the install-time `--scope` flag).
