@@ -136,6 +136,10 @@
       url = "github:obra/superpowers";
       flake = false;
     };
+    trailofbits-skills-src = {
+      url = "github:trailofbits/skills";
+      flake = false;
+    };
   };
 
   outputs =
@@ -168,6 +172,7 @@
         "daymade-skills-src"
         "humanizer-src"
         "superpowers-src"
+        "trailofbits-skills-src"
       ];
 
       # The three source categories, each in its own subdirectory under
@@ -183,6 +188,7 @@
           humanizer = inputs.humanizer-src;
           "skill-creator" = inputs.anthropics-skills-src;
           superpowers = inputs.superpowers-src;
+          trailofbits = inputs.trailofbits-skills-src;
         };
       };
       aggregated = import ./sources/aggregated {
