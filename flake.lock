@@ -256,6 +256,41 @@
         "type": "github"
       }
     },
+    "nix-microsoft-skills": {
+      "inputs": {
+        "agent-skill-flake": [
+          "agent-skill-flake"
+        ],
+        "devshell": [
+          "devshell"
+        ],
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ],
+        "treefmt-nix": [
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1780699787,
+        "narHash": "sha256-juOGFt4OeJpNKuOOUvngm9HyrnFLnmZqpMzDY/sE//c=",
+        "owner": "nhooey",
+        "repo": "nix-microsoft-skills",
+        "rev": "81217635d96a45c68f255e2aaa893a390ebaaf04",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nhooey",
+        "repo": "nix-microsoft-skills",
+        "type": "github"
+      }
+    },
     "nix-skills": {
       "inputs": {
         "agent-skill-flake": [
@@ -318,6 +353,7 @@
         "git-skills": "git-skills",
         "humanizer-src": "humanizer-src",
         "nix-gstack": "nix-gstack",
+        "nix-microsoft-skills": "nix-microsoft-skills",
         "nix-skills": "nix-skills",
         "nixpkgs": "nixpkgs",
         "superpowers-src": "superpowers-src",

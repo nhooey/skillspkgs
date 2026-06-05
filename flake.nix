@@ -97,6 +97,15 @@
       inputs.treefmt-nix.follows = "treefmt-nix";
       inputs.devshell.follows = "devshell";
     };
+    nix-microsoft-skills = {
+      url = "github:nhooey/nix-microsoft-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs.devshell.follows = "devshell";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
     nix-skills = {
       url = "github:nhooey/nix-skills";
       inputs.nixpkgs.follows = "nixpkgs";

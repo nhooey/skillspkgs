@@ -26,6 +26,11 @@
       url = "github:nhooey/nix-gstack";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-microsoft-skills = {
+      url = "github:nhooey/nix-microsoft-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
     nix-skills = {
       url = "github:nhooey/nix-skills";
       inputs.nixpkgs.follows = "nixpkgs";
