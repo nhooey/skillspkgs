@@ -66,23 +66,44 @@
     # (loaded from one rev) and the skill derivations (built under another) can
     # drift on their `passthru` contract — e.g. `flakeSkillName missing` at
     # `darwin-rebuild switch` time.
+    # Each source repo below follows the shared infra inputs (systems /
+    # flake-parts / treefmt-nix / devshell) onto this flake's copies, so the
+    # lock keeps one node per infra flake instead of one per source — the
+    # aggregated graph is otherwise dominated by duplicate nix-systems /
+    # flake-parts / devshell / treefmt-nix subtrees.
     coding-agent-skills = {
       url = "github:nhooey/coding-agent-skills";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs.devshell.follows = "devshell";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     git-skills = {
       url = "github:nhooey/git-skills";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs.devshell.follows = "devshell";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     nix-gstack = {
       url = "github:nhooey/nix-gstack";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs.devshell.follows = "devshell";
     };
     nix-skills = {
       url = "github:nhooey/nix-skills";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs.devshell.follows = "devshell";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
 
