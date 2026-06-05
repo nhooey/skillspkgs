@@ -253,7 +253,53 @@
         "type": "github"
       }
     },
+    "daymade": {
+      "inputs": {
+        "daymade-skills-src": "daymade-skills-src_2",
+        "flake-skills": [
+          "skills-git",
+          "skillspkgs-combinations",
+          "flake-skills"
+        ],
+        "nixpkgs": [
+          "skills-git",
+          "skillspkgs-combinations",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "dir": "pkgs/daymade",
+        "lastModified": 1780606768,
+        "narHash": "sha256-ECtSp03LzpnYqgwXryoCvdBfKOJLfiyzj0tYXxwrNrQ=",
+        "owner": "nhooey",
+        "repo": "skillspkgs",
+        "rev": "8677a86f04a7c94417bec3bedab2516d18fbe75d",
+        "type": "github"
+      },
+      "original": {
+        "dir": "pkgs/daymade",
+        "owner": "nhooey",
+        "repo": "skillspkgs",
+        "type": "github"
+      }
+    },
     "daymade-skills-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1780231637,
+        "narHash": "sha256-aK4v1uJnYPh/QU4dSyku7nVNkWWwpQJ6q7cWhuzyq8M=",
+        "owner": "daymade",
+        "repo": "claude-code-skills",
+        "rev": "c09bac375fcd116469a218ecdea50a43a97657a9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "daymade",
+        "repo": "claude-code-skills",
+        "type": "github"
+      }
+    },
+    "daymade-skills-src_2": {
       "flake": false,
       "locked": {
         "lastModified": 1780231637,
@@ -2957,11 +3003,11 @@
         "treefmt-nix": "treefmt-nix_14"
       },
       "locked": {
-        "lastModified": 1780596602,
-        "narHash": "sha256-E0vebzoxRFwDfht56AwSgu7cIWZJuSRb/RMUzslyXJc=",
+        "lastModified": 1780608659,
+        "narHash": "sha256-tap1t9I3pQtVzEvcvzegNgeYWbRSScPu+kFiVOklhnk=",
         "owner": "nhooey",
         "repo": "skills-git",
-        "rev": "bc9b03e034f91e2d1779b23d397650b1d3b8e838",
+        "rev": "1fe2f8c6d81bca69d81d362719457daf19aca8e7",
         "type": "github"
       },
       "original": {
@@ -3886,6 +3932,7 @@
     },
     "skillspkgs-combinations_9": {
       "inputs": {
+        "daymade": "daymade",
         "flake-skills": [
           "skills-git",
           "flake-skills"
@@ -3902,11 +3949,11 @@
       },
       "locked": {
         "dir": "sources/combinations",
-        "lastModified": 1780495770,
-        "narHash": "sha256-Y/jBCJJmnaZ6DnnP8ZeBPbPHLg7Sao3fKx4b5S8DxnM=",
+        "lastModified": 1780606768,
+        "narHash": "sha256-ECtSp03LzpnYqgwXryoCvdBfKOJLfiyzj0tYXxwrNrQ=",
         "owner": "nhooey",
         "repo": "skillspkgs",
-        "rev": "a7648e7c56188c4d5ab59e48ae7185b9541f1fa2",
+        "rev": "8677a86f04a7c94417bec3bedab2516d18fbe75d",
         "type": "github"
       },
       "original": {

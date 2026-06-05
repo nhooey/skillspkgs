@@ -165,24 +165,15 @@
           ;
         vendoredSources = vendored.sources;
         systems = import inputs.systems;
-        inherit (inputs) skills-nix;
+        inherit (inputs) skills-nix skills-git;
       };
 
-      # One declarative owner for the dev shell: the authoring combination
-      # spliced in AS A SOURCE (its `packages` make it re-composable) plus the
-      # whole skills-git pack, merged into a single combination. One reconcile
-      # hook converges the whole union — no more per-set hooks juggling
-      # disjoint appNames.
-      devShellSkills = flake-skills.lib.mkCombination {
-        inherit nixpkgs;
-        systems = import inputs.systems;
-        name = "skillspkgs-devshell";
-        packagePrefix = "agent-skill-";
-        sources = [
-          { source = combos.combinations.authoring; }
-          { source = inputs.skills-git; }
-        ];
-      };
+      # One declarative owner for the dev shell: the `authoring-with-git`
+      # combination — the authoring set plus the whole git/GitHub pack, merged
+      # into a single combination that one reconcile hook converges. Defined
+      # once in sources/combinations/authoring-with-git.nix (and exposed via
+      # `combinations` for other repos), so the dev shell just reuses it.
+      devShellSkills = combos.combinations.authoring-with-git;
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import inputs.systems;
