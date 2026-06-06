@@ -88,6 +88,38 @@
         "type": "github"
       }
     },
+    "data-skills": {
+      "inputs": {
+        "agent-skill-flake": [
+          "agent-skill-flake"
+        ],
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ],
+        "treefmt-nix": [
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1780778711,
+        "narHash": "sha256-5TnNV9rjKNR2hDbGW4qJJUZNA3STsdTUyZbNqnZOtTs=",
+        "owner": "nhooey",
+        "repo": "data-skills",
+        "rev": "1b53e5b697559538aa24c77ae96de807f7a5ae85",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nhooey",
+        "repo": "data-skills",
+        "type": "github"
+      }
+    },
     "daymade-skills-src": {
       "flake": false,
       "locked": {
@@ -352,6 +384,7 @@
         "anthropics-skills-src": "anthropics-skills-src",
         "caveman-src": "caveman-src",
         "coding-agent-skills": "coding-agent-skills",
+        "data-skills": "data-skills",
         "daymade-skills-src": "daymade-skills-src",
         "devshell": "devshell_2",
         "flake-parts": "flake-parts_2",
