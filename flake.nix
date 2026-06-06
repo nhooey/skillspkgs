@@ -38,26 +38,20 @@
   inputs = {
     # ---- infrastructure ----
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-parts = {
-      url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs-lib.follows = "nixpkgs";
-    };
-    systems.url = "github:nix-systems/default";
-    devshell = {
-      url = "github:numtide/devshell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     # `agent-skill-flake` is the builder library (mkSkillFlake / mkAllSkillsFlake /
     # mkAggregateSkillsFlake / mkCombination / mkSkillsEnv) used to build
-    # categories 1 and 3.
+    # categories 1 and 3. It is also the single source of truth for the shared
+    # builder infra: flake-parts / systems / devshell / treefmt-nix below alias
+    # onto its copies rather than pinning their own, so each collapses to one
+    # node in the lock instead of being pinned twice.
     agent-skill-flake = {
       url = "github:nhooey/agent-skill-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    flake-parts.follows = "agent-skill-flake/flake-parts";
+    systems.follows = "agent-skill-flake/systems";
+    devshell.follows = "agent-skill-flake/devshell";
+    treefmt-nix.follows = "agent-skill-flake/treefmt-nix";
 
     # ---- CATEGORY 2: first-party repos that ship their own flake (aggregated) ----
     # `agent-skill-flake.follows` keeps these on the same agent-skill-flake rev as
@@ -67,10 +61,11 @@
     # drift on their `passthru` contract — e.g. `flakeSkillName missing` at
     # `darwin-rebuild switch` time.
     # Each source repo below follows the shared infra inputs (systems /
-    # flake-parts / treefmt-nix / devshell) onto this flake's copies, so the
-    # lock keeps one node per infra flake instead of one per source — the
-    # aggregated graph is otherwise dominated by duplicate nix-systems /
-    # flake-parts / devshell / treefmt-nix subtrees.
+    # flake-parts / treefmt-nix / devshell) onto this flake's copies — which in
+    # turn follow agent-skill-flake's — so the lock keeps one node per infra
+    # flake instead of one per source. The aggregated graph is otherwise
+    # dominated by duplicate nix-systems / flake-parts / devshell / treefmt-nix
+    # subtrees.
     coding-agent-skills = {
       url = "github:nhooey/coding-agent-skills";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -224,9 +219,9 @@
       systems = import inputs.systems;
       # The devshell-skills module bundles agent-skill-flake's OWN devshell
       # flakeModule, so we do NOT import `inputs.devshell.flakeModule` here too
-      # (that would load a second, differently-pinned devshell). The `devshell`
-      # input itself stays declared above: it remains a `.follows` target for
-      # the category-2 source repos and an `infrastructureInputs` member.
+      # (that would double-import the devshell module). The `devshell` input
+      # itself stays declared above (now following agent-skill-flake's copy)
+      # as an `infrastructureInputs` member.
       imports = [
         inputs.agent-skill-flake.flakeModules.devshellSkills
         inputs.treefmt-nix.flakeModule
