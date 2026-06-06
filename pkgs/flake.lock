@@ -1,5 +1,29 @@
 {
   "nodes": {
+    "agent-skill-flake": {
+      "inputs": {
+        "devshell": "devshell",
+        "flake-parts": "flake-parts",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": "systems",
+        "treefmt-nix": "treefmt-nix"
+      },
+      "locked": {
+        "lastModified": 1780702215,
+        "narHash": "sha256-iWITVu86QtmiFwlpxfKmrxaWayWGBAaeOdYOvOXdzQY=",
+        "owner": "nhooey",
+        "repo": "agent-skill-flake",
+        "rev": "e603a9deb58941a821c6b3f613e9d28d40d97126",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nhooey",
+        "repo": "agent-skill-flake",
+        "type": "github"
+      }
+    },
     "anthropics-skills-src": {
       "flake": false,
       "locked": {
@@ -16,10 +40,42 @@
         "type": "github"
       }
     },
+    "caveman-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1779273824,
+        "narHash": "sha256-BydREt/vai3j7kO5+e1OxsjXf6Vy+jSY1yA/yyxjHbI=",
+        "owner": "JuliusBrussee",
+        "repo": "caveman",
+        "rev": "655b7d9c5431f822264b7732e9901c5578ac84cf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "JuliusBrussee",
+        "repo": "caveman",
+        "type": "github"
+      }
+    },
+    "daymade-skills-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1780590738,
+        "narHash": "sha256-GjA9H2Eu4bxd6u6zHy/e7V8J8DSkA0D+3zrD9ORz6Yg=",
+        "owner": "daymade",
+        "repo": "claude-code-skills",
+        "rev": "96b14eb2cea2ea4f6a15e3e8182c89879e0137fc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "daymade",
+        "repo": "claude-code-skills",
+        "type": "github"
+      }
+    },
     "devshell": {
       "inputs": {
         "nixpkgs": [
-          "flake-skills",
+          "agent-skill-flake",
           "nixpkgs"
         ]
       },
@@ -40,7 +96,7 @@
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
-          "flake-skills",
+          "agent-skill-flake",
           "nixpkgs"
         ]
       },
@@ -55,30 +111,6 @@
       "original": {
         "owner": "hercules-ci",
         "repo": "flake-parts",
-        "type": "github"
-      }
-    },
-    "flake-skills": {
-      "inputs": {
-        "devshell": "devshell",
-        "flake-parts": "flake-parts",
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "systems": "systems",
-        "treefmt-nix": "treefmt-nix"
-      },
-      "locked": {
-        "lastModified": 1780330228,
-        "narHash": "sha256-ro9DNyVV4MctBkYLFNC2mNijP8oi3GtNGWr/M3rk7nc=",
-        "owner": "nhooey",
-        "repo": "flake-skills",
-        "rev": "5560e7c83a5616b85d72631f8f3169230f92cb70",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nhooey",
-        "repo": "flake-skills",
         "type": "github"
       }
     },
@@ -116,12 +148,15 @@
     },
     "root": {
       "inputs": {
+        "agent-skill-flake": "agent-skill-flake",
         "anthropics-skills-src": "anthropics-skills-src",
-        "flake-skills": "flake-skills",
+        "caveman-src": "caveman-src",
+        "daymade-skills-src": "daymade-skills-src",
         "humanizer-src": "humanizer-src",
         "nixpkgs": "nixpkgs",
         "superpowers-src": "superpowers-src",
-        "systems": "systems_2"
+        "systems": "systems_2",
+        "trailofbits-skills-src": "trailofbits-skills-src"
       }
     },
     "superpowers-src": {
@@ -170,10 +205,26 @@
         "type": "github"
       }
     },
+    "trailofbits-skills-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1780676921,
+        "narHash": "sha256-VCIy7AaKLHD4paZUDpuAKkchRbGyaw3KY/khS55ypw0=",
+        "owner": "trailofbits",
+        "repo": "skills",
+        "rev": "d5fe2e6a7896236c3102fd5477e833623ad70298",
+        "type": "github"
+      },
+      "original": {
+        "owner": "trailofbits",
+        "repo": "skills",
+        "type": "github"
+      }
+    },
     "treefmt-nix": {
       "inputs": {
         "nixpkgs": [
-          "flake-skills",
+          "agent-skill-flake",
           "nixpkgs"
         ]
       },
