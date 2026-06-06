@@ -317,11 +317,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1780766749,
-        "narHash": "sha256-OSAUN9hGUHzlxYX7co/4YUgEideTw1nJNInpUXQErwA=",
+        "lastModified": 1780772214,
+        "narHash": "sha256-d5ufiewSw/K7QA2IweCbV4hl9jTIW4PtfFxDCrRy0Bo=",
         "owner": "nhooey",
         "repo": "nix-skills",
-        "rev": "053ea97bf73c63df0c29fae668dd659e4e1a99a5",
+        "rev": "6c763b8c1b77dd97b846e2641adffe6c4b1cb725",
         "type": "github"
       },
       "original": {
