@@ -75,11 +75,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1780747993,
-        "narHash": "sha256-oCIcPO3mVfeWd3ZLar1kC8LSTjyrtI+kdnEYIWqwvMI=",
+        "lastModified": 1780766752,
+        "narHash": "sha256-YuWFnOkY68ro9GiShQ6ZMIX79gyuMChka3+lIESGTR0=",
         "owner": "nhooey",
         "repo": "coding-agent-skills",
-        "rev": "adb37c579c302aefc633988e6b814df57242d94f",
+        "rev": "9d4f6f11b70911ddbaa564b80b2ebd529db0c054",
         "type": "github"
       },
       "original": {
@@ -191,9 +191,6 @@
         "agent-skill-flake": [
           "agent-skill-flake"
         ],
-        "devshell": [
-          "devshell"
-        ],
         "flake-parts": [
           "flake-parts"
         ],
@@ -208,11 +205,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1780702148,
-        "narHash": "sha256-NUMEns+lh1jIlKmhUabXDbVOpGlePxB39aXCicNspg4=",
+        "lastModified": 1780766745,
+        "narHash": "sha256-MRH05D8uspasWtVbZVDMPoUlO2IzhOHcCa3sh+0G1e4=",
         "owner": "nhooey",
         "repo": "git-skills",
-        "rev": "edf97cec894c8284ab02e624d3be4d50ffd5fea3",
+        "rev": "d975b61ec94c47e1b7037d31eb4cb6518251a06b",
         "type": "github"
       },
       "original": {
@@ -288,11 +285,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1780748974,
-        "narHash": "sha256-fYI8X8xNoGMrsD/N7ci7RnZXt/2ZgYUQ5MfxbAf9NJk=",
+        "lastModified": 1780766756,
+        "narHash": "sha256-1fHgAfyBMi6CnTBPqRoyr5FyuPmxyjRps/6R1aqm3KA=",
         "owner": "nhooey",
         "repo": "nix-microsoft-skills",
-        "rev": "e6eae6a1c520c208d28250fb46fbe3cf05c25d0b",
+        "rev": "b5c29bafd6021c27e457bdf360d3e184525b476d",
         "type": "github"
       },
       "original": {
@@ -320,11 +317,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1780748020,
-        "narHash": "sha256-ayLQHqawpTacySjtVQC5VVaLxgWxvKv+hJx1lgnfyHA=",
+        "lastModified": 1780766749,
+        "narHash": "sha256-OSAUN9hGUHzlxYX7co/4YUgEideTw1nJNInpUXQErwA=",
         "owner": "nhooey",
         "repo": "nix-skills",
-        "rev": "317af6cf7fdf9ff91a8e10ffefcd32305943200e",
+        "rev": "053ea97bf73c63df0c29fae668dd659e4e1a99a5",
         "type": "github"
       },
       "original": {
