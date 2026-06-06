@@ -210,20 +210,23 @@
         systems = import inputs.systems;
         inherit (inputs) nix-skills git-skills;
       };
-
-      # Root-side wiring for the `skills-devshell/` sub-flake: the dev-shell
-      # skill set (skillspkgs' own `authoring-with-git` combination) is defined
-      # in that isolated sub-flake and invoked here at RUNTIME, never as a root
-      # input. skillspkgs still aggregates its skill sources for the package
-      # outputs; only the dev-shell install moved off the root.
-      devshellSkills = agent-skill-flake.lib.devshellSkillsHook { };
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import inputs.systems;
+      # The devshell-skills module bundles agent-skill-flake's OWN devshell
+      # flakeModule, so we do NOT import `inputs.devshell.flakeModule` here too
+      # (that would load a second, differently-pinned devshell). The `devshell`
+      # input itself stays declared above: it remains a `.follows` target for
+      # the category-2 source repos and an `infrastructureInputs` member.
       imports = [
-        inputs.devshell.flakeModule
+        inputs.agent-skill-flake.flakeModules.devshellSkills
         inputs.treefmt-nix.flakeModule
       ];
+
+      # Dev-shell options consumed by the devshellSkills module above: name the
+      # shell, generate the stock motd, reconcile skills-devshell/ at project
+      # scope, and prepend the standard ci/dev/maintenance command trio.
+      agent-skill-flake.devshellSkills.name = "skillspkgs";
 
       flake = {
         homeManagerModules.default = import ./lib/home-manager-module.nix;
@@ -252,38 +255,14 @@
 
           legacyPackages = aggregated.aggregatedFor "legacyPackages" system;
 
-          devshells.default = {
-            name = "skillspkgs";
-            motd = ''
-              {bold}{14}🚀 Entering skillspkgs dev shell{reset}
-              Run {bold}menu{reset} to list available commands.
-            '';
-            # Reconcile the dev-shell skill set (skillspkgs' own
-            # authoring-with-git combination) at project scope on `nix develop`,
-            # by invoking the `skills-devshell/` sub-flake at RUNTIME via the
-            # hook — declarative + idempotent, and never a root input.
-            devshell.startup.install-skills.text = devshellSkills.startup;
-            commands = [
-              # dev
-              {
-                category = "dev";
-                name = "fmt";
-                help = "Format the tree with treefmt";
-                command = "nix fmt";
-              }
-              {
-                category = "dev";
-                name = "update-flake";
-                help = "Update all flake inputs";
-                command = "nix flake update";
-              }
-            ]
-            ++ devshellSkills.commands;
-            packages = [
-              pkgs.jq
-              pkgs.python3
-            ];
-          };
+          # The motd, the install-skills startup, and the standard + skills
+          # command lists all come from agent-skill-flake.flakeModules.
+          # devshellSkills (imported above). We only set the name and add this
+          # repo's own packages; the module's command lists merge with ours.
+          devshells.default.packages = [
+            pkgs.jq
+            pkgs.python3
+          ];
 
           treefmt = {
             projectRootFile = "flake.nix";
