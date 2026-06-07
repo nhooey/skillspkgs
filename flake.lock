@@ -107,11 +107,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1780778711,
-        "narHash": "sha256-5TnNV9rjKNR2hDbGW4qJJUZNA3STsdTUyZbNqnZOtTs=",
+        "lastModified": 1780791149,
+        "narHash": "sha256-duPcLOrubOGykDyGNBP+n48twDCzmlAxJzxoXYeHG+Q=",
         "owner": "nhooey",
         "repo": "data-skills",
-        "rev": "1b53e5b697559538aa24c77ae96de807f7a5ae85",
+        "rev": "99a7732b99de1aef9ecbb0a8436ac5f386674624",
         "type": "github"
       },
       "original": {
