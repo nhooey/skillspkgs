@@ -14,10 +14,15 @@
 # logic-programmer, git-version-control). Each skill is a lone SKILL.md with no
 # references/ or scripts/, so no extraDirs/extraFiles are needed.
 #
-# The upstream owner is `Pyroxin`, but a package-key namespace segment must be
-# lowercase (^[a-z0-9][a-z0-9-]*$), so `source.owner` is the lowercased `pyroxin`
-# — package keys are `agent-skill-pyroxin-<name>`. The installed skill name stays
-# bare.
+# The package-key namespace is `pyroxin-opinionated-software-engineering`, not the
+# bare GitHub owner `pyroxin`. Pyroxin/opinionated-claude-skills is a monorepo of
+# many independent plugins (opinionated-python-development, opinionated-apple-
+# development, ...), several of which could ship a same-named skill; namespacing
+# by `<owner>-<plugin>` instead of `<owner>` keeps a future sibling wrapper from
+# colliding in the aggregated root package set. The value satisfies the namespace
+# validator (lowercase `^[a-z0-9][a-z0-9-]*$`); package keys are
+# `agent-skill-pyroxin-opinionated-software-engineering-<name>`. The installed
+# skill name stays bare.
 {
   nixpkgs,
   agent-skill-flake,
@@ -29,7 +34,7 @@ let
   base = agent-skill-flake.lib.mkAllSkillsFlake {
     inherit nixpkgs;
     source = {
-      owner = "pyroxin";
+      owner = "pyroxin-opinionated-software-engineering";
     };
     skillsDir = "${src}/opinionated-software-engineering/skills";
     packagePrefix = "agent-skill-";
@@ -37,7 +42,8 @@ let
 
   # Root + combinations views: the individual skills only. `hasPrefix
   # "agent-skill-"` keeps the singular per-skill keys and drops both `default`
-  # and the plural `agent-skills-pyroxin-all` aggregate.
+  # and the plural `agent-skills-pyroxin-opinionated-software-engineering-all`
+  # aggregate.
   skillsOnly = mapAttrs (_: filterAttrs (n: _: hasPrefix "agent-skill-" n)) base.packages;
 in
 base
