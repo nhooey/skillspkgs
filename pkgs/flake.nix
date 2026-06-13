@@ -1,5 +1,5 @@
 {
-  description = "skillspkgs vendored category — third-party Claude Code skills with no upstream Nix flake (caveman, daymade, humanizer, skill-creator, superpowers, trailofbits).";
+  description = "skillspkgs vendored category — third-party Claude Code skills with no upstream Nix flake (caveman, daymade, humanizer, opinionated-software-engineering, skill-creator, superpowers, trailofbits).";
 
   # Standalone `?dir=pkgs` face for the whole vendored category. The root flake
   # never reads this — it plain-`import`s ./default.nix (see that file's header).
@@ -34,6 +34,10 @@
       url = "github:blader/humanizer";
       flake = false;
     };
+    opinionated-claude-skills-src = {
+      url = "github:Pyroxin/opinionated-claude-skills";
+      flake = false;
+    };
     superpowers-src = {
       url = "github:obra/superpowers";
       flake = false;
@@ -53,6 +57,7 @@
       caveman-src,
       daymade-skills-src,
       humanizer-src,
+      opinionated-claude-skills-src,
       superpowers-src,
       trailofbits-skills-src,
       ...
@@ -65,6 +70,7 @@
           caveman = caveman-src;
           daymade = daymade-skills-src;
           humanizer = humanizer-src;
+          "opinionated-software-engineering" = opinionated-claude-skills-src;
           "skill-creator" = anthropics-skills-src;
           superpowers = superpowers-src;
           trailofbits = trailofbits-skills-src;

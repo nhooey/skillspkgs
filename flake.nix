@@ -134,6 +134,10 @@
       url = "github:blader/humanizer";
       flake = false;
     };
+    opinionated-claude-skills-src = {
+      url = "github:Pyroxin/opinionated-claude-skills";
+      flake = false;
+    };
     superpowers-src = {
       url = "github:obra/superpowers";
       flake = false;
@@ -174,6 +178,7 @@
         "caveman-src"
         "daymade-skills-src"
         "humanizer-src"
+        "opinionated-claude-skills-src"
         "superpowers-src"
         "trailofbits-skills-src"
       ];
@@ -190,6 +195,7 @@
           caveman = inputs.caveman-src;
           daymade = inputs.daymade-skills-src;
           humanizer = inputs.humanizer-src;
+          "opinionated-software-engineering" = inputs.opinionated-claude-skills-src;
           "skill-creator" = inputs.anthropics-skills-src;
           superpowers = inputs.superpowers-src;
           trailofbits = inputs.trailofbits-skills-src;
