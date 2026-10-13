@@ -8,13 +8,17 @@
 # generic `default` / `agent-skills-all` aggregates are dropped from both views
 # (the latter would collide with a category-2 key).
 #
-# NOTE — upstream layout caveat.
+# NOTE — upstream layout caveat, settled by the `extraFiles` below.
 # `mkAllSkillsFlake` ships only SKILL.md, references/, and scripts/ per skill
-# (Anthropic's agent-skill spec). Several obra/superpowers skills carry loose
-# top-level companion files outside that whitelist (e.g. systematic-debugging's
-# condition-based-waiting.md, writing-skills' anthropic-best-practices.md). The
-# core SKILL.md prose still works; to ship the extras, pass `extraFiles` to
-# mkAllSkillsFlake and bump the agent-skill-flake rev.
+# (Anthropic's agent-skill spec). Eight of the fourteen obra/superpowers skills
+# carry 26 loose top-level companion files outside that whitelist, and their
+# SKILL.md files name them: subagent-driven-development's three dispatch prompts,
+# requesting-code-review's code-reviewer.md, writing-skills'
+# anthropic-best-practices.md and render-graphs.js, systematic-debugging's ten.
+# Without them a skill sends its reader to a file the install does not hold, so
+# the `extraFiles` globs below ship every loose file the collection carries —
+# the set mk-all-skills-flake.nix documents for exactly this source. The pinned
+# agent-skill-flake rev already takes the argument, so no bump goes with it.
 {
   nixpkgs,
   agent-skill-flake,
@@ -36,6 +40,13 @@ let
     };
     skillsDir = "${src}/skills";
     packagePrefix = "agent-skill-";
+    extraFiles = [
+      "*.md"
+      "*.sh"
+      "*.ts"
+      "*.js"
+      "*.dot"
+    ];
   };
 
   # Pack envs cover exactly the systems mkAllSkillsFlake built for — derive the
