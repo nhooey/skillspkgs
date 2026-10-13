@@ -14,13 +14,15 @@ The build/install/uninstall/preview/reap logic lives in [`nhooey/agent-skill-fla
 
 Each subdirectory under `pkgs/` is a thin wrapper that:
 
-- pins an upstream repo whose authors don't ship a Nix flake,
-- delegates the skill build + install/uninstall/preview/reap apps to `agent-skill-flake` via `lib.mkSkillFlake`,
-- can be installed independently as a standalone flake — no aggregation step required.
+- Pins an upstream repo whose authors don't ship a Nix flake.
+- Delegates the skill build + install/uninstall/preview/reap apps to `agent-skill-flake` via `lib.mkSkillFlake`.
+- Can be installed independently as a standalone flake — no aggregation step required.
 
-See [`pkgs/README.md`](./pkgs/README.md) for the wrapper charter, the ~20-line `flake.nix` template, and pinning rules. That subdirectory is wrappers-only; PRs adding first-party content, forks, or multi-skill bundles there get closed.
+See [`pkgs/README.md`](./pkgs/README.md) for the wrapper charter, the ~20-line `flake.nix` template, and pinning rules. That subdirectory is wrappers-only.
 
-### Quick start — install one skill
+### Quick start
+
+#### Imperative install (*without* Nix Flakes)
 
 ```bash
 nix run github:nhooey/skillspkgs?dir=pkgs/humanizer#install
@@ -37,7 +39,7 @@ nix run github:nhooey/skillspkgs?dir=pkgs/humanizer#reap       # clean up dead m
 nix build github:nhooey/skillspkgs?dir=pkgs/humanizer          # produce ./result
 ```
 
-### Quick start — declarative install via home-manager
+#### Declarative install via home-manager (with Nix Flakes)
 
 ```nix
 {
