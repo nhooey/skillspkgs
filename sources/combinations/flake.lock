@@ -52,11 +52,11 @@
       },
       "locked": {
         "dir": "pkgs/daymade",
-        "lastModified": 1780788833,
-        "narHash": "sha256-2XeeWw+ClR2ONMsv1iUceBObyly8oterWViDF/Vv3aw=",
+        "lastModified": 1791825883,
+        "narHash": "sha256-md9dU+eACrr7yG5sZXFMsvQTs0f9w7Ysdn2NoA8pnIg=",
         "owner": "nhooey",
         "repo": "skillspkgs",
-        "rev": "f25b986a8e89ffe4598b8e4a1440926708b60c40",
+        "rev": "f5640decb2b2c08a3c742688b87255cacdcf3954",
         "type": "github"
       },
       "original": {
@@ -179,11 +179,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1780775118,
-        "narHash": "sha256-Vs1Z1Ttut981ZBguZcCkYn0WiOCrZLj7TCIQNTAkA28=",
+        "lastModified": 1780790293,
+        "narHash": "sha256-59JsVBC45E3dKmwH8GpmodPeM+MxLH48PraQD/yi6xM=",
         "owner": "nhooey",
         "repo": "git-skills",
-        "rev": "7ee92d9167c539f2761cb4de0301732e9b440970",
+        "rev": "98e0910bf394146281f894a98b39de2925676e7f",
         "type": "github"
       },
       "original": {
@@ -204,11 +204,11 @@
       },
       "locked": {
         "dir": "pkgs/humanizer",
-        "lastModified": 1780788833,
-        "narHash": "sha256-2XeeWw+ClR2ONMsv1iUceBObyly8oterWViDF/Vv3aw=",
+        "lastModified": 1791825883,
+        "narHash": "sha256-md9dU+eACrr7yG5sZXFMsvQTs0f9w7Ysdn2NoA8pnIg=",
         "owner": "nhooey",
         "repo": "skillspkgs",
-        "rev": "f25b986a8e89ffe4598b8e4a1440926708b60c40",
+        "rev": "f5640decb2b2c08a3c742688b87255cacdcf3954",
         "type": "github"
       },
       "original": {
@@ -247,11 +247,11 @@
         "treefmt-nix": "treefmt-nix_3"
       },
       "locked": {
-        "lastModified": 1780775242,
-        "narHash": "sha256-PCVrb6OPr2/wELZWW7Vo2hs85wsvVzTNqdUmUWClBMA=",
+        "lastModified": 1780790301,
+        "narHash": "sha256-Io9t/Y54y96rwYyc9EqcX1w4z4d0sqgkm97MpMAeFpU=",
         "owner": "nhooey",
         "repo": "nix-skills",
-        "rev": "292360c7466d1b2c1c334ef3006803066624174e",
+        "rev": "c6a94418cb5993ffd15cc8658be02fbdecd49b22",
         "type": "github"
       },
       "original": {
@@ -262,11 +262,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1780243769,
-        "narHash": "sha256-x5UQuRsH3MqI0U9afaXSNqzTPSeZlRLvFAav2Ux1pNw=",
+        "lastModified": 1791734076,
+        "narHash": "sha256-i5qk1kLiit98rRbh1AXmWBNT9QXC/y4l5Wk/u5EdpDQ=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "331800de5053fcebacf6813adb5db9c9dca22a0c",
+        "rev": "7fd4004d0511991fff3a0524856a9be09e28c5f0",
         "type": "github"
       },
       "original": {
@@ -301,11 +301,11 @@
       },
       "locked": {
         "dir": "pkgs/skill-creator",
-        "lastModified": 1780788833,
-        "narHash": "sha256-2XeeWw+ClR2ONMsv1iUceBObyly8oterWViDF/Vv3aw=",
+        "lastModified": 1791825883,
+        "narHash": "sha256-md9dU+eACrr7yG5sZXFMsvQTs0f9w7Ysdn2NoA8pnIg=",
         "owner": "nhooey",
         "repo": "skillspkgs",
-        "rev": "f25b986a8e89ffe4598b8e4a1440926708b60c40",
+        "rev": "f5640decb2b2c08a3c742688b87255cacdcf3954",
         "type": "github"
       },
       "original": {
@@ -327,11 +327,11 @@
       },
       "locked": {
         "dir": "pkgs/superpowers",
-        "lastModified": 1780788833,
-        "narHash": "sha256-2XeeWw+ClR2ONMsv1iUceBObyly8oterWViDF/Vv3aw=",
+        "lastModified": 1791825883,
+        "narHash": "sha256-md9dU+eACrr7yG5sZXFMsvQTs0f9w7Ysdn2NoA8pnIg=",
         "owner": "nhooey",
         "repo": "skillspkgs",
-        "rev": "f25b986a8e89ffe4598b8e4a1440926708b60c40",
+        "rev": "f5640decb2b2c08a3c742688b87255cacdcf3954",
         "type": "github"
       },
       "original": {
@@ -404,11 +404,11 @@
     },
     "systems_4": {
       "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "lastModified": 1791244623,
+        "narHash": "sha256-uuanbkFk8a313Zfrxdcz8Us/yQtaxNnKJtX8v0ZPpd8=",
         "owner": "nix-systems",
         "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "rev": "d36eeed142f88b5a636f2e3856a53c61654cf29b",
         "type": "github"
       },
       "original": {
