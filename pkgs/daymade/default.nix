@@ -4,26 +4,29 @@
 # use) and by ../default.nix (the root's plain `import` fold).
 #
 # Like superpowers (and unlike humanizer/skill-creator) this contributes MANY
-# packages: 58 individual `agent-skill-daymade-*` skills plus the
+# packages: 118 individual `agent-skill-daymade-*` skills plus the
 # `agent-skills-daymade-*` pack envs. The seven topical packs are a disjoint
-# partition of all 58; `agent-skills-daymade-all` is the single overlapping
+# partition of all 118; `agent-skills-daymade-all` is the single overlapping
 # bundle.
 #
 # Two upstream-layout facts shape the build:
-#   • Skills live at the REPO ROOT (38 standalone), not under a `skills/` dir,
+#   • Skills live at the REPO ROOT (55 standalone), not under a `skills/` dir,
 #     alongside non-skill dirs (demos/, references/, scripts/). discoverSkills
 #     keys on a top-level SKILL.md, so those are skipped automatically.
-#   • Four "suite" dirs (daymade-audio, daymade-claude-code, daymade-docs,
-#     daymade-skill) carry no SKILL.md themselves — their skills sit one level
-#     down. So each suite is its own mkAllSkillsFlake `skillsDir`, and the five
-#     groups (root + 4 suites) are merged here.
+#   • Seven "suite" dirs (daymade-audio, daymade-claude-code, daymade-codex,
+#     daymade-docs, daymade-financial, daymade-macos, daymade-skill) carry no
+#     SKILL.md themselves — their skills sit one level down (63 in all). So
+#     each suite is its own mkAllSkillsFlake `skillsDir`, and the eight groups
+#     (root + 7 suites) are merged here. Installed names are unique across
+#     groups, so the merge drops nothing.
 #
 # `source = { owner = "daymade"; }` namespaces every package key as
 # `agent-skill-daymade-<name>`, which keeps daymade's skill-creator from
 # colliding with anthropics/skills' in the root package set. The installed
-# skill name stays bare. `renameFn` only lowercases — daymade ships one
-# uppercase dir, iOS-APP-developer, which would fail Claude Code's
-# ^[a-z0-9-]{1,64}$ name rule otherwise.
+# skill name stays bare. `renameFn` only lowercases — a guard against any
+# uppercase upstream dir (upstream renamed its last one, iOS-APP-developer, to
+# developing-ios-apps), which would fail Claude Code's ^[a-z0-9-]{1,64}$ name
+# rule otherwise.
 {
   nixpkgs,
   agent-skill-flake,
@@ -42,13 +45,16 @@ let
 
   renameFn = ctx: toLower ctx.name;
 
-  # One mkAllSkillsFlake call per skillsDir: the repo root (38 standalone) plus
+  # One mkAllSkillsFlake call per skillsDir: the repo root (55 standalone) plus
   # each suite (its nested skills). "." means the repo root itself.
   groupDirs = [
     "."
     "daymade-audio"
     "daymade-claude-code"
+    "daymade-codex"
     "daymade-docs"
+    "daymade-financial"
+    "daymade-macos"
     "daymade-skill"
   ];
 
@@ -72,7 +78,7 @@ let
   # Each group's `packages.<sys>` carries its own `default` /
   # `agent-skills-daymade-all` aggregate (covering only that group); drop both
   # before merging so the union is exactly the `agent-skill-daymade-*` per-skill
-  # keys. The canonical all-58 `agent-skills-daymade-all` pack is rebuilt from
+  # keys. The canonical all-118 `agent-skills-daymade-all` pack is rebuilt from
   # ./packs.nix below.
   dropAggregates =
     pkgs:
@@ -89,8 +95,8 @@ let
   # name); merge them across the root + suites into one index.
   mergedByName = system: foldl' (acc: g: acc // g.bySkillName.${system}) { } groups;
 
-  # Pack lists hold pre-rename directory names; `toLower` matches the
-  # lowercased installed name (iOS-APP-developer -> ios-app-developer).
+  # Pack lists hold upstream directory names; `toLower` matches the
+  # lowercased installed name (a no-op while upstream dirs are all lowercase).
   mkEnv =
     system: packName: skillNames:
     agent-skill-flake.lib.mkSkillsEnv {
@@ -109,7 +115,7 @@ let
     (mergedSkillsFor system)
     // packsP
     // {
-      # Standalone-face aggregate: the all-58 env (the per-group `default`s were
+      # Standalone-face aggregate: the all-118 env (the per-group `default`s were
       # dropped above as they each covered only one group).
       default = packsP.agent-skills-daymade-all;
     }
