@@ -6,13 +6,18 @@
 # `vendoredSources` is an attrset (skill-name -> a `{ packages.<sys> = …; }`
 # source) supplied by the caller — the root flake passes its in-memory
 # `vendored.sources`; the standalone `?dir=` face passes four `github:?dir=pkgs/*`
-# faces. `nix-skills` is the live category-2 input.
+# faces. `nix-skills` is the live category-2 input; `nixSkillNames` cherry-picks
+# from it, and a splicing combination may narrow it.
 {
   nixpkgs,
   agent-skill-flake,
   systems,
   nix-skills,
   vendoredSources,
+  nixSkillNames ? [
+    "nix-flakes"
+    "nix-garnix-ci"
+  ],
   ...
 }:
 let
@@ -24,10 +29,7 @@ let
     sources = [
       {
         source = nix-skills;
-        skills = [
-          "nix-flakes"
-          "nix-garnix-ci"
-        ];
+        skills = nixSkillNames;
       }
       { source = vendoredSources.humanizer; }
       {
