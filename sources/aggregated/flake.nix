@@ -17,6 +17,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
+    data-skills = {
+      url = "github:nhooey/data-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
     git-skills = {
       url = "github:nhooey/git-skills";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -39,7 +44,13 @@
   };
 
   outputs =
-    { nixpkgs, systems, ... }@inputs:
+    {
+      self,
+      nixpkgs,
+      systems,
+      agent-skill-flake,
+      ...
+    }@inputs:
     let
       forSystems = nixpkgs.lib.genAttrs (import systems);
       aggregated = import ./default.nix {
@@ -57,5 +68,30 @@
     {
       packages = forSystems (system: aggregated.aggregatedFor "packages" system);
       legacyPackages = forSystems (system: aggregated.aggregatedFor "legacyPackages" system);
+
+      # Consume this flake as a dev-shell skills source, the way a repo's
+      # `skills-devshell/` sub-flake does, so `nix flake check` here fails if
+      # this face stops working as one (e.g. a locked repo rev that no longer
+      # evaluates under the pinned agent-skill-flake). Referencing the reconcile
+      # app builds it over every skill this face exposes.
+      checks = forSystems (
+        system:
+        let
+          devshell = agent-skill-flake.lib.mkDevshellSkillsFlake {
+            inherit nixpkgs;
+            systems = [ system ];
+            name = "aggregated-check";
+            sources = [ { source = self; } ];
+          };
+        in
+        {
+          as-skills-source = nixpkgs.legacyPackages.${system}.writeText "aggregated-as-skills-source" (
+            builtins.toJSON {
+              packages = builtins.attrNames devshell.packages.${system};
+              reconcile = devshell.apps.${system}.reconcile.program;
+            }
+          );
+        }
+      );
     };
 }
