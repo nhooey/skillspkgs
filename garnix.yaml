@@ -1,6 +1,0 @@
-builds:
-  include:
-    - "devShells.x86_64-linux.default"
-    - "devShells.aarch64-linux.default"
-    - "homeManagerModules.default"
-  exclude: []
