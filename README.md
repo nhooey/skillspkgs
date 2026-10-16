@@ -1,7 +1,5 @@
 # skillspkgs
 
-[![Built with Garnix](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fgarnix.io%2Fapi%2Fbadges%2Fnhooey%2Fskillspkgs)](https://garnix.io/repo/nhooey/skillspkgs)
-
 A Nix aggregator for [Claude Code Agent Skills](https://docs.claude.com/), packaged across three categories:
 
 1. **Vendored third-party skills** (`pkgs/`) — upstream repos that don't ship a Nix flake, wrapped here.
@@ -112,9 +110,3 @@ Curated unions of skills already provided by categories 1 and 2, built via `agen
 - **[`nhooey/agent-skill-flake`](https://github.com/nhooey/agent-skill-flake)** — the library. Provides `mkSkillFlake`, `mkAllSkillsFlake`, `mkAggregateSkillsFlake`, `mkCombination`, and `mkSkillsEnv`. Consumed by this repo and by the first-party content repos.
 - **[`nhooey/nix-skills`](https://github.com/nhooey/nix-skills)** — first-party skill content the author maintains, using `mkAllSkillsFlake`. A good reference for authoring your own skills repo; `nix flake init -t github:nhooey/skillspkgs` scaffolds one.
 - **`nhooey/skillspkgs`** (this repo) — aggregates all three categories above.
-
-## CI
-
-[Garnix](https://garnix.io) builds the root flake's `devShells.default` and evaluates `homeManagerModules.default` on `x86_64-linux` and `aarch64-linux`. Per-skill `?dir=...` flakes are not currently covered by CI here — they'd need a separate Garnix configuration per URL. Contributions welcome.
-</content>
-</invoke>
