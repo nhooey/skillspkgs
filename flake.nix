@@ -268,6 +268,61 @@
             pkgs.python3
           ];
 
+          # `sources/aggregated/flake.{nix,lock}` is a second copy of the
+          # category-2 inputs (see its header), and bumping the root's lock
+          # leaves its lock behind. A stale rev there can stop evaluating under
+          # the agent-skill-flake it pins while the root still works. Fail if it
+          # declares a different repo set or locks any of them (or
+          # agent-skill-flake) at a different rev than the root; its own
+          # `nix flake check` then evaluates it as a skills source.
+          checks.aggregated-subflake-in-sync =
+            let
+              inherit (nixpkgs) lib;
+              rootLock = lib.importJSON ./flake.lock;
+              subLock = lib.importJSON ./sources/aggregated/flake.lock;
+              # A `follows` input is a path list, not a node name; it pins nothing.
+              revOf =
+                lock: name:
+                let
+                  node = lock.nodes.root.inputs.${name} or null;
+                in
+                if builtins.isString node then lock.nodes.${node}.locked.rev else null;
+              rootRepos = builtins.attrNames (builtins.removeAttrs inputs infrastructureInputs);
+              subRepos = builtins.attrNames (
+                builtins.removeAttrs subLock.nodes.root.inputs [
+                  "nixpkgs"
+                  "systems"
+                  "agent-skill-flake"
+                ]
+              );
+              missing = lib.subtractLists subRepos rootRepos;
+              extra = lib.subtractLists rootRepos subRepos;
+              drifted = builtins.filter (n: revOf rootLock n != revOf subLock n) (
+                [ "agent-skill-flake" ] ++ lib.intersectLists rootRepos subRepos
+              );
+              problems =
+                map (n: "missing from sources/aggregated: ${n}") missing
+                ++ map (n: "not aggregated by the root: ${n}") extra
+                ++ map (
+                  n:
+                  "${n}: root locks ${toString (revOf rootLock n)}, sources/aggregated locks ${toString (revOf subLock n)}"
+                ) drifted;
+            in
+            pkgs.runCommand "aggregated-subflake-in-sync" { } (
+              if problems == [ ] then
+                "touch $out"
+              else
+                ''
+                  cat >&2 <<'EOF'
+                  sources/aggregated/flake.{nix,lock} has drifted from the root flake:
+                    ${lib.concatStringsSep "\n  " problems}
+                  Declare the same repos in both, then pin the sub-flake to the root's revs:
+                    nix flake lock ./sources/aggregated --override-input <name> github:nhooey/<name>/<rev>
+                  EOF
+                  exit 1
+                ''
+            );
+
           treefmt = {
             projectRootFile = "flake.nix";
             programs = {

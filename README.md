@@ -95,6 +95,8 @@ Every flake **input** that isn't listed in `infrastructureInputs` (the inputs th
 
 After editing, run `nix flake lock` in each directory so both `flake.lock` files pin the new input.
 
+Both locks must also pin each repo (and `agent-skill-flake`) at the same rev: the root's `checks.<system>.aggregated-subflake-in-sync` fails when the sub-flake declares a different repo set or has drifted, and prints the `nix flake lock ./sources/aggregated --override-input …` to re-pin it. When you bump a repo in the root lock, bump it in `sources/aggregated/flake.lock` too. The sub-flake's own `nix flake check ./sources/aggregated` evaluates it as a dev-shell skills source.
+
 ### Why the input is declared twice
 
 The root flake never reads the sub-flake's `flake.nix`. It plain-`import`s `sources/aggregated/default.nix` and passes its own (much larger) input set. The sub-flake under `sources/aggregated/` exists only to give that subpath a standalone, buildable `?dir=sources/aggregated` face, so it re-declares the category-2 repos explicitly. Each flake therefore needs its own copy of the input.
