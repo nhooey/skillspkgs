@@ -59,11 +59,11 @@
     "daymade-skills-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1780590738,
-        "narHash": "sha256-GjA9H2Eu4bxd6u6zHy/e7V8J8DSkA0D+3zrD9ORz6Yg=",
+        "lastModified": 1791859419,
+        "narHash": "sha256-wF7lZHBemSXtGDDyfopYOShbmaVYUhtPqF6pfVDrAa0=",
         "owner": "daymade",
         "repo": "claude-code-skills",
-        "rev": "96b14eb2cea2ea4f6a15e3e8182c89879e0137fc",
+        "rev": "b05fda19c1d09836571e027b44f12dc5d6cf3a8a",
         "type": "github"
       },
       "original": {
