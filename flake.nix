@@ -114,6 +114,14 @@
       inputs.treefmt-nix.follows = "treefmt-nix";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
+    shell-skills = {
+      url = "github:nhooey/shell-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
 
     # ---- CATEGORY 1: vendored third-party sources, no upstream flake (built inline) ----
     # No rev in the URL — `flake.lock` pins these (run `nix flake update <src>`
