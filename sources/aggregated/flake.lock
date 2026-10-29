@@ -71,11 +71,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1792136218,
-        "narHash": "sha256-qAFN5lU96SSex5IQ7yy/kP9uTOaT7B11Wj1o/VIZFSs=",
+        "lastModified": 1793258167,
+        "narHash": "sha256-B3T9GeJwqfgokxEcQkCI+r2//mrPg8q51udTIF1bv+s=",
         "owner": "nhooey",
         "repo": "coding-agent-skills",
-        "rev": "86ae315114289c48028f9ca7b48950ba091d322d",
+        "rev": "befb4de92fb7d12f9e38d8c2ed28b89e1c267e95",
         "type": "github"
       },
       "original": {
@@ -300,6 +300,27 @@
         "type": "github"
       }
     },
+    "flake-parts_8": {
+      "inputs": {
+        "nixpkgs-lib": [
+          "shell-skills",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1778716662,
+        "narHash": "sha256-m1Yf0wZ8j1OHjTc2UwHwyQRSnNeSgLJOd7q5Y45hzi4=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "f7c1a2d347e4c52d5fb8d10cb4d94b5884e546fb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
     "git-skills": {
       "inputs": {
         "agent-skill-flake": [
@@ -428,7 +449,36 @@
         "nix-microsoft-skills": "nix-microsoft-skills",
         "nix-skills": "nix-skills",
         "nixpkgs": "nixpkgs",
+        "shell-skills": "shell-skills",
         "systems": "systems_8"
+      }
+    },
+    "shell-skills": {
+      "inputs": {
+        "agent-skill-flake": [
+          "agent-skill-flake"
+        ],
+        "flake-parts": "flake-parts_8",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ],
+        "treefmt-nix": "treefmt-nix_8"
+      },
+      "locked": {
+        "lastModified": 1792223224,
+        "narHash": "sha256-/4lkuCmhUo8ljStbQuGaGkY3zTwzNs8nwGl6747qXWQ=",
+        "owner": "nhooey",
+        "repo": "shell-skills",
+        "rev": "6724cc2a800cbb4bd4ee5ef7115d482fceeb0f9a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nhooey",
+        "repo": "shell-skills",
+        "type": "github"
       }
     },
     "systems": {
@@ -681,6 +731,27 @@
       "inputs": {
         "nixpkgs": [
           "nix-skills",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1780220602,
+        "narHash": "sha256-eynAfOmbmxJnkp7YewvCEbShNnnYJ9gLLqkzsYtBPeM=",
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "rev": "db947814a175b7ca6ded66e21383d938df01c227",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "treefmt-nix_8": {
+      "inputs": {
+        "nixpkgs": [
+          "shell-skills",
           "nixpkgs"
         ]
       },
