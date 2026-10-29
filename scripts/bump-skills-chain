@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+# Move one aggregated skill repo to its newest commit in skillspkgs, then move
+# skillspkgs in nur-packages, merging one PR in each repo.
+#
+# Usage: scripts/bump-skills-chain <input> "<what the new commits bring in>"
+#   <input>  an aggregated input of this flake, e.g. coding-agent-skills
+#   The second argument goes into both commit messages and PR bodies.
+#
+# Both skillspkgs locks (the root and sources/aggregated) are pinned to the
+# same rev, so checks.<system>.aggregated-subflake-in-sync keeps passing.
+# Every agent-skills-nhooey-*-all package is built before each push.
+#
+# Environment:
+#   NUR_PACKAGES_DIR  checkout of nhooey/nur-packages
+#                     (default: ~/git/github/nhooey/nur-packages)
+#
+# After it finishes, the nur-packages input on MyNixOS still has to be updated,
+# released and switched to (see the mynixos-workflow skill).
+set -euo pipefail
+
+if [ $# -ne 2 ]; then
+  sed -n '5,7p' "$0" >&2
+  exit 2
+fi
+input=$1
+brings=$2
+nur=${NUR_PACKAGES_DIR:-$HOME/git/github/nhooey/nur-packages}
+system=$(nix eval --impure --raw --expr builtins.currentSystem)
+
+build_all() {
+  local attrs
+  attrs=$(nix eval --json ".#packages.$system" --apply \
+    'p: builtins.filter (n: builtins.match "agent-skills-nhooey-.*-all" n != null) (builtins.attrNames p)' |
+    jq -r '.[] | ".#" + .')
+  # shellcheck disable=SC2086 # one flake reference per word
+  nix build --no-link $attrs
+}
+
+# skillspkgs
+cd "$(dirname "$0")/.."
+git switch -q master && git pull -q --ff-only
+old=$(jq -r --arg i "$input" '.nodes[.nodes.root.inputs[$i]].locked.rev' flake.lock)
+nix flake update "$input"
+rev=$(jq -r --arg i "$input" '.nodes[.nodes.root.inputs[$i]].locked.rev' flake.lock)
+if [ "$rev" = "$old" ]; then
+  echo "$input is already at ${rev:0:7}" >&2
+  exit 0
+fi
+nix flake lock ./sources/aggregated --override-input "$input" "github:nhooey/$input/$rev"
+nix build --no-link ".#checks.$system.aggregated-subflake-in-sync"
+build_all
+
+short=${rev:0:7}
+branch="update-$input-$short"
+git switch -q -c "$branch"
+git add flake.lock sources/aggregated/flake.lock
+git commit -q -F - <<EOF
+Update $input to $short
+
+$brings
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+EOF
+git push -q -u origin "$branch"
+gh pr create --title "Update $input to $short" --body "$(cat <<EOF
+Updates $input ${old:0:7} to $short in both flake.lock files. $brings
+
+- Every \`agent-skills-nhooey-*-all\` package builds.
+- \`aggregated-subflake-in-sync\` passes.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+EOF
+)"
+gh pr merge --merge --delete-branch
+git switch -q master && git pull -q --ff-only
+sp=$(git rev-parse --short HEAD)
+
+# nur-packages
+cd "$nur"
+git switch -q master && git pull -q --ff-only
+git switch -q -c "update-skillspkgs-$sp"
+nix flake update skillspkgs
+build_all
+git add flake.lock
+git commit -q -F - <<EOF
+Update skillspkgs to $sp
+
+Brings in $input $short. $brings
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+EOF
+git push -q -u origin "update-skillspkgs-$sp"
+gh pr create --title "Update skillspkgs to $sp" --body "$(cat <<EOF
+Updates the skillspkgs lock, bringing in $input $short. $brings
+
+- Every \`agent-skills-nhooey-*-all\` package builds.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+EOF
+)"
+gh pr merge --merge --delete-branch
+git switch -q master && git pull -q --ff-only
+git log --oneline -1
