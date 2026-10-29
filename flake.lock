@@ -157,6 +157,38 @@
         "type": "github"
       }
     },
+    "document-skills": {
+      "inputs": {
+        "agent-skill-flake": [
+          "agent-skill-flake"
+        ],
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ],
+        "treefmt-nix": [
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792226589,
+        "narHash": "sha256-klG5wY3xkLP7RsA6yg90SyarlzK5FL9sMc83KGQPU9U=",
+        "owner": "nhooey",
+        "repo": "document-skills",
+        "rev": "6fa6c4a3446e01403c66fe5ad068133903cde592",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nhooey",
+        "repo": "document-skills",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -366,6 +398,7 @@
           "agent-skill-flake",
           "devshell"
         ],
+        "document-skills": "document-skills",
         "flake-parts": [
           "agent-skill-flake",
           "flake-parts"
@@ -387,7 +420,8 @@
         "treefmt-nix": [
           "agent-skill-flake",
           "treefmt-nix"
-        ]
+        ],
+        "writing-skills": "writing-skills"
       }
     },
     "shell-skills": {
@@ -487,6 +521,38 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "writing-skills": {
+      "inputs": {
+        "agent-skill-flake": [
+          "agent-skill-flake"
+        ],
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ],
+        "treefmt-nix": [
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792226500,
+        "narHash": "sha256-vprcLWCebX8ooLH7ddBpYAhAjKD4BNWHURaSbmUkWcc=",
+        "owner": "nhooey",
+        "repo": "writing-skills",
+        "rev": "217a2243b51af2d59779053933f1bee2239d811a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nhooey",
+        "repo": "writing-skills",
         "type": "github"
       }
     }
