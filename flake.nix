@@ -82,6 +82,14 @@
       inputs.treefmt-nix.follows = "treefmt-nix";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
+    document-skills = {
+      url = "github:nhooey/document-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
     git-skills = {
       url = "github:nhooey/git-skills";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -116,6 +124,14 @@
     };
     shell-skills = {
       url = "github:nhooey/shell-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
+    writing-skills = {
+      url = "github:nhooey/writing-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
