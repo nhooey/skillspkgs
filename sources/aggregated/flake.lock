@@ -71,11 +71,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1793258167,
-        "narHash": "sha256-B3T9GeJwqfgokxEcQkCI+r2//mrPg8q51udTIF1bv+s=",
+        "lastModified": 1793269059,
+        "narHash": "sha256-+iANjJ4DEDoyH16Kv2I6JiJK0nrKKiykXl1G5wuEB/4=",
         "owner": "nhooey",
         "repo": "coding-agent-skills",
-        "rev": "befb4de92fb7d12f9e38d8c2ed28b89e1c267e95",
+        "rev": "db755ce01c0649af43a5689f4f403effa608a246",
         "type": "github"
       },
       "original": {
@@ -166,11 +166,11 @@
         "treefmt-nix": "treefmt-nix_4"
       },
       "locked": {
-        "lastModified": 1792226589,
-        "narHash": "sha256-klG5wY3xkLP7RsA6yg90SyarlzK5FL9sMc83KGQPU9U=",
+        "lastModified": 1793269054,
+        "narHash": "sha256-u3UPB743iPV8o394AWZEj6p04V9KvTYWRK8HBj0zhto=",
         "owner": "nhooey",
         "repo": "document-skills",
-        "rev": "6fa6c4a3446e01403c66fe5ad068133903cde592",
+        "rev": "7f038e7cb8b8a0f5662bd0a2bb80ce02bdcc0707",
         "type": "github"
       },
       "original": {
