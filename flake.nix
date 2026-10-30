@@ -98,6 +98,14 @@
       inputs.treefmt-nix.follows = "treefmt-nix";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
+    macos-skills = {
+      url = "github:nhooey/macos-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
     mynixos-skills = {
       url = "github:nhooey/mynixos-skills";
       inputs.nixpkgs.follows = "nixpkgs";
