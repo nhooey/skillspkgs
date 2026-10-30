@@ -258,6 +258,38 @@
         "type": "github"
       }
     },
+    "mynixos-skills": {
+      "inputs": {
+        "agent-skill-flake": [
+          "agent-skill-flake"
+        ],
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ],
+        "treefmt-nix": [
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793372699,
+        "narHash": "sha256-TkrTBQ+2qM0/tdyZTGLTB9lqQJ2rvO4+2A1qtdaKyWI=",
+        "owner": "nhooey",
+        "repo": "mynixos-skills",
+        "rev": "2a621b318c325000bad31d1efcd167ee7b6a0b6e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nhooey",
+        "repo": "mynixos-skills",
+        "type": "github"
+      }
+    },
     "nix-gstack": {
       "inputs": {
         "agent-skill-flake": [
@@ -405,6 +437,7 @@
         ],
         "git-skills": "git-skills",
         "humanizer-src": "humanizer-src",
+        "mynixos-skills": "mynixos-skills",
         "nix-gstack": "nix-gstack",
         "nix-microsoft-skills": "nix-microsoft-skills",
         "nix-skills": "nix-skills",

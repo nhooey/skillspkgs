@@ -32,6 +32,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
+    mynixos-skills = {
+      url = "github:nhooey/mynixos-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
     nix-gstack = {
       url = "github:nhooey/nix-gstack";
       inputs.nixpkgs.follows = "nixpkgs";
