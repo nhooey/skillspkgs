@@ -389,11 +389,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792403054,
-        "narHash": "sha256-u6Pp8j5Ha4xYCUdUAlJ9pxSKqKHqZVkJWbIKfh9dyuE=",
+        "lastModified": 1793454338,
+        "narHash": "sha256-sFhOpCUfYf54IDKmIaWxhEmBXNpnH2LTYSEgxMWuvjc=",
         "owner": "nhooey",
         "repo": "nix-gstack",
-        "rev": "8a3cb4e64e69c1db64cacafd7e0dd0131ea22587",
+        "rev": "d5a7f0014c6d10ffef894061cd71508e7dfd3288",
         "type": "github"
       },
       "original": {

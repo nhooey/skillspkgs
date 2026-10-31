@@ -520,11 +520,11 @@
         "treefmt-nix": "treefmt-nix_8"
       },
       "locked": {
-        "lastModified": 1792403054,
-        "narHash": "sha256-u6Pp8j5Ha4xYCUdUAlJ9pxSKqKHqZVkJWbIKfh9dyuE=",
+        "lastModified": 1793454338,
+        "narHash": "sha256-sFhOpCUfYf54IDKmIaWxhEmBXNpnH2LTYSEgxMWuvjc=",
         "owner": "nhooey",
         "repo": "nix-gstack",
-        "rev": "8a3cb4e64e69c1db64cacafd7e0dd0131ea22587",
+        "rev": "d5a7f0014c6d10ffef894061cd71508e7dfd3288",
         "type": "github"
       },
       "original": {
@@ -784,16 +784,16 @@
     },
     "systems_8": {
       "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "lastModified": 1680978170,
+        "narHash": "sha256-PHVNQ7y0EQYzujQRYoRdb96K0m1KSeAjSrbz2b75S6Q=",
         "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "repo": "aarch64-darwin",
+        "rev": "75e6c6912484d28ebba5769b794ffa4aff653ba2",
         "type": "github"
       },
       "original": {
         "owner": "nix-systems",
-        "repo": "default",
+        "repo": "aarch64-darwin",
         "type": "github"
       }
     },
