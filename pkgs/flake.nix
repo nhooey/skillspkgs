@@ -1,5 +1,5 @@
 {
-  description = "skillspkgs vendored category — third-party Claude Code skills with no upstream Nix flake (caveman, daymade, humanizer, opinionated-software-engineering, skill-creator, superpowers, trailofbits).";
+  description = "skillspkgs vendored category — third-party Claude Code skills with no upstream Nix flake (caveman, clojure-skills, daymade, humanizer, malli, opinionated-software-engineering, shadow-cljs, skill-creator, superpowers, trailofbits).";
 
   # Standalone `?dir=pkgs` face for the whole vendored category. The root flake
   # never reads this — it plain-`import`s ./default.nix (see that file's header).
@@ -24,6 +24,18 @@
     };
     caveman-src = {
       url = "github:JuliusBrussee/caveman";
+      flake = false;
+    };
+    clojure-malli-skill-src = {
+      url = "github:stoating/clojure-malli-skill";
+      flake = false;
+    };
+    clojure-shadow-cljs-skill-src = {
+      url = "github:stoating/clojure-shadow-cljs-skill";
+      flake = false;
+    };
+    clojure-skills-src = {
+      url = "github:chaploud/clojure-skills";
       flake = false;
     };
     daymade-skills-src = {
@@ -55,6 +67,9 @@
       agent-skill-flake,
       anthropics-skills-src,
       caveman-src,
+      clojure-malli-skill-src,
+      clojure-shadow-cljs-skill-src,
+      clojure-skills-src,
       daymade-skills-src,
       humanizer-src,
       opinionated-claude-skills-src,
@@ -68,9 +83,12 @@
         inherit nixpkgs agent-skill-flake;
         srcs = {
           caveman = caveman-src;
+          "clojure-skills" = clojure-skills-src;
           daymade = daymade-skills-src;
           humanizer = humanizer-src;
+          malli = clojure-malli-skill-src;
           "opinionated-software-engineering" = opinionated-claude-skills-src;
+          "shadow-cljs" = clojure-shadow-cljs-skill-src;
           "skill-creator" = anthropics-skills-src;
           superpowers = superpowers-src;
           trailofbits = trailofbits-skills-src;

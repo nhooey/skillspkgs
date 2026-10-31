@@ -21,12 +21,22 @@
   # Optional path under `src` to the skill. Upstreams that ship many skills in
   # one repo (e.g. anthropics/skills) need this; null uses `src` as-is.
   srcSubpath ? null,
+  # Files and directories beside SKILL.md that the skill needs, beyond the
+  # SKILL.md, references/ and scripts/ that mkSkillFlake always ships: e.g.
+  # sibling reference .md files that SKILL.md routes to, or a LICENSE.
+  extraDirs ? [ ],
+  extraFiles ? [ ],
 }:
 let
   inherit (nixpkgs.lib) filterAttrs hasPrefix mapAttrs;
 
   built = agent-skill-flake.lib.mkSkillFlake {
-    inherit nixpkgs skillName;
+    inherit
+      nixpkgs
+      skillName
+      extraDirs
+      extraFiles
+      ;
     source = { inherit owner; };
     src = if srcSubpath == null then src else "${src}/${srcSubpath}";
   };
