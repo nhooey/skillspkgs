@@ -166,6 +166,18 @@
       url = "github:JuliusBrussee/caveman";
       flake = false;
     };
+    clojure-malli-skill-src = {
+      url = "github:stoating/clojure-malli-skill";
+      flake = false;
+    };
+    clojure-shadow-cljs-skill-src = {
+      url = "github:stoating/clojure-shadow-cljs-skill";
+      flake = false;
+    };
+    clojure-skills-src = {
+      url = "github:chaploud/clojure-skills";
+      flake = false;
+    };
     daymade-skills-src = {
       url = "github:daymade/claude-code-skills";
       flake = false;
@@ -216,6 +228,9 @@
         "treefmt-nix"
         "anthropics-skills-src"
         "caveman-src"
+        "clojure-malli-skill-src"
+        "clojure-shadow-cljs-skill-src"
+        "clojure-skills-src"
         "daymade-skills-src"
         "humanizer-src"
         "opinionated-claude-skills-src"
@@ -233,9 +248,12 @@
         # subpath (e.g. skill-creator reads `skills/skill-creator`).
         srcs = {
           caveman = inputs.caveman-src;
+          "clojure-skills" = inputs.clojure-skills-src;
           daymade = inputs.daymade-skills-src;
           humanizer = inputs.humanizer-src;
+          malli = inputs.clojure-malli-skill-src;
           "opinionated-software-engineering" = inputs.opinionated-claude-skills-src;
+          "shadow-cljs" = inputs.clojure-shadow-cljs-skill-src;
           "skill-creator" = inputs.anthropics-skills-src;
           superpowers = inputs.superpowers-src;
           trailofbits = inputs.trailofbits-skills-src;

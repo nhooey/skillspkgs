@@ -56,6 +56,54 @@
         "type": "github"
       }
     },
+    "clojure-malli-skill-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1777410631,
+        "narHash": "sha256-zoyhXayrIfVkLdYCwvN0+ZX0Cfv4zHG7tZfw1e+4RJg=",
+        "owner": "stoating",
+        "repo": "clojure-malli-skill",
+        "rev": "4724d10a1c6fa97854932e5496c46e257223e84e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "stoating",
+        "repo": "clojure-malli-skill",
+        "type": "github"
+      }
+    },
+    "clojure-shadow-cljs-skill-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1777410680,
+        "narHash": "sha256-I+uWr3GVbE01wlVzfy6t6HEUNnGoCQ86pY/5OgY9x6Q=",
+        "owner": "stoating",
+        "repo": "clojure-shadow-cljs-skill",
+        "rev": "ba817b2759466132215472eb6cb704990369a48a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "stoating",
+        "repo": "clojure-shadow-cljs-skill",
+        "type": "github"
+      }
+    },
+    "clojure-skills-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1792595291,
+        "narHash": "sha256-NQIlMJaFkPqLmmrrzHvURd0YaixcH/a6T76ZQSTF/LU=",
+        "owner": "chaploud",
+        "repo": "clojure-skills",
+        "rev": "75e51ea7fcfceff83a01824eb704bcf87a953582",
+        "type": "github"
+      },
+      "original": {
+        "owner": "chaploud",
+        "repo": "clojure-skills",
+        "type": "github"
+      }
+    },
     "coding-agent-skills": {
       "inputs": {
         "agent-skill-flake": [
@@ -455,6 +503,9 @@
         "agent-skill-flake": "agent-skill-flake",
         "anthropics-skills-src": "anthropics-skills-src",
         "caveman-src": "caveman-src",
+        "clojure-malli-skill-src": "clojure-malli-skill-src",
+        "clojure-shadow-cljs-skill-src": "clojure-shadow-cljs-skill-src",
+        "clojure-skills-src": "clojure-skills-src",
         "coding-agent-skills": "coding-agent-skills",
         "data-skills": "data-skills",
         "daymade-skills-src": "daymade-skills-src",
