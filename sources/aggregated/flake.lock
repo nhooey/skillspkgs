@@ -203,7 +203,7 @@
     "flake-parts_10": {
       "inputs": {
         "nixpkgs-lib": [
-          "shell-skills",
+          "nix-skills",
           "nixpkgs"
         ]
       },
@@ -222,6 +222,27 @@
       }
     },
     "flake-parts_11": {
+      "inputs": {
+        "nixpkgs-lib": [
+          "shell-skills",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1778716662,
+        "narHash": "sha256-m1Yf0wZ8j1OHjTc2UwHwyQRSnNeSgLJOd7q5Y45hzi4=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "f7c1a2d347e4c52d5fb8d10cb4d94b5884e546fb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-parts_12": {
       "inputs": {
         "nixpkgs-lib": [
           "writing-skills",
@@ -329,7 +350,7 @@
     "flake-parts_6": {
       "inputs": {
         "nixpkgs-lib": [
-          "mynixos-skills",
+          "macos-skills",
           "nixpkgs"
         ]
       },
@@ -350,6 +371,27 @@
     "flake-parts_7": {
       "inputs": {
         "nixpkgs-lib": [
+          "mynixos-skills",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1790898470,
+        "narHash": "sha256-zTwuwezD0w3hpga6a6P8emidzAZFyWqlNeRBlpWOOl8=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "024633cd702b10285db5cb19b40ad48d2399ba60",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-parts_8": {
+      "inputs": {
+        "nixpkgs-lib": [
           "nix-gstack",
           "nixpkgs"
         ]
@@ -368,31 +410,10 @@
         "type": "github"
       }
     },
-    "flake-parts_8": {
-      "inputs": {
-        "nixpkgs-lib": [
-          "nix-microsoft-skills",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1778716662,
-        "narHash": "sha256-m1Yf0wZ8j1OHjTc2UwHwyQRSnNeSgLJOd7q5Y45hzi4=",
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "rev": "f7c1a2d347e4c52d5fb8d10cb4d94b5884e546fb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "type": "github"
-      }
-    },
     "flake-parts_9": {
       "inputs": {
         "nixpkgs-lib": [
-          "nix-skills",
+          "nix-microsoft-skills",
           "nixpkgs"
         ]
       },
@@ -436,7 +457,7 @@
         "type": "github"
       }
     },
-    "mynixos-skills": {
+    "macos-skills": {
       "inputs": {
         "agent-skill-flake": [
           "agent-skill-flake"
@@ -447,6 +468,32 @@
         ],
         "systems": "systems_6",
         "treefmt-nix": "treefmt-nix_6"
+      },
+      "locked": {
+        "lastModified": 1793375568,
+        "narHash": "sha256-LXMWP1GiLS3kaAa37lSqh9ZeN9BwuPlODwGlozfQTHs=",
+        "owner": "nhooey",
+        "repo": "macos-skills",
+        "rev": "987f1790d31380beb6a3767d7612893e7f7363cf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nhooey",
+        "repo": "macos-skills",
+        "type": "github"
+      }
+    },
+    "mynixos-skills": {
+      "inputs": {
+        "agent-skill-flake": [
+          "agent-skill-flake"
+        ],
+        "flake-parts": "flake-parts_7",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": "systems_7",
+        "treefmt-nix": "treefmt-nix_7"
       },
       "locked": {
         "lastModified": 1793372699,
@@ -465,12 +512,12 @@
     "nix-gstack": {
       "inputs": {
         "agent-skill-flake": "agent-skill-flake_2",
-        "flake-parts": "flake-parts_7",
+        "flake-parts": "flake-parts_8",
         "nixpkgs": [
           "nixpkgs"
         ],
-        "systems": "systems_7",
-        "treefmt-nix": "treefmt-nix_7"
+        "systems": "systems_8",
+        "treefmt-nix": "treefmt-nix_8"
       },
       "locked": {
         "lastModified": 1792403054,
@@ -491,12 +538,12 @@
         "agent-skill-flake": [
           "agent-skill-flake"
         ],
-        "flake-parts": "flake-parts_8",
+        "flake-parts": "flake-parts_9",
         "nixpkgs": [
           "nixpkgs"
         ],
-        "systems": "systems_8",
-        "treefmt-nix": "treefmt-nix_8"
+        "systems": "systems_9",
+        "treefmt-nix": "treefmt-nix_9"
       },
       "locked": {
         "lastModified": 1792403049,
@@ -517,12 +564,12 @@
         "agent-skill-flake": [
           "agent-skill-flake"
         ],
-        "flake-parts": "flake-parts_9",
+        "flake-parts": "flake-parts_10",
         "nixpkgs": [
           "nixpkgs"
         ],
-        "systems": "systems_9",
-        "treefmt-nix": "treefmt-nix_9"
+        "systems": "systems_10",
+        "treefmt-nix": "treefmt-nix_10"
       },
       "locked": {
         "lastModified": 1792406839,
@@ -561,13 +608,14 @@
         "data-skills": "data-skills",
         "document-skills": "document-skills",
         "git-skills": "git-skills",
+        "macos-skills": "macos-skills",
         "mynixos-skills": "mynixos-skills",
         "nix-gstack": "nix-gstack",
         "nix-microsoft-skills": "nix-microsoft-skills",
         "nix-skills": "nix-skills",
         "nixpkgs": "nixpkgs",
         "shell-skills": "shell-skills",
-        "systems": "systems_10",
+        "systems": "systems_11",
         "writing-skills": "writing-skills"
       }
     },
@@ -576,14 +624,14 @@
         "agent-skill-flake": [
           "agent-skill-flake"
         ],
-        "flake-parts": "flake-parts_10",
+        "flake-parts": "flake-parts_11",
         "nixpkgs": [
           "nixpkgs"
         ],
         "systems": [
           "systems"
         ],
-        "treefmt-nix": "treefmt-nix_10"
+        "treefmt-nix": "treefmt-nix_11"
       },
       "locked": {
         "lastModified": 1792223224,
@@ -615,6 +663,21 @@
       }
     },
     "systems_10": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_11": {
       "locked": {
         "lastModified": 1791244623,
         "narHash": "sha256-uuanbkFk8a313Zfrxdcz8Us/yQtaxNnKJtX8v0ZPpd8=",
@@ -706,11 +769,11 @@
     },
     "systems_7": {
       "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "lastModified": 1791244623,
+        "narHash": "sha256-uuanbkFk8a313Zfrxdcz8Us/yQtaxNnKJtX8v0ZPpd8=",
         "owner": "nix-systems",
         "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "rev": "d36eeed142f88b5a636f2e3856a53c61654cf29b",
         "type": "github"
       },
       "original": {
@@ -773,7 +836,7 @@
     "treefmt-nix_10": {
       "inputs": {
         "nixpkgs": [
-          "shell-skills",
+          "nix-skills",
           "nixpkgs"
         ]
       },
@@ -792,6 +855,27 @@
       }
     },
     "treefmt-nix_11": {
+      "inputs": {
+        "nixpkgs": [
+          "shell-skills",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1780220602,
+        "narHash": "sha256-eynAfOmbmxJnkp7YewvCEbShNnnYJ9gLLqkzsYtBPeM=",
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "rev": "db947814a175b7ca6ded66e21383d938df01c227",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "treefmt-nix_12": {
       "inputs": {
         "nixpkgs": [
           "writing-skills",
@@ -899,7 +983,7 @@
     "treefmt-nix_6": {
       "inputs": {
         "nixpkgs": [
-          "mynixos-skills",
+          "macos-skills",
           "nixpkgs"
         ]
       },
@@ -920,16 +1004,16 @@
     "treefmt-nix_7": {
       "inputs": {
         "nixpkgs": [
-          "nix-gstack",
+          "mynixos-skills",
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1775636079,
-        "narHash": "sha256-pc20NRoMdiar8oPQceQT47UUZMBTiMdUuWrYu2obUP0=",
+        "lastModified": 1791885023,
+        "narHash": "sha256-C3alQ2MEt0zVrUSho5NUDo3jmhbff72++bfwoqT9Omo=",
         "owner": "numtide",
         "repo": "treefmt-nix",
-        "rev": "790751ff7fd3801feeaf96d7dc416a8d581265ba",
+        "rev": "0d6d739a833ba9a9c93034862e4a7b061a062a1c",
         "type": "github"
       },
       "original": {
@@ -941,7 +1025,7 @@
     "treefmt-nix_8": {
       "inputs": {
         "nixpkgs": [
-          "nix-microsoft-skills",
+          "nix-gstack",
           "nixpkgs"
         ]
       },
@@ -962,16 +1046,16 @@
     "treefmt-nix_9": {
       "inputs": {
         "nixpkgs": [
-          "nix-skills",
+          "nix-microsoft-skills",
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1780220602,
-        "narHash": "sha256-eynAfOmbmxJnkp7YewvCEbShNnnYJ9gLLqkzsYtBPeM=",
+        "lastModified": 1775636079,
+        "narHash": "sha256-pc20NRoMdiar8oPQceQT47UUZMBTiMdUuWrYu2obUP0=",
         "owner": "numtide",
         "repo": "treefmt-nix",
-        "rev": "db947814a175b7ca6ded66e21383d938df01c227",
+        "rev": "790751ff7fd3801feeaf96d7dc416a8d581265ba",
         "type": "github"
       },
       "original": {
@@ -985,14 +1069,14 @@
         "agent-skill-flake": [
           "agent-skill-flake"
         ],
-        "flake-parts": "flake-parts_11",
+        "flake-parts": "flake-parts_12",
         "nixpkgs": [
           "nixpkgs"
         ],
         "systems": [
           "systems"
         ],
-        "treefmt-nix": "treefmt-nix_11"
+        "treefmt-nix": "treefmt-nix_12"
       },
       "locked": {
         "lastModified": 1792226500,
