@@ -166,11 +166,11 @@
         "treefmt-nix": "treefmt-nix_4"
       },
       "locked": {
-        "lastModified": 1793269054,
-        "narHash": "sha256-u3UPB743iPV8o394AWZEj6p04V9KvTYWRK8HBj0zhto=",
+        "lastModified": 1793522081,
+        "narHash": "sha256-NbkhgrjWDoE6xtr2WTnn32GnE5NvpCizCQbeL3B6+yE=",
         "owner": "nhooey",
         "repo": "document-skills",
-        "rev": "7f038e7cb8b8a0f5662bd0a2bb80ce02bdcc0707",
+        "rev": "60ef3ef765b038f8a4982f9cdc5b0ce86be45aba",
         "type": "github"
       },
       "original": {
