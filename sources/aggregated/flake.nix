@@ -68,6 +68,14 @@
       inputs.systems.follows = "systems";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
+    xtdb-skills = {
+      url = "github:nhooey/xtdb-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+      inputs.skill-authoring-skills.inputs.systems.follows = "systems";
+      inputs.skill-authoring-skills.inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
   };
 
   outputs =

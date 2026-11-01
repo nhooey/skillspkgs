@@ -154,6 +154,20 @@
       inputs.treefmt-nix.follows = "treefmt-nix";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
+    xtdb-skills = {
+      url = "github:nhooey/xtdb-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+      # xtdb-skills' citation checks come from skill-authoring-skills; its
+      # infrastructure follows this flake's too, so the lock keeps one copy.
+      inputs.skill-authoring-skills.inputs.systems.follows = "systems";
+      inputs.skill-authoring-skills.inputs.flake-parts.follows = "flake-parts";
+      inputs.skill-authoring-skills.inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs.skill-authoring-skills.inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
 
     # ---- CATEGORY 1: vendored third-party sources, no upstream flake (built inline) ----
     # No rev in the URL — `flake.lock` pins these (run `nix flake update <src>`
