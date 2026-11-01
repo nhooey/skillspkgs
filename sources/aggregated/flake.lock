@@ -263,6 +263,49 @@
         "type": "github"
       }
     },
+    "flake-parts_13": {
+      "inputs": {
+        "nixpkgs-lib": [
+          "xtdb-skills",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1790898470,
+        "narHash": "sha256-zTwuwezD0w3hpga6a6P8emidzAZFyWqlNeRBlpWOOl8=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "024633cd702b10285db5cb19b40ad48d2399ba60",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-parts_14": {
+      "inputs": {
+        "nixpkgs-lib": [
+          "xtdb-skills",
+          "skill-authoring-skills",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1790898470,
+        "narHash": "sha256-zTwuwezD0w3hpga6a6P8emidzAZFyWqlNeRBlpWOOl8=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "024633cd702b10285db5cb19b40ad48d2399ba60",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
     "flake-parts_2": {
       "inputs": {
         "nixpkgs-lib": [
@@ -616,7 +659,8 @@
         "nixpkgs": "nixpkgs",
         "shell-skills": "shell-skills",
         "systems": "systems_11",
-        "writing-skills": "writing-skills"
+        "writing-skills": "writing-skills",
+        "xtdb-skills": "xtdb-skills"
       }
     },
     "shell-skills": {
@@ -644,6 +688,35 @@
       "original": {
         "owner": "nhooey",
         "repo": "shell-skills",
+        "type": "github"
+      }
+    },
+    "skill-authoring-skills": {
+      "inputs": {
+        "agent-skill-flake": [
+          "agent-skill-flake"
+        ],
+        "flake-parts": "flake-parts_14",
+        "nixpkgs": [
+          "xtdb-skills",
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ],
+        "treefmt-nix": "treefmt-nix_13"
+      },
+      "locked": {
+        "lastModified": 1793221802,
+        "narHash": "sha256-z+NB1zTR3F1UjEu+GDseywxs1VmZLNMZYU76X6ySxzk=",
+        "owner": "nhooey",
+        "repo": "skill-authoring-skills",
+        "rev": "e34ce477c03247a1dc5617caa15db26543ef4d9f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nhooey",
+        "repo": "skill-authoring-skills",
         "type": "github"
       }
     },
@@ -896,6 +969,49 @@
         "type": "github"
       }
     },
+    "treefmt-nix_13": {
+      "inputs": {
+        "nixpkgs": [
+          "xtdb-skills",
+          "skill-authoring-skills",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791885023,
+        "narHash": "sha256-C3alQ2MEt0zVrUSho5NUDo3jmhbff72++bfwoqT9Omo=",
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "rev": "0d6d739a833ba9a9c93034862e4a7b061a062a1c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "treefmt-nix_14": {
+      "inputs": {
+        "nixpkgs": [
+          "xtdb-skills",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791885023,
+        "narHash": "sha256-C3alQ2MEt0zVrUSho5NUDo3jmhbff72++bfwoqT9Omo=",
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "rev": "0d6d739a833ba9a9c93034862e4a7b061a062a1c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
     "treefmt-nix_2": {
       "inputs": {
         "nixpkgs": [
@@ -1089,6 +1205,35 @@
       "original": {
         "owner": "nhooey",
         "repo": "writing-skills",
+        "type": "github"
+      }
+    },
+    "xtdb-skills": {
+      "inputs": {
+        "agent-skill-flake": [
+          "agent-skill-flake"
+        ],
+        "flake-parts": "flake-parts_13",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "skill-authoring-skills": "skill-authoring-skills",
+        "systems": [
+          "systems"
+        ],
+        "treefmt-nix": "treefmt-nix_14"
+      },
+      "locked": {
+        "lastModified": 1793438905,
+        "narHash": "sha256-HPuelTQzrJoiKN+c5XzjJ9EpggBO0FIbMr1XNSyf0t4=",
+        "owner": "nhooey",
+        "repo": "xtdb-skills",
+        "rev": "9c32800cd12d8fcb48213344d4940614dd0ac736",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nhooey",
+        "repo": "xtdb-skills",
         "type": "github"
       }
     }
