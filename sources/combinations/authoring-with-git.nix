@@ -2,8 +2,8 @@
 # git/GitHub pack, i.e. the full skill set a skills-authoring repo installs into
 # its dev shell. It splices the `authoring` combination in AS A SOURCE (its
 # `packages` make it re-composable), so the curated authoring set stays defined
-# once, in authoring.nix, and this file only adds git-skills on top. It narrows
-# the nix-skills pick to `nix-flakes`, leaving out `nix-garnix-ci`.
+# once, in authoring.nix, and this file only adds git-skills on top. It pins
+# the nix-skills pick to `nix-flakes`.
 #
 # `git-skills` is a live category-2 input; the other args are forwarded to
 # `authoring.nix` unchanged. `name` is the distinct reconcile-ownership appName.
