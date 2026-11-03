@@ -277,11 +277,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793699768,
-        "narHash": "sha256-7gnTJK6YB7izqHqrSnZD08K1sQsLqLAyFZY2hsbnEzg=",
+        "lastModified": 1793719125,
+        "narHash": "sha256-SL/Ou1Z4cllpFcEpRQa4sU/DrbkSn77GWJki5rxLfiY=",
         "owner": "nhooey",
         "repo": "git-skills",
-        "rev": "60752724d0bd0cfdffe13176010562b749a1918d",
+        "rev": "81b8fb0f962e028eb4ab697f65e79481df84c7f4",
         "type": "github"
       },
       "original": {
