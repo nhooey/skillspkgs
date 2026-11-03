@@ -99,13 +99,17 @@ After editing, run `nix flake lock` in each directory so both `flake.lock` files
 
 Both locks must also pin each repo (and `agent-skill-flake`) at the same rev: the root's `checks.<system>.aggregated-subflake-in-sync` fails when the sub-flake declares a different repo set or has drifted, and prints the `nix flake lock ./sources/aggregated --override-input …` to re-pin it. When you bump a repo in the root lock, bump it in `sources/aggregated/flake.lock` too. The sub-flake's own `nix flake check ./sources/aggregated` evaluates it as a dev-shell skills source.
 
-### Bumping an aggregated repo
+### Bumping aggregated repos
 
 ```bash
-scripts/bump-skills-chain coding-agent-skills "Brings in the kanban skill's renamed lists."
+scripts/bump-skills-chain -m "Brings in the PR watcher's ask-once answers." \
+  --devshell ~/git/nhooey/nhooey-mynixos/skills-devshell \
+  git-skills nix-skills
 ```
 
-[`scripts/bump-skills-chain`](./scripts/bump-skills-chain) moves the repo to its newest commit in both locks and builds every `agent-skills-nhooey-*-all` package. It then merges a PR here and one in `nur-packages` that moves its `skillspkgs` lock.
+[`scripts/bump-skills-chain`](./scripts/bump-skills-chain) moves each named repo to its newest commit in both locks and builds every `agent-skills-nhooey-*-all` package. It then merges one PR here for all of them, and one in `nur-packages` that moves its `skillspkgs` lock.
+
+A project's skills dev shell pins skill repos in its own lock rather than through skillspkgs, so a skill installed only there, such as `nix-flakes`, never changes with the chain. Each `--devshell` directory, or each one in the colon-separated `SKILLS_DEVSHELLS`, gets the named repos it declares updated too: through a merged PR when its repo has an `origin` remote, and as a commit on its current branch when it doesn't.
 
 ### Why the input is declared twice
 

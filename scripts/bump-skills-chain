@@ -1,29 +1,88 @@
 #!/usr/bin/env bash
-# Move one aggregated skill repo to its newest commit in skillspkgs, then move
-# skillspkgs in nur-packages, merging one PR in each repo.
+# Move aggregated skill repos to their newest commits in skillspkgs, move
+# skillspkgs in nur-packages, and move the same repos in any skills dev
+# shells that pin them directly, merging one PR per repo with a remote.
 #
-# Usage: scripts/bump-skills-chain <input> "<what the new commits bring in>"
-#   <input>  an aggregated input of this flake, e.g. coding-agent-skills
-#   The second argument goes into both commit messages and PR bodies.
+# Usage: scripts/bump-skills-chain -m "<what the new commits bring in>"
+#          [--devshell DIR]... <input>...
+#   <input>        an aggregated input of this flake, e.g. coding-agent-skills
+#   -m             goes into every commit message and PR body
+#   --devshell DIR a skills dev-shell flake (such as a project's
+#                  skills-devshell/) whose own lock pins skill repos
 #
 # Both skillspkgs locks (the root and sources/aggregated) are pinned to the
-# same rev, so checks.<system>.aggregated-subflake-in-sync keeps passing.
+# same revs, so checks.<system>.aggregated-subflake-in-sync keeps passing.
 # Every agent-skills-nhooey-*-all package is built before each push.
+#
+# A dev shell gets only the named inputs it declares. Its repo gets a PR
+# and a merge when it has an origin remote, and otherwise a commit on its
+# current branch, which must not have other changes to the lock.
 #
 # Environment:
 #   NUR_PACKAGES_DIR  checkout of nhooey/nur-packages
 #                     (default: ~/git/github/nhooey/nur-packages)
+#   SKILLS_DEVSHELLS  colon-separated dev-shell dirs, added to --devshell
 #
 # After it finishes, the nur-packages input on MyNixOS still has to be updated,
-# released and switched to (see the mynixos-workflow skill).
+# released and switched to; a dev shell picks its skills up on its next load.
 set -euo pipefail
 
-if [ $# -ne 2 ]; then
-  sed -n '5,7p' "$0" >&2
+usage() { sed -n '6,11p' "$0" | sed 's/^# \{0,1\}//' >&2; }
+
+brings=""
+devshells=()
+inputs=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+  -m)
+    brings=$2
+    shift 2
+    ;;
+  --devshell)
+    devshells+=("$2")
+    shift 2
+    ;;
+  -h | --help)
+    usage
+    exit 0
+    ;;
+  -*)
+    echo "unknown flag: $1" >&2
+    usage
+    exit 2
+    ;;
+  *)
+    inputs+=("$1")
+    shift
+    ;;
+  esac
+done
+if [ -n "${SKILLS_DEVSHELLS:-}" ]; then
+  IFS=: read -r -a extra <<<"$SKILLS_DEVSHELLS"
+  devshells+=("${extra[@]}")
+fi
+if [ -z "$brings" ] || [ ${#inputs[@]} -eq 0 ]; then
+  usage
   exit 2
 fi
-input=$1
-brings=$2
+# Resolve now, before the script changes directory. A dev shell with an
+# origin remote must be on its default branch, so its PR starts there.
+for i in "${!devshells[@]}"; do
+  d=$(cd "${devshells[$i]}" && pwd -P)
+  devshells[i]=$d
+  if git -C "$d" remote get-url origin >/dev/null 2>&1; then
+    base=$(git -C "$d" symbolic-ref --short refs/remotes/origin/HEAD | sed 's|^origin/||')
+    if [ "$(git -C "$d" branch --show-current)" != "$base" ]; then
+      echo "$d isn't on $base; switch it there first" >&2
+      exit 2
+    fi
+  fi
+  if ! git -C "$d" diff --quiet -- flake.lock; then
+    echo "$d/flake.lock has uncommitted changes" >&2
+    exit 2
+  fi
+done
+
 nur=${NUR_PACKAGES_DIR:-$HOME/git/github/nhooey/nur-packages}
 system=$(nix eval --impure --raw --expr builtins.currentSystem)
 
@@ -36,68 +95,102 @@ build_all() {
   nix build --no-link $attrs
 }
 
-# skillspkgs
-cd "$(dirname "$0")/.."
-git switch -q master && git pull -q --ff-only
-old=$(jq -r --arg i "$input" '.nodes[.nodes.root.inputs[$i]].locked.rev' flake.lock)
-nix flake update "$input"
-rev=$(jq -r --arg i "$input" '.nodes[.nodes.root.inputs[$i]].locked.rev' flake.lock)
-if [ "$rev" = "$old" ]; then
-  echo "$input is already at ${rev:0:7}" >&2
-  exit 0
-fi
-nix flake lock ./sources/aggregated --override-input "$input" "github:nhooey/$input/$rev"
-nix build --no-link ".#checks.$system.aggregated-subflake-in-sync"
-build_all
+# The locked rev of a root input, or "" when the flake doesn't declare it.
+locked_rev() {
+  jq -r --arg i "$2" '.nodes.root.inputs[$i] as $n | if $n then .nodes[$n].locked.rev else "" end' "$1/flake.lock"
+}
 
-short=${rev:0:7}
-branch="update-$input-$short"
-git switch -q -c "$branch"
-git add flake.lock sources/aggregated/flake.lock
-git commit -q -F - <<EOF
-Update $input to $short
+# Commit the staged change, push a branch, open a PR and merge it.
+merge_pr() {
+  local branch=$1 title=$2 body=$3
+  git switch -q -c "$branch"
+  git commit -q -F - <<EOF
+$title
 
-$brings
+$body
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
 EOF
-git push -q -u origin "$branch"
-gh pr create --title "Update $input to $short" --body "$(cat <<EOF
-Updates $input ${old:0:7} to $short in both flake.lock files. $brings
+  git push -q -u origin "$branch"
+  gh pr create --title "$title" --body "$body
 
-- Every \`agent-skills-nhooey-*-all\` package builds.
-- \`aggregated-subflake-in-sync\` passes.
+🤖 Generated with [Claude Code](https://claude.com/claude-code)"
+  gh pr merge --merge --delete-branch
+}
 
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-EOF
-)"
-gh pr merge --merge --delete-branch
+# skillspkgs
+cd "$(dirname "$0")/.."
+git switch -q master && git pull -q --ff-only
+moved=()
+for input in "${inputs[@]}"; do
+  old=$(locked_rev . "$input")
+  if [ -z "$old" ]; then
+    echo "$input isn't an input of skillspkgs" >&2
+    exit 2
+  fi
+  nix flake update "$input"
+  rev=$(locked_rev . "$input")
+  if [ "$rev" = "$old" ]; then
+    echo "$input is already at ${rev:0:7}" >&2
+    continue
+  fi
+  nix flake lock ./sources/aggregated --override-input "$input" "github:nhooey/$input/$rev"
+  moved+=("$input ${rev:0:7}")
+done
+if [ ${#moved[@]} -eq 0 ]; then
+  echo "nothing to move" >&2
+  exit 0
+fi
+nix build --no-link ".#checks.$system.aggregated-subflake-in-sync"
+build_all
+
+# "git-skills ab89fea and nix-skills bb57f90"
+summary=$(printf '%s\n' "${moved[@]}" | sed -e '$!s/$/,/' | paste -sd ' ' - | sed -E 's/, ([^,]*)$/ and \1/')
+branch="update-$(printf '%s\n' "${moved[@]}" | tr ' ' - | paste -sd - -)"
+git add flake.lock sources/aggregated/flake.lock
+merge_pr "$branch" "Update $summary" "$brings
+
+Every \`agent-skills-nhooey-*-all\` package builds, and \`aggregated-subflake-in-sync\` passes."
 git switch -q master && git pull -q --ff-only
 sp=$(git rev-parse --short HEAD)
 
 # nur-packages
 cd "$nur"
 git switch -q master && git pull -q --ff-only
-git switch -q -c "update-skillspkgs-$sp"
 nix flake update skillspkgs
 build_all
 git add flake.lock
-git commit -q -F - <<EOF
-Update skillspkgs to $sp
+merge_pr "update-skillspkgs-$sp" "Update skillspkgs to $sp" "Brings in $summary. $brings"
+git switch -q master && git pull -q --ff-only
+git log --oneline -1
 
-Brings in $input $short. $brings
+# Skills dev shells that pin the skill repos themselves.
+for dir in "${devshells[@]}"; do
+  names=()
+  for input in "${inputs[@]}"; do
+    [ -n "$(locked_rev "$dir" "$input")" ] && names+=("$input")
+  done
+  if [ ${#names[@]} -eq 0 ]; then
+    echo "$dir pins none of ${inputs[*]}" >&2
+    continue
+  fi
+  cd "$dir"
+  nix flake update "${names[@]}"
+  git diff --quiet -- flake.lock && continue
+  git add flake.lock
+  title="Update ${names[*]} in the skills dev shell"
+  if git remote get-url origin >/dev/null 2>&1; then
+    base=$(git symbolic-ref --short refs/remotes/origin/HEAD | sed 's|^origin/||')
+    merge_pr "update-skills-devshell-$sp" "$title" "Brings in $summary. $brings"
+    git switch -q "$base" && git pull -q --ff-only
+  else
+    git commit -q -F - <<EOF
+$title
+
+Brings in $summary. $brings
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
 EOF
-git push -q -u origin "update-skillspkgs-$sp"
-gh pr create --title "Update skillspkgs to $sp" --body "$(cat <<EOF
-Updates the skillspkgs lock, bringing in $input $short. $brings
-
-- Every \`agent-skills-nhooey-*-all\` package builds.
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-EOF
-)"
-gh pr merge --merge --delete-branch
-git switch -q master && git pull -q --ff-only
-git log --oneline -1
+  fi
+  git log --oneline -1
+done
