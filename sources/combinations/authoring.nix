@@ -16,7 +16,6 @@
   vendoredSources,
   nixSkillNames ? [
     "nix-flakes"
-    "nix-garnix-ci"
   ],
   ...
 }:
