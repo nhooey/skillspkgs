@@ -11,11 +11,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1792227263,
-        "narHash": "sha256-bTc7BgLTmd8A8dVkwvtO/3SP5mk5C1bwWW4oNGtCPjE=",
+        "lastModified": 1792663323,
+        "narHash": "sha256-a/yujIeodi2c7jXcdpHE6Fr9CAN+ev0i759lsSC7W6Q=",
         "owner": "nhooey",
         "repo": "agent-skill-flake",
-        "rev": "80737fa35420aeaa2b7df3ad54b9eee45aad2580",
+        "rev": "8d5a9a5d8d2211fa077268fd8f48066d94cce6a7",
         "type": "github"
       },
       "original": {
@@ -357,11 +357,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793524616,
-        "narHash": "sha256-PnzA0CVv1hC4B8vO9ye+Oam49bIdP0UXaBdK/sugAOo=",
+        "lastModified": 1793696346,
+        "narHash": "sha256-akvogQttSCS4pHey2daWzUM1t+ykpx2uoDaveq5pKsU=",
         "owner": "nhooey",
         "repo": "nix-gstack",
-        "rev": "1937de3aa27c67f2bb93b10f81fa5c0a962338da",
+        "rev": "12a604e86ba5a0b4df6f1e8c7345ae2de690923b",
         "type": "github"
       },
       "original": {
@@ -389,11 +389,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792403049,
-        "narHash": "sha256-T9mZd9uqvZ87dBWfZxhlSgflZL2JV5cnmaYER3HdABE=",
+        "lastModified": 1792575294,
+        "narHash": "sha256-0aSJaIMr00vZHzLyj8HHNeXuvMdAqA1bYa0QQYi57QM=",
         "owner": "nhooey",
         "repo": "nix-microsoft-skills",
-        "rev": "9f4a21f1e02b0b41a405fe0044b1321cea2f74bb",
+        "rev": "c01584b24bfd2a2a5b180c107df1ef251b8fd253",
         "type": "github"
       },
       "original": {
@@ -528,11 +528,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792223224,
-        "narHash": "sha256-/4lkuCmhUo8ljStbQuGaGkY3zTwzNs8nwGl6747qXWQ=",
+        "lastModified": 1793729179,
+        "narHash": "sha256-CCZaJyiQLOaw5vusbVTHD/dTRDpzljU4RHoF+1OO4es=",
         "owner": "nhooey",
         "repo": "shell-skills",
-        "rev": "6724cc2a800cbb4bd4ee5ef7115d482fceeb0f9a",
+        "rev": "766ca0ca9e27c89ee4f3d8e5514b74ca42bcee9f",
         "type": "github"
       },
       "original": {
@@ -561,11 +561,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793221802,
-        "narHash": "sha256-z+NB1zTR3F1UjEu+GDseywxs1VmZLNMZYU76X6ySxzk=",
+        "lastModified": 1793439196,
+        "narHash": "sha256-QE2PgHLLIf0QyOZjX5NHYQaX96mUvZ/WUjClqmQTj/A=",
         "owner": "nhooey",
         "repo": "skill-authoring-skills",
-        "rev": "e34ce477c03247a1dc5617caa15db26543ef4d9f",
+        "rev": "d8cfdb77b3536a97ef4757ac2d06d4ff1ba3b580",
         "type": "github"
       },
       "original": {
@@ -694,11 +694,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793438905,
-        "narHash": "sha256-HPuelTQzrJoiKN+c5XzjJ9EpggBO0FIbMr1XNSyf0t4=",
+        "lastModified": 1793538824,
+        "narHash": "sha256-HCXLFnJCHWHjER0v3skV9jSe3T+danzZrRxMPq/3NaA=",
         "owner": "nhooey",
         "repo": "xtdb-skills",
-        "rev": "9c32800cd12d8fcb48213344d4940614dd0ac736",
+        "rev": "d5fb0271796b740170ba777683b4956a0f3f72b9",
         "type": "github"
       },
       "original": {
