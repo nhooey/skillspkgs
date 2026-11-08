@@ -560,11 +560,11 @@
         "treefmt-nix": "treefmt-nix_5"
       },
       "locked": {
-        "lastModified": 1793719125,
-        "narHash": "sha256-SL/Ou1Z4cllpFcEpRQa4sU/DrbkSn77GWJki5rxLfiY=",
+        "lastModified": 1794145370,
+        "narHash": "sha256-FwNn1aMZI3CO7Wgjvf57F+j03kudkUAGeDsLvtb5juA=",
         "owner": "nhooey",
         "repo": "git-skills",
-        "rev": "81b8fb0f962e028eb4ab697f65e79481df84c7f4",
+        "rev": "f6d1df8de12b898b1b6678f012a8942820139b1e",
         "type": "github"
       },
       "original": {
@@ -586,11 +586,11 @@
         "treefmt-nix": "treefmt-nix_6"
       },
       "locked": {
-        "lastModified": 1794046516,
-        "narHash": "sha256-78cm5VCvKv/kXOPasK6+3HaU+Mm1rFnww9GKxG1leAo=",
+        "lastModified": 1794144895,
+        "narHash": "sha256-+0e3JJmX6Xq0axriB225wfaIgPhkR23oU41g6g8pP1k=",
         "owner": "nhooey",
         "repo": "macos-skills",
-        "rev": "157521ab91105d931d18ba9c226b59c7782d7b7b",
+        "rev": "146768fe09fd925fbc78f3c2e8176ef8cf984198",
         "type": "github"
       },
       "original": {
