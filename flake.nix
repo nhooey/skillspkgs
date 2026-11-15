@@ -292,7 +292,19 @@
           ;
         vendoredSources = vendored.sources;
         systems = import inputs.systems;
-        inherit (inputs) nix-skills git-skills;
+        # The category-2 repos the combinations pick skills from.
+        skillSources = {
+          inherit (inputs)
+            coding-agent-skills
+            document-skills
+            git-skills
+            nix-skills
+            python-skills
+            shell-skills
+            software-design-skills
+            writing-skills
+            ;
+        };
       };
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
@@ -305,6 +317,17 @@
       imports = [
         inputs.agent-skill-flake.flakeModules.devshellSkills
         inputs.treefmt-nix.flakeModule
+        # One `combination-<name>` check per combination: building its env
+        # proves every skill it names resolves and no two collide.
+        {
+          perSystem =
+            { system, ... }:
+            {
+              checks = nixpkgs.lib.mapAttrs' (
+                name: combination: nixpkgs.lib.nameValuePair "combination-${name}" combination.env.${system}
+              ) combos.combinations;
+            };
+        }
       ];
 
       # Dev-shell options consumed by the devshellSkills module above: name the

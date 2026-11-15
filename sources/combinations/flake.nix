@@ -16,13 +16,43 @@
       url = "github:nhooey/agent-skill-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-skills = {
-      url = "github:nhooey/nix-skills/overnight-skills";
+    coding-agent-skills = {
+      url = "github:nhooey/coding-agent-skills/overnight-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
+    document-skills = {
+      url = "github:nhooey/document-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     git-skills = {
       url = "github:nhooey/git-skills/overnight-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
+    nix-skills = {
+      url = "github:nhooey/nix-skills/overnight-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
+    python-skills = {
+      url = "github:nhooey/python-skills/overnight-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
+    shell-skills = {
+      url = "github:nhooey/shell-skills/overnight-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
+    software-design-skills = {
+      url = "github:nhooey/software-design-skills/overnight-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
+    writing-skills = {
+      url = "github:nhooey/writing-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
@@ -48,13 +78,11 @@
       nixpkgs,
       systems,
       agent-skill-flake,
-      nix-skills,
-      git-skills,
       humanizer,
       skill-creator,
       superpowers,
       ...
-    }:
+    }@inputs:
     let
       forSystems = nixpkgs.lib.genAttrs (import systems);
       combos = import ./default.nix {
@@ -62,9 +90,19 @@
           nixpkgs
           agent-skill-flake
           forSystems
-          nix-skills
-          git-skills
           ;
+        skillSources = {
+          inherit (inputs)
+            coding-agent-skills
+            document-skills
+            git-skills
+            nix-skills
+            python-skills
+            shell-skills
+            software-design-skills
+            writing-skills
+            ;
+        };
         vendoredSources = {
           humanizer = humanizer;
           "skill-creator" = skill-creator;

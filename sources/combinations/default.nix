@@ -14,15 +14,15 @@
 #   combinations       = { <name> = <mkCombination result>; };
 # `}`, where the mkCombination result is system-parametric
 # (`{ packages; apps; reconcileScript; env; }`). `vendoredSources` is a
-# name->source map (see authoring.nix); `nix-skills` and `git-skills` are live
-# category-2 inputs.
+# name->source map (see authoring.nix); `skillSources` maps category-2 input
+# names to the live inputs (see families.nix), and `nix-skills` and
+# `git-skills` are passed on from it by name.
 {
   nixpkgs,
   agent-skill-flake,
   forSystems,
   systems,
-  nix-skills,
-  git-skills,
+  skillSources,
   vendoredSources,
 }:
 let
@@ -34,10 +34,10 @@ let
       agent-skill-flake
       forSystems
       systems
-      nix-skills
-      git-skills
+      skillSources
       vendoredSources
       ;
+    inherit (skillSources) nix-skills git-skills;
   };
 
   # Auto-discover sibling per-combination `.nix` files (single-level readDir).
