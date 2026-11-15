@@ -6,3 +6,7 @@
 # Skills the devShell reconciles into project scope on `nix develop`
 # (nix-store symlinks, regenerated every entry — never committed).
 /.claude/skills/
+# Project-scope skill installs from `nix develop`'s startup hooks; the
+# skills' preferences files beside them are the project's own.
+/.agents/skills/*
+!/.agents/skills/*.preferences.md
