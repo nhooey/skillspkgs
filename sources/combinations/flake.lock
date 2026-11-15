@@ -50,6 +50,22 @@
         "type": "github"
       }
     },
+    "agent-stuff-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790543438,
+        "narHash": "sha256-tIKtwPCXCYhYza7BgRQiRK+Lv9YrI+xpDtfSPrzR3w4=",
+        "owner": "mitsuhiko",
+        "repo": "agent-stuff",
+        "rev": "0865c849befd2021490679f96a8dee58c84ac857",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mitsuhiko",
+        "repo": "agent-stuff",
+        "type": "github"
+      }
+    },
     "anthropics-skills-src": {
       "flake": false,
       "locked": {
@@ -63,6 +79,22 @@
       "original": {
         "owner": "anthropics",
         "repo": "skills",
+        "type": "github"
+      }
+    },
+    "citypaul-dotfiles-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790978103,
+        "narHash": "sha256-QX4KsgD6ZmB3JSnWrDJFCuVAKVPD/pNMIMTmo8G2zMg=",
+        "owner": "citypaul",
+        "repo": ".dotfiles",
+        "rev": "cd4028d57d6e4e95814f7b8ee55ca13c23a9c2f0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "citypaul",
+        "repo": ".dotfiles",
         "type": "github"
       }
     },
@@ -540,6 +572,8 @@
     "root": {
       "inputs": {
         "agent-skill-flake": "agent-skill-flake",
+        "agent-stuff-src": "agent-stuff-src",
+        "citypaul-dotfiles-src": "citypaul-dotfiles-src",
         "coding-agent-skills": "coding-agent-skills",
         "document-skills": "document-skills",
         "git-skills": "git-skills",

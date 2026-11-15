@@ -71,6 +71,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
+    # Single-skill vendored sources, built here through their pkgs/<name>
+    # module (a plain `import` of a file in this repo, not a `path:` input).
+    agent-stuff-src = {
+      url = "github:mitsuhiko/agent-stuff";
+      flake = false;
+    };
+    citypaul-dotfiles-src = {
+      url = "github:citypaul/.dotfiles";
+      flake = false;
+    };
   };
 
   outputs =
@@ -85,6 +95,11 @@
     }@inputs:
     let
       forSystems = nixpkgs.lib.genAttrs (import systems);
+      vendored =
+        name: src:
+        (import ../../pkgs/${name} {
+          inherit nixpkgs agent-skill-flake src;
+        }).source;
       combos = import ./default.nix {
         inherit
           nixpkgs
@@ -107,6 +122,8 @@
           humanizer = humanizer;
           "skill-creator" = skill-creator;
           superpowers = superpowers;
+          "typescript-strict" = vendored "typescript-strict" inputs.citypaul-dotfiles-src;
+          "update-changelog" = vendored "update-changelog" inputs.agent-stuff-src;
         };
         systems = import systems;
       };

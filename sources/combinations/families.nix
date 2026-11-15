@@ -10,8 +10,10 @@
 #   skill-collections                 base + skill authoring
 #   skill-packaging                   skill-collections + input bumping
 #   nix-tooling                       base + input bumping + shipped defaults
-#   claude-code-tools                 base + shipped defaults
-#   applications                      base + shipped defaults
+#                                     + changelogs
+#   claude-code-tools                 base + shipped defaults + changelogs
+#                                     + strict TypeScript
+#   applications                      base + shipped defaults + changelogs
 #   browser-extensions-and-game-mods  base
 #   configuration                     base + GitHub policy + input bumping
 #   content                           base
@@ -19,9 +21,9 @@
 # Every first-party pick is a list of skill names, so a combination holds
 # exactly the skills named here: a new skill in a collection joins a family
 # only when it is added below, and a name a collection no longer has is an
-# evaluation error. The vendored authoring sources (humanizer,
-# skill-creator, superpowers) are taken whole, as `authoring.nix` takes
-# them. Families splice `base` (or another family) in as a source, so each
+# evaluation error. Vendored sources are single skills, or (humanizer,
+# skill-creator, superpowers) the authoring set taken whole, as
+# `authoring.nix` takes it. Families splice `base` (or another family) in as a source, so each
 # shared set is defined once.
 #
 # `skillSources` holds the category-2 repos by input name and
@@ -112,6 +114,10 @@ let
     "config-hygiene-shipped-defaults"
   ];
 
+  changelogs = {
+    source = vendoredSources."update-changelog";
+  };
+
   skillCollections = mk "skill-collections" [
     { source = base; }
     (pick "coding-agent-skills" [
@@ -142,14 +148,18 @@ let
       { source = base; }
       inputBumping
       shippedDefaults
+      changelogs
     ];
     claude-code-tools = mk "claude-code-tools" [
       { source = base; }
       shippedDefaults
+      changelogs
+      { source = vendoredSources."typescript-strict"; }
     ];
     applications = mk "applications" [
       { source = base; }
       shippedDefaults
+      changelogs
     ];
     browser-extensions-and-game-mods = mk "browser-extensions-and-game-mods" [
       { source = base; }

@@ -128,9 +128,9 @@ Curated unions of skills already provided by categories 1 and 2, built via `agen
 | `base`                             | Git, GitHub, shell, writing and Markdown hygiene, `nix-flakes`, and the coding-agent skills every run uses |
 | `skill-collections`                | Skill authoring: humanizer, skill-creator, superpowers, `coding-agent-skill-references`, Python style for bundled scripts |
 | `skill-packaging`                  | `skill-collections`, plus `nix-flake-recursive-bump-input-versions`                                      |
-| `nix-tooling`                      | `nix-flake-recursive-bump-input-versions`, `config-hygiene-shipped-defaults`                             |
-| `claude-code-tools`                | `config-hygiene-shipped-defaults`                                                                        |
-| `applications`                     | `config-hygiene-shipped-defaults`                                                                        |
+| `nix-tooling`                      | `nix-flake-recursive-bump-input-versions`, `config-hygiene-shipped-defaults`, `update-changelog`         |
+| `claude-code-tools`                | `config-hygiene-shipped-defaults`, `update-changelog`, `typescript-strict`                               |
+| `applications`                     | `config-hygiene-shipped-defaults`, `update-changelog`                                                    |
 | `browser-extensions-and-game-mods` | —                                                                                                        |
 | `configuration`                    | The `github-policy-*` skills, `nix-flake-recursive-bump-input-versions`                                  |
 | `content`                          | —                                                                                                        |

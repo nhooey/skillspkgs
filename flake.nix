@@ -180,12 +180,24 @@
     # ---- CATEGORY 1: vendored third-party sources, no upstream flake (built inline) ----
     # No rev in the URL — `flake.lock` pins these (run `nix flake update <src>`
     # to bump). Embedding a rev would double-pin and make the lock a no-op.
+    agent-stuff-src = {
+      url = "github:mitsuhiko/agent-stuff";
+      flake = false;
+    };
     anthropics-skills-src = {
       url = "github:anthropics/skills";
       flake = false;
     };
+    apollographql-skills-src = {
+      url = "github:apollographql/skills";
+      flake = false;
+    };
     caveman-src = {
       url = "github:JuliusBrussee/caveman";
+      flake = false;
+    };
+    citypaul-dotfiles-src = {
+      url = "github:citypaul/.dotfiles";
       flake = false;
     };
     clojure-malli-skill-src = {
@@ -248,8 +260,11 @@
         "devshell"
         "agent-skill-flake"
         "treefmt-nix"
+        "agent-stuff-src"
         "anthropics-skills-src"
+        "apollographql-skills-src"
         "caveman-src"
+        "citypaul-dotfiles-src"
         "clojure-malli-skill-src"
         "clojure-shadow-cljs-skill-src"
         "clojure-skills-src"
@@ -276,9 +291,12 @@
           malli = inputs.clojure-malli-skill-src;
           "opinionated-software-engineering" = inputs.opinionated-claude-skills-src;
           "shadow-cljs" = inputs.clojure-shadow-cljs-skill-src;
+          "rust-best-practices" = inputs.apollographql-skills-src;
           "skill-creator" = inputs.anthropics-skills-src;
           superpowers = inputs.superpowers-src;
+          "typescript-strict" = inputs.citypaul-dotfiles-src;
           trailofbits = inputs.trailofbits-skills-src;
+          "update-changelog" = inputs.agent-stuff-src;
         };
       };
       aggregated = import ./sources/aggregated {
