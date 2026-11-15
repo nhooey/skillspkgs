@@ -40,48 +40,6 @@
         "type": "github"
       }
     },
-    "daymade": {
-      "inputs": {
-        "agent-skill-flake": [
-          "agent-skill-flake"
-        ],
-        "daymade-skills-src": "daymade-skills-src",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "dir": "pkgs/daymade",
-        "lastModified": 1793720172,
-        "narHash": "sha256-b6uZvRx5mWktnvREWhtXGnichutI+0au6zUtPczrAvk=",
-        "owner": "nhooey",
-        "repo": "skillspkgs",
-        "rev": "95453c8001da8a31fbb6b901ee13de87714a1c06",
-        "type": "github"
-      },
-      "original": {
-        "dir": "pkgs/daymade",
-        "owner": "nhooey",
-        "repo": "skillspkgs",
-        "type": "github"
-      }
-    },
-    "daymade-skills-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1791859419,
-        "narHash": "sha256-wF7lZHBemSXtGDDyfopYOShbmaVYUhtPqF6pfVDrAa0=",
-        "owner": "daymade",
-        "repo": "claude-code-skills",
-        "rev": "b05fda19c1d09836571e027b44f12dc5d6cf3a8a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "daymade",
-        "repo": "claude-code-skills",
-        "type": "github"
-      }
-    },
     "devshell": {
       "inputs": {
         "nixpkgs": [
@@ -279,7 +237,6 @@
     "root": {
       "inputs": {
         "agent-skill-flake": "agent-skill-flake",
-        "daymade": "daymade",
         "git-skills": "git-skills",
         "humanizer": "humanizer",
         "nix-skills": "nix-skills",
