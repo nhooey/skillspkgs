@@ -97,11 +97,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1794042208,
-        "narHash": "sha256-Urh9A4/qm2fJJbw0ofrf83UlrgsAw2l02RWQQEqv5oI=",
+        "lastModified": 1794768137,
+        "narHash": "sha256-QzbSjLm1lFQbstx4MWwqnCpHsa/18iXLwGNbF9HZF+8=",
         "owner": "nhooey",
         "repo": "coding-agent-skills",
-        "rev": "cdbe9b69acbbc5a365d2a73b10956c1b1b452937",
+        "rev": "96618415df61509b0968a78abce2baec432df90d",
         "type": "github"
       },
       "original": {
