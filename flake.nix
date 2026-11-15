@@ -67,7 +67,7 @@
     # dominated by duplicate nix-systems / flake-parts / devshell / treefmt-nix
     # subtrees.
     coding-agent-skills = {
-      url = "github:nhooey/coding-agent-skills";
+      url = "github:nhooey/coding-agent-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -75,7 +75,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     data-skills = {
-      url = "github:nhooey/data-skills";
+      url = "github:nhooey/data-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -83,7 +83,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     document-skills = {
-      url = "github:nhooey/document-skills";
+      url = "github:nhooey/document-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -91,7 +91,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     git-skills = {
-      url = "github:nhooey/git-skills";
+      url = "github:nhooey/git-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -99,7 +99,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     macos-skills = {
-      url = "github:nhooey/macos-skills";
+      url = "github:nhooey/macos-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -115,7 +115,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     nix-microsoft-skills = {
-      url = "github:nhooey/nix-microsoft-skills";
+      url = "github:nhooey/nix-microsoft-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -123,7 +123,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     nix-skills = {
-      url = "github:nhooey/nix-skills";
+      url = "github:nhooey/nix-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -131,7 +131,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     python-skills = {
-      url = "github:nhooey/python-skills";
+      url = "github:nhooey/python-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -139,7 +139,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     shell-skills = {
-      url = "github:nhooey/shell-skills";
+      url = "github:nhooey/shell-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -147,7 +147,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     software-design-skills = {
-      url = "github:nhooey/software-design-skills";
+      url = "github:nhooey/software-design-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -155,7 +155,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     writing-skills = {
-      url = "github:nhooey/writing-skills";
+      url = "github:nhooey/writing-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -163,7 +163,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     xtdb-skills = {
-      url = "github:nhooey/xtdb-skills";
+      url = "github:nhooey/xtdb-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";

@@ -17,12 +17,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-skills = {
-      url = "github:nhooey/nix-skills";
+      url = "github:nhooey/nix-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     git-skills = {
-      url = "github:nhooey/git-skills";
+      url = "github:nhooey/git-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
