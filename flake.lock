@@ -560,6 +560,38 @@
         "type": "github"
       }
     },
+    "python-skills": {
+      "inputs": {
+        "agent-skill-flake": [
+          "agent-skill-flake"
+        ],
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ],
+        "treefmt-nix": [
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794764782,
+        "narHash": "sha256-INmLyu/9ZU6EX9oxu/4qP2w1BxPluY1RNr9RO5hR+VE=",
+        "owner": "nhooey",
+        "repo": "python-skills",
+        "rev": "963e75fcaad332d008089ec4da432dc5f6d1d931",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nhooey",
+        "repo": "python-skills",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "agent-skill-flake": "agent-skill-flake",
@@ -588,7 +620,9 @@
         "nix-skills": "nix-skills",
         "nixpkgs": "nixpkgs",
         "opinionated-claude-skills-src": "opinionated-claude-skills-src",
+        "python-skills": "python-skills",
         "shell-skills": "shell-skills",
+        "software-design-skills": "software-design-skills",
         "superpowers-src": "superpowers-src",
         "systems": [
           "agent-skill-flake",
@@ -691,6 +725,38 @@
       "original": {
         "owner": "nhooey",
         "repo": "skill-authoring-skills",
+        "type": "github"
+      }
+    },
+    "software-design-skills": {
+      "inputs": {
+        "agent-skill-flake": [
+          "agent-skill-flake"
+        ],
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ],
+        "treefmt-nix": [
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794761134,
+        "narHash": "sha256-Bq+053jhbCWS+rM8WrmLcjUXpl1b//H8e0mEqDVkqlU=",
+        "owner": "nhooey",
+        "repo": "software-design-skills",
+        "rev": "75a594a02fdb79f002ba52fd6c3be39ac71f72a5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nhooey",
+        "repo": "software-design-skills",
         "type": "github"
       }
     },
