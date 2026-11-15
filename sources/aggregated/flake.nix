@@ -51,8 +51,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
+    python-skills = {
+      url = "github:nhooey/python-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
     shell-skills = {
       url = "github:nhooey/shell-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.agent-skill-flake.follows = "agent-skill-flake";
+    };
+    software-design-skills = {
+      url = "github:nhooey/software-design-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
