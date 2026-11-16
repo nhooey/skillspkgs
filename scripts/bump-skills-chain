@@ -25,66 +25,85 @@
 #
 # After it finishes, the nur-packages input on MyNixOS still has to be updated,
 # released and switched to; a dev shell picks its skills up on its next load.
+#
+# Sourcing the script defines its functions without running it, which is
+# how tests/bump-skills-chain.bats reaches them.
 set -euo pipefail
 
-usage() { sed -n '6,11p' "$0" | sed 's/^# \{0,1\}//' >&2; }
+usage() { sed -n '6,11p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//' >&2; }
 
-brings=""
-devshells=()
-inputs=()
-while [ $# -gt 0 ]; do
-  case "$1" in
-  -m)
-    brings=$2
-    shift 2
-    ;;
-  --devshell)
-    devshells+=("$2")
-    shift 2
-    ;;
-  -h | --help)
-    usage
-    exit 0
-    ;;
-  -*)
-    echo "unknown flag: $1" >&2
-    usage
-    exit 2
-    ;;
-  *)
-    inputs+=("$1")
-    shift
-    ;;
-  esac
-done
-if [ -n "${SKILLS_DEVSHELLS:-}" ]; then
-  IFS=: read -r -a extra <<<"$SKILLS_DEVSHELLS"
-  devshells+=("${extra[@]}")
-fi
-if [ -z "$brings" ] || [ ${#inputs[@]} -eq 0 ]; then
-  usage
-  exit 2
-fi
-# Resolve now, before the script changes directory. A dev shell with an
-# origin remote must be on its default branch, so its PR starts there.
-for i in "${!devshells[@]}"; do
-  d=$(cd "${devshells[$i]}" && pwd -P)
-  devshells[i]=$d
-  if git -C "$d" remote get-url origin >/dev/null 2>&1; then
-    base=$(git -C "$d" symbolic-ref --short refs/remotes/origin/HEAD | sed 's|^origin/||')
-    if [ "$(git -C "$d" branch --show-current)" != "$base" ]; then
-      echo "$d isn't on $base; switch it there first" >&2
+# Set `brings`, `devshells` and `inputs` from the command line and
+# SKILLS_DEVSHELLS. Exits 0 on --help and 2 on bad usage.
+parse_args() {
+  brings=""
+  devshells=()
+  inputs=()
+  while [ $# -gt 0 ]; do
+    case "$1" in
+    -m | --devshell)
+      if [ $# -lt 2 ]; then
+        echo "$1 needs a value" >&2
+        usage
+        exit 2
+      fi
+      if [ "$1" = -m ]; then
+        brings=$2
+      else
+        devshells+=("$2")
+      fi
+      shift 2
+      ;;
+    -h | --help)
+      usage
+      exit 0
+      ;;
+    -*)
+      echo "unknown flag: $1" >&2
+      usage
       exit 2
-    fi
+      ;;
+    *)
+      inputs+=("$1")
+      shift
+      ;;
+    esac
+  done
+  if [ -n "${SKILLS_DEVSHELLS:-}" ]; then
+    local extra
+    IFS=: read -r -a extra <<<"$SKILLS_DEVSHELLS"
+    devshells+=("${extra[@]}")
   fi
-  if ! git -C "$d" diff --quiet -- flake.lock; then
-    echo "$d/flake.lock has uncommitted changes" >&2
+  if [ -z "$brings" ] || [ ${#inputs[@]} -eq 0 ]; then
+    usage
     exit 2
   fi
-done
+}
 
-nur=${NUR_PACKAGES_DIR:-$HOME/git/github/nhooey/nur-packages}
-system=$(nix eval --impure --raw --expr builtins.currentSystem)
+# The locked rev of a root input, or "" when the flake doesn't declare it.
+locked_rev() {
+  jq -r --arg i "$2" '.nodes.root.inputs[$i] as $n | if $n then .nodes[$n].locked.rev else "" end' "$1/flake.lock"
+}
+
+# "git-skills ab89fea and nix-skills bb57f90", from one "<input> <rev>"
+# argument per moved input.
+moved_summary() {
+  printf '%s\n' "$@" | sed -e '$!s/$/,/' | paste -sd ' ' - | sed -E 's/, ([^,]*)$/ and \1/'
+}
+
+# "update-git-skills-ab89fea-nix-skills-bb57f90", from the same arguments.
+moved_branch() {
+  echo "update-$(printf '%s\n' "$@" | tr ' ' - | paste -sd - -)"
+}
+
+# A commit message from a title and a body, with the co-author trailer.
+commit_message() {
+  printf '%s\n\n%s\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n' "$1" "$2"
+}
+
+# A PR body from a commit body, with the Claude Code footer.
+pr_body() {
+  printf '%s\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n' "$1"
+}
 
 build_all() {
   local attrs
@@ -95,102 +114,114 @@ build_all() {
   nix build --no-link $attrs
 }
 
-# The locked rev of a root input, or "" when the flake doesn't declare it.
-locked_rev() {
-  jq -r --arg i "$2" '.nodes.root.inputs[$i] as $n | if $n then .nodes[$n].locked.rev else "" end' "$1/flake.lock"
-}
-
 # Commit the staged change, push a branch, open a PR and merge it.
 merge_pr() {
   local branch=$1 title=$2 body=$3
   git switch -q -c "$branch"
-  git commit -q -F - <<EOF
-$title
-
-$body
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-EOF
+  commit_message "$title" "$body" | git commit -q -F -
   git push -q -u origin "$branch"
-  gh pr create --title "$title" --body "$body
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)"
+  gh pr create --title "$title" --body "$(pr_body "$body")"
   gh pr merge --merge --delete-branch
 }
 
-# skillspkgs
-cd "$(dirname "$0")/.."
-git switch -q master && git pull -q --ff-only
-moved=()
-for input in "${inputs[@]}"; do
-  old=$(locked_rev . "$input")
-  if [ -z "$old" ]; then
-    echo "$input isn't an input of skillspkgs" >&2
-    exit 2
-  fi
-  nix flake update "$input"
-  rev=$(locked_rev . "$input")
-  if [ "$rev" = "$old" ]; then
-    echo "$input is already at ${rev:0:7}" >&2
-    continue
-  fi
-  nix flake lock ./sources/aggregated --override-input "$input" "github:nhooey/$input/$rev"
-  moved+=("$input ${rev:0:7}")
-done
-if [ ${#moved[@]} -eq 0 ]; then
-  echo "nothing to move" >&2
-  exit 0
-fi
-nix build --no-link ".#checks.$system.aggregated-subflake-in-sync"
-build_all
+main() {
+  parse_args "$@"
 
-# "git-skills ab89fea and nix-skills bb57f90"
-summary=$(printf '%s\n' "${moved[@]}" | sed -e '$!s/$/,/' | paste -sd ' ' - | sed -E 's/, ([^,]*)$/ and \1/')
-branch="update-$(printf '%s\n' "${moved[@]}" | tr ' ' - | paste -sd - -)"
-git add flake.lock sources/aggregated/flake.lock
-merge_pr "$branch" "Update $summary" "$brings
+  # Resolve now, before the script changes directory. A dev shell with an
+  # origin remote must be on its default branch, so its PR starts there.
+  local i d base
+  for i in "${!devshells[@]}"; do
+    d=$(cd "${devshells[$i]}" && pwd -P)
+    devshells[i]=$d
+    if git -C "$d" remote get-url origin >/dev/null 2>&1; then
+      base=$(git -C "$d" symbolic-ref --short refs/remotes/origin/HEAD | sed 's|^origin/||')
+      if [ "$(git -C "$d" branch --show-current)" != "$base" ]; then
+        echo "$d isn't on $base; switch it there first" >&2
+        exit 2
+      fi
+    fi
+    if ! git -C "$d" diff --quiet -- flake.lock; then
+      echo "$d/flake.lock has uncommitted changes" >&2
+      exit 2
+    fi
+  done
+
+  local nur
+  nur=${NUR_PACKAGES_DIR:-$HOME/git/github/nhooey/nur-packages}
+  system=$(nix eval --impure --raw --expr builtins.currentSystem)
+
+  # skillspkgs
+  cd "$(dirname "${BASH_SOURCE[0]}")/.."
+  git switch -q master && git pull -q --ff-only
+  local moved=() input old rev
+  for input in "${inputs[@]}"; do
+    old=$(locked_rev . "$input")
+    if [ -z "$old" ]; then
+      echo "$input isn't an input of skillspkgs" >&2
+      exit 2
+    fi
+    nix flake update "$input"
+    rev=$(locked_rev . "$input")
+    if [ "$rev" = "$old" ]; then
+      echo "$input is already at ${rev:0:7}" >&2
+      continue
+    fi
+    nix flake lock ./sources/aggregated --override-input "$input" "github:nhooey/$input/$rev"
+    moved+=("$input ${rev:0:7}")
+  done
+  if [ ${#moved[@]} -eq 0 ]; then
+    echo "nothing to move" >&2
+    exit 0
+  fi
+  nix build --no-link ".#checks.$system.aggregated-subflake-in-sync"
+  build_all
+
+  local summary sp
+  summary=$(moved_summary "${moved[@]}")
+  git add flake.lock sources/aggregated/flake.lock
+  merge_pr "$(moved_branch "${moved[@]}")" "Update $summary" "$brings
 
 Every \`agent-skills-nhooey-*-all\` package builds, and \`aggregated-subflake-in-sync\` passes."
-git switch -q master && git pull -q --ff-only
-sp=$(git rev-parse --short HEAD)
+  git switch -q master && git pull -q --ff-only
+  sp=$(git rev-parse --short HEAD)
 
-# nur-packages
-cd "$nur"
-git switch -q master && git pull -q --ff-only
-nix flake update skillspkgs
-build_all
-git add flake.lock
-merge_pr "update-skillspkgs-$sp" "Update skillspkgs to $sp" "Brings in $summary. $brings"
-git switch -q master && git pull -q --ff-only
-git log --oneline -1
-
-# Skills dev shells that pin the skill repos themselves.
-for dir in "${devshells[@]}"; do
-  names=()
-  for input in "${inputs[@]}"; do
-    [ -n "$(locked_rev "$dir" "$input")" ] && names+=("$input")
-  done
-  if [ ${#names[@]} -eq 0 ]; then
-    echo "$dir pins none of ${inputs[*]}" >&2
-    continue
-  fi
-  cd "$dir"
-  nix flake update "${names[@]}"
-  git diff --quiet -- flake.lock && continue
+  # nur-packages
+  cd "$nur"
+  git switch -q master && git pull -q --ff-only
+  nix flake update skillspkgs
+  build_all
   git add flake.lock
-  title="Update ${names[*]} in the skills dev shell"
-  if git remote get-url origin >/dev/null 2>&1; then
-    base=$(git symbolic-ref --short refs/remotes/origin/HEAD | sed 's|^origin/||')
-    merge_pr "update-skills-devshell-$sp" "$title" "Brings in $summary. $brings"
-    git switch -q "$base" && git pull -q --ff-only
-  else
-    git commit -q -F - <<EOF
-$title
-
-Brings in $summary. $brings
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-EOF
-  fi
+  merge_pr "update-skillspkgs-$sp" "Update skillspkgs to $sp" "Brings in $summary. $brings"
+  git switch -q master && git pull -q --ff-only
   git log --oneline -1
-done
+
+  # Skills dev shells that pin the skill repos themselves.
+  local dir names title
+  for dir in "${devshells[@]}"; do
+    names=()
+    for input in "${inputs[@]}"; do
+      [ -n "$(locked_rev "$dir" "$input")" ] && names+=("$input")
+    done
+    if [ ${#names[@]} -eq 0 ]; then
+      echo "$dir pins none of ${inputs[*]}" >&2
+      continue
+    fi
+    cd "$dir"
+    nix flake update "${names[@]}"
+    git diff --quiet -- flake.lock && continue
+    git add flake.lock
+    title="Update ${names[*]} in the skills dev shell"
+    if git remote get-url origin >/dev/null 2>&1; then
+      base=$(git symbolic-ref --short refs/remotes/origin/HEAD | sed 's|^origin/||')
+      merge_pr "update-skills-devshell-$sp" "$title" "Brings in $summary. $brings"
+      git switch -q "$base" && git pull -q --ff-only
+    else
+      commit_message "$title" "Brings in $summary. $brings" | git commit -q -F -
+    fi
+    git log --oneline -1
+  done
+}
+
+if [ "${BASH_SOURCE[0]}" = "$0" ]; then
+  main "$@"
+fi

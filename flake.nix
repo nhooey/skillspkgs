@@ -446,6 +446,30 @@
 
           checks.home-manager-module = import ./tests/home-manager-module.nix { inherit pkgs; };
 
+          # Lint scripts/bump-skills-chain and unit-test its pure functions.
+          checks.bump-skills-chain =
+            pkgs.runCommand "bump-skills-chain-test"
+              {
+                src = nixpkgs.lib.fileset.toSource {
+                  root = ./.;
+                  fileset = nixpkgs.lib.fileset.unions [
+                    ./scripts/bump-skills-chain
+                    ./tests/bump-skills-chain.bats
+                  ];
+                };
+                nativeBuildInputs = [
+                  pkgs.bats
+                  pkgs.jq
+                  pkgs.shellcheck
+                ];
+              }
+              ''
+                cd $src
+                shellcheck --external-sources scripts/bump-skills-chain tests/bump-skills-chain.bats
+                bats tests/bump-skills-chain.bats
+                touch $out
+              '';
+
           treefmt = {
             projectRootFile = "flake.nix";
             programs = {
