@@ -17,42 +17,42 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     coding-agent-skills = {
-      url = "github:nhooey/coding-agent-skills/overnight-skills";
+      url = "github:nhooey/coding-agent-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     document-skills = {
-      url = "github:nhooey/document-skills/overnight-skills";
+      url = "github:nhooey/document-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     git-skills = {
-      url = "github:nhooey/git-skills/overnight-skills";
+      url = "github:nhooey/git-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     nix-skills = {
-      url = "github:nhooey/nix-skills/overnight-skills";
+      url = "github:nhooey/nix-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     python-skills = {
-      url = "github:nhooey/python-skills/overnight-skills";
+      url = "github:nhooey/python-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     shell-skills = {
-      url = "github:nhooey/shell-skills/overnight-skills";
+      url = "github:nhooey/shell-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     software-design-skills = {
-      url = "github:nhooey/software-design-skills/overnight-skills";
+      url = "github:nhooey/software-design-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     writing-skills = {
-      url = "github:nhooey/writing-skills/overnight-skills";
+      url = "github:nhooey/writing-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };

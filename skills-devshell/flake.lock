@@ -331,6 +331,23 @@
         "type": "github"
       }
     },
+    "cc-safety-net": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1792213229,
+        "narHash": "sha256-OdAUAfHcnUI4OyF4ixUni26Cw1n2XbJ7o7nrMr4teCU=",
+        "owner": "kenryu42",
+        "repo": "cc-safety-net",
+        "rev": "7d94f342c2c2a1d42299d26c060eac8c651b07c0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kenryu42",
+        "ref": "plugin",
+        "repo": "cc-safety-net",
+        "type": "github"
+      }
+    },
     "coding-agent-skills": {
       "inputs": {
         "agent-skill-flake": "agent-skill-flake_2",
@@ -342,16 +359,15 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1794779740,
-        "narHash": "sha256-bymfB0iLgzD1tUdi7S2mB8Uo4FVFxzx9+fgL8SN3AC4=",
+        "lastModified": 1794835805,
+        "narHash": "sha256-RdXBW11Ohs1rWb2LuwyuL7tfZ+25GDTPWWslDBI+ykE=",
         "owner": "nhooey",
         "repo": "coding-agent-skills",
-        "rev": "780cb3651e94d62419914d16780bc5ed3cc6428c",
+        "rev": "a8d03e69c170765b7f8ff66853c3618e67f5206e",
         "type": "github"
       },
       "original": {
         "owner": "nhooey",
-        "ref": "overnight-skills",
         "repo": "coding-agent-skills",
         "type": "github"
       }
@@ -631,16 +647,15 @@
         "treefmt-nix": "treefmt-nix_3"
       },
       "locked": {
-        "lastModified": 1794773315,
+        "lastModified": 1794812226,
         "narHash": "sha256-i+RXy1HLsFKHfB1PlEY4dD8/S0EmdSbciuEFOG1+vh8=",
         "owner": "nhooey",
         "repo": "document-skills",
-        "rev": "bf2d501ca3060367a515de9d1a81f44597e97146",
+        "rev": "cd8fbae594fa1e2ab23c7d597483127ee62881f6",
         "type": "github"
       },
       "original": {
         "owner": "nhooey",
-        "ref": "overnight-skills",
         "repo": "document-skills",
         "type": "github"
       }
@@ -1089,16 +1104,15 @@
         "treefmt-nix": "treefmt-nix_5"
       },
       "locked": {
-        "lastModified": 1794773950,
+        "lastModified": 1794824992,
         "narHash": "sha256-71i3iPpufuxf0mXgNoaU3V6EGqxesY2D7PARpVzgs0k=",
         "owner": "nhooey",
         "repo": "git-skills",
-        "rev": "114b1b91f649d664b265cf1a04dcd6716fe5b6af",
+        "rev": "1855be006cedad493a0557f15263e6233b192936",
         "type": "github"
       },
       "original": {
         "owner": "nhooey",
-        "ref": "overnight-skills",
         "repo": "git-skills",
         "type": "github"
       }
@@ -1154,16 +1168,15 @@
         "treefmt-nix": "treefmt-nix_8"
       },
       "locked": {
-        "lastModified": 1794774834,
+        "lastModified": 1794812272,
         "narHash": "sha256-xzXOC7tuLvOqXF0XprZ93VB9vZhB9QIEabTKS3uvyHI=",
         "owner": "nhooey",
         "repo": "nix-skills",
-        "rev": "c5060495cf7041f0104a879ed5469030916a4945",
+        "rev": "c7dc8249320a370952555a33748d7d23f6852734",
         "type": "github"
       },
       "original": {
         "owner": "nhooey",
-        "ref": "overnight-skills",
         "repo": "nix-skills",
         "type": "github"
       }
@@ -1204,7 +1217,6 @@
       },
       "original": {
         "owner": "nhooey",
-        "ref": "overnight-skills",
         "repo": "python-skills",
         "type": "github"
       }
@@ -1229,6 +1241,7 @@
     "shell-skills": {
       "inputs": {
         "agent-skill-flake": "agent-skill-flake_8",
+        "cc-safety-net": "cc-safety-net",
         "flake-parts": "flake-parts_14",
         "nixpkgs": [
           "nixpkgs"
@@ -1238,16 +1251,15 @@
         "treefmt-nix": "treefmt-nix_12"
       },
       "locked": {
-        "lastModified": 1794776627,
-        "narHash": "sha256-A4QUGwKYAQuBdM3oXaRQJ9Z/Tq/JhxhNRpLZAaYAJ3U=",
+        "lastModified": 1794835949,
+        "narHash": "sha256-cJpnSj0MEjxo4HWl7m6XoAhnG2tSSKvbRIniFa3cTSI=",
         "owner": "nhooey",
         "repo": "shell-skills",
-        "rev": "55d02d5cd67abd01ca76b53ff1e2b150954c122f",
+        "rev": "0001d245bf4aeab943efb91247e714a398ef2b91",
         "type": "github"
       },
       "original": {
         "owner": "nhooey",
-        "ref": "overnight-skills",
         "repo": "shell-skills",
         "type": "github"
       }
@@ -1990,16 +2002,15 @@
         "treefmt-nix": "treefmt-nix_15"
       },
       "locked": {
-        "lastModified": 1794772550,
+        "lastModified": 1794812282,
         "narHash": "sha256-GRVUVsChKe8oj1PrrIMAPcKuMa9yPB0lMXHCV7oo38g=",
         "owner": "nhooey",
         "repo": "writing-skills",
-        "rev": "90e14d962fd7df7ccebb0e17fa15887248ab4c6a",
+        "rev": "0d61b84cea52d0f5351cd1c5a17867bb0087a1ba",
         "type": "github"
       },
       "original": {
         "owner": "nhooey",
-        "ref": "overnight-skills",
         "repo": "writing-skills",
         "type": "github"
       }

@@ -15,31 +15,31 @@
     # aggregates. They follow `nixpkgs` but not `agent-skill-flake`, so each
     # keeps its own compatible builder.
     coding-agent-skills = {
-      url = "github:nhooey/coding-agent-skills/overnight-skills";
+      url = "github:nhooey/coding-agent-skills";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     document-skills = {
-      url = "github:nhooey/document-skills/overnight-skills";
+      url = "github:nhooey/document-skills";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     git-skills = {
-      url = "github:nhooey/git-skills/overnight-skills";
+      url = "github:nhooey/git-skills";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-skills = {
-      url = "github:nhooey/nix-skills/overnight-skills";
+      url = "github:nhooey/nix-skills";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     python-skills = {
-      url = "github:nhooey/python-skills/overnight-skills";
+      url = "github:nhooey/python-skills";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     shell-skills = {
-      url = "github:nhooey/shell-skills/overnight-skills";
+      url = "github:nhooey/shell-skills";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     writing-skills = {
-      url = "github:nhooey/writing-skills/overnight-skills";
+      url = "github:nhooey/writing-skills";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
