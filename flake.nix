@@ -67,7 +67,7 @@
     # dominated by duplicate nix-systems / flake-parts / devshell / treefmt-nix
     # subtrees.
     coding-agent-skills = {
-      url = "github:nhooey/coding-agent-skills/overnight-skills";
+      url = "github:nhooey/coding-agent-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -75,7 +75,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     data-skills = {
-      url = "github:nhooey/data-skills/overnight-skills";
+      url = "github:nhooey/data-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -83,7 +83,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     document-skills = {
-      url = "github:nhooey/document-skills/overnight-skills";
+      url = "github:nhooey/document-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -91,7 +91,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     git-skills = {
-      url = "github:nhooey/git-skills/overnight-skills";
+      url = "github:nhooey/git-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -99,7 +99,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     macos-skills = {
-      url = "github:nhooey/macos-skills/overnight-skills";
+      url = "github:nhooey/macos-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -115,7 +115,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     nix-microsoft-skills = {
-      url = "github:nhooey/nix-microsoft-skills/overnight-skills";
+      url = "github:nhooey/nix-microsoft-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -123,7 +123,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     nix-skills = {
-      url = "github:nhooey/nix-skills/overnight-skills";
+      url = "github:nhooey/nix-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -131,7 +131,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     python-skills = {
-      url = "github:nhooey/python-skills/overnight-skills";
+      url = "github:nhooey/python-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -139,7 +139,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     shell-skills = {
-      url = "github:nhooey/shell-skills/overnight-skills";
+      url = "github:nhooey/shell-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -147,7 +147,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     software-design-skills = {
-      url = "github:nhooey/software-design-skills/overnight-skills";
+      url = "github:nhooey/software-design-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -155,7 +155,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     writing-skills = {
-      url = "github:nhooey/writing-skills/overnight-skills";
+      url = "github:nhooey/writing-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -163,7 +163,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     xtdb-skills = {
-      url = "github:nhooey/xtdb-skills/overnight-skills";
+      url = "github:nhooey/xtdb-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -283,21 +283,7 @@
         inherit nixpkgs agent-skill-flake;
         # Locked sources keyed by pkgs/<name> dir; each module slices its own
         # subpath (e.g. skill-creator reads `skills/skill-creator`).
-        srcs = {
-          caveman = inputs.caveman-src;
-          "clojure-skills" = inputs.clojure-skills-src;
-          daymade = inputs.daymade-skills-src;
-          humanizer = inputs.humanizer-src;
-          malli = inputs.clojure-malli-skill-src;
-          "opinionated-software-engineering" = inputs.opinionated-claude-skills-src;
-          "shadow-cljs" = inputs.clojure-shadow-cljs-skill-src;
-          "rust-best-practices" = inputs.apollographql-skills-src;
-          "skill-creator" = inputs.anthropics-skills-src;
-          superpowers = inputs.superpowers-src;
-          "typescript-strict" = inputs.citypaul-dotfiles-src;
-          trailofbits = inputs.trailofbits-skills-src;
-          "update-changelog" = inputs.agent-stuff-src;
-        };
+        srcs = import ./pkgs/srcs.nix inputs;
       };
       aggregated = import ./sources/aggregated {
         inherit nixpkgs inputs infrastructureInputs;
@@ -330,7 +316,7 @@
       # The devshell-skills module bundles agent-skill-flake's OWN devshell
       # flakeModule, so we do NOT import `inputs.devshell.flakeModule` here too
       # (that would double-import the devshell module). The `devshell` input
-      # itself stays declared above (now following agent-skill-flake's copy)
+      # itself stays declared above (following agent-skill-flake's copy)
       # as an `infrastructureInputs` member.
       imports = [
         inputs.agent-skill-flake.flakeModules.devshellSkills
@@ -373,6 +359,13 @@
         { system, ... }:
         let
           pkgs = nixpkgs.legacyPackages.${system};
+          # scripts/skillspkgs as a command; `nix`, `git` and `gh` come from
+          # the user's own PATH, as they do for the rest of their work.
+          skillspkgs-tool = pkgs.writeShellApplication {
+            name = "skillspkgs";
+            runtimeInputs = [ pkgs.jq ];
+            text = builtins.readFile ./scripts/skillspkgs;
+          };
         in
         {
           # Categories 2 (aggregated) + 1 (vendored), per-skill packages only.
@@ -387,6 +380,13 @@
           devshells.default.packages = [
             pkgs.jq
             pkgs.python3
+          ];
+          devshells.default.commands = [
+            {
+              category = "maintenance";
+              package = skillspkgs-tool;
+              help = "Bump skill inputs and keep the sources/aggregated lock in step (skillspkgs --help)";
+            }
           ];
 
           # `sources/aggregated/flake.{nix,lock}` is a second copy of the
@@ -437,12 +437,65 @@
                   cat >&2 <<'EOF'
                   sources/aggregated/flake.{nix,lock} has drifted from the root flake:
                     ${lib.concatStringsSep "\n  " problems}
-                  Declare the same repos in both, then pin the sub-flake to the root's revs:
-                    nix flake lock ./sources/aggregated --override-input <name> github:nhooey/<name>/<rev>
+                  Declare the same repos in both, then pin the sub-flake to the root's revs
+                  by running `skillspkgs sync-aggregated` in the dev shell.
                   EOF
                   exit 1
                 ''
             );
+
+          # The same check `nix flake check ./sources/aggregated` runs, over the
+          # root's copy of the aggregated repos, which the check above holds at
+          # the sub-flake's revs: consume them as a dev-shell skills source and
+          # build the reconcile app over every skill they expose.
+          checks.aggregated-as-skills-source =
+            let
+              devshell = agent-skill-flake.lib.mkDevshellSkillsFlake {
+                inherit nixpkgs;
+                systems = [ system ];
+                name = "aggregated-check";
+                sources = [
+                  {
+                    source = {
+                      packages.${system} = aggregated.aggregatedFor "packages" system;
+                      legacyPackages.${system} = aggregated.aggregatedFor "legacyPackages" system;
+                    };
+                  }
+                ];
+              };
+            in
+            pkgs.writeText "aggregated-as-skills-source" (
+              builtins.toJSON {
+                packages = builtins.attrNames devshell.packages.${system};
+                reconcile = devshell.apps.${system}.reconcile.program;
+              }
+            );
+
+          checks.home-manager-module = import ./tests/home-manager-module.nix { inherit pkgs; };
+
+          # Lint scripts/skillspkgs and unit-test its pure functions.
+          checks.skillspkgs-tool =
+            pkgs.runCommand "skillspkgs-tool-test"
+              {
+                src = nixpkgs.lib.fileset.toSource {
+                  root = ./.;
+                  fileset = nixpkgs.lib.fileset.unions [
+                    ./scripts/skillspkgs
+                    ./tests/skillspkgs.bats
+                  ];
+                };
+                nativeBuildInputs = [
+                  pkgs.bats
+                  pkgs.jq
+                  pkgs.shellcheck
+                ];
+              }
+              ''
+                cd $src
+                shellcheck --external-sources scripts/skillspkgs tests/skillspkgs.bats
+                bats tests/skillspkgs.bats
+                touch $out
+              '';
 
           treefmt = {
             projectRootFile = "flake.nix";

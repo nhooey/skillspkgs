@@ -7,10 +7,8 @@
   # the combinations standalone face (sources/combinations/flake.nix). Individual
   # skills also have their own thinner `?dir=pkgs/<name>` faces.
   #
-  # The `srcs` map below must name EVERY pkgs/<name>/ subdirectory: default.nix
-  # auto-discovers them by `readDir` and folds each (forcing `srcs.<name>`), so a
-  # missing entry breaks `vendoredSkillsFor` with `attribute '<name>' missing`.
-  # Keep it in sync with the root flake's `srcs` map when adding a wrapper.
+  # The `srcs` map comes from ./srcs.nix, shared with the root flake, so these
+  # inputs must declare every `*-src` input it names.
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default";
@@ -77,40 +75,13 @@
       nixpkgs,
       systems,
       agent-skill-flake,
-      agent-stuff-src,
-      anthropics-skills-src,
-      apollographql-skills-src,
-      caveman-src,
-      citypaul-dotfiles-src,
-      clojure-malli-skill-src,
-      clojure-shadow-cljs-skill-src,
-      clojure-skills-src,
-      daymade-skills-src,
-      humanizer-src,
-      opinionated-claude-skills-src,
-      superpowers-src,
-      trailofbits-skills-src,
       ...
-    }:
+    }@inputs:
     let
       forSystems = nixpkgs.lib.genAttrs (import systems);
       vendored = import ./default.nix {
         inherit nixpkgs agent-skill-flake;
-        srcs = {
-          caveman = caveman-src;
-          "clojure-skills" = clojure-skills-src;
-          daymade = daymade-skills-src;
-          humanizer = humanizer-src;
-          malli = clojure-malli-skill-src;
-          "opinionated-software-engineering" = opinionated-claude-skills-src;
-          "shadow-cljs" = clojure-shadow-cljs-skill-src;
-          "rust-best-practices" = apollographql-skills-src;
-          "skill-creator" = anthropics-skills-src;
-          superpowers = superpowers-src;
-          "typescript-strict" = citypaul-dotfiles-src;
-          trailofbits = trailofbits-skills-src;
-          "update-changelog" = agent-stuff-src;
-        };
+        srcs = import ./srcs.nix inputs;
       };
     in
     {
