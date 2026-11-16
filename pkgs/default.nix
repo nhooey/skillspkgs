@@ -5,7 +5,7 @@
 # keeping Garnix happy when skillspkgs is consumed transitively) and by the
 # standalone pkgs/flake.nix face. Adding a vendored skill is a matter of dropping
 # a new pkgs/<name>/ directory (default.nix + flake.nix) and adding its source to
-# the root's `srcs` map.
+# ./srcs.nix.
 #
 # Per-module contract — each pkgs/<name>/default.nix is
 #   { nixpkgs, agent-skill-flake, src } -> built // {
