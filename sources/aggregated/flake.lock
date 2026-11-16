@@ -114,11 +114,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1794835805,
-        "narHash": "sha256-RdXBW11Ohs1rWb2LuwyuL7tfZ+25GDTPWWslDBI+ykE=",
+        "lastModified": 1794858152,
+        "narHash": "sha256-62c1KDN1VrKXw06KvsXcOKmZ6T4w+2XFwUpxMygSoSM=",
         "owner": "nhooey",
         "repo": "coding-agent-skills",
-        "rev": "a8d03e69c170765b7f8ff66853c3618e67f5206e",
+        "rev": "a1d8411f398641211b193d6e1602393161aa66ef",
         "type": "github"
       },
       "original": {
@@ -619,11 +619,11 @@
         "treefmt-nix": "treefmt-nix_5"
       },
       "locked": {
-        "lastModified": 1794824992,
-        "narHash": "sha256-71i3iPpufuxf0mXgNoaU3V6EGqxesY2D7PARpVzgs0k=",
+        "lastModified": 1794859908,
+        "narHash": "sha256-z334yx55mdom9K2RhB2ll2Oggaed7SXpUSowWuUnfZM=",
         "owner": "nhooey",
         "repo": "git-skills",
-        "rev": "1855be006cedad493a0557f15263e6233b192936",
+        "rev": "3289bb9f5b64a4f5a90c990956787f57becc171a",
         "type": "github"
       },
       "original": {
@@ -721,11 +721,11 @@
         "treefmt-nix": "treefmt-nix_9"
       },
       "locked": {
-        "lastModified": 1794812272,
-        "narHash": "sha256-xzXOC7tuLvOqXF0XprZ93VB9vZhB9QIEabTKS3uvyHI=",
+        "lastModified": 1794859885,
+        "narHash": "sha256-22Qru0+dx5TvfUdSuJx5Yg8AegCRLSqXpegkI1rUOC4=",
         "owner": "nhooey",
         "repo": "nix-skills",
-        "rev": "c7dc8249320a370952555a33748d7d23f6852734",
+        "rev": "79b7702e0a298843ecbd10e16918a013e2d231ec",
         "type": "github"
       },
       "original": {
