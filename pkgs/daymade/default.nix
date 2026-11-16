@@ -115,8 +115,8 @@ let
     (mergedSkillsFor system)
     // packsP
     // {
-      # Standalone-face aggregate: the all-118 env (the per-group `default`s were
-      # dropped above as they each covered only one group).
+      # Standalone-face aggregate: the all-118 env, since each per-group
+      # `default` covers only one group.
       default = packsP.agent-skills-daymade-all;
     }
   );
