@@ -444,6 +444,8 @@
                 ''
             );
 
+          checks.home-manager-module = import ./tests/home-manager-module.nix { inherit pkgs; };
+
           treefmt = {
             projectRootFile = "flake.nix";
             programs = {
