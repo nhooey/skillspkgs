@@ -10,10 +10,12 @@ inputs: {
   humanizer = inputs.humanizer-src;
   malli = inputs.clojure-malli-skill-src;
   "opinionated-software-engineering" = inputs.opinionated-claude-skills-src;
+  pstack = inputs.cursor-plugins-src;
   "shadow-cljs" = inputs.clojure-shadow-cljs-skill-src;
   "rust-best-practices" = inputs.apollographql-skills-src;
   "skill-creator" = inputs.anthropics-skills-src;
   superpowers = inputs.superpowers-src;
+  "tla-check" = inputs.younes-io-agent-skills-src;
   "typescript-strict" = inputs.citypaul-dotfiles-src;
   trailofbits = inputs.trailofbits-skills-src;
   "update-changelog" = inputs.agent-stuff-src;

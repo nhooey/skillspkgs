@@ -1,5 +1,5 @@
 {
-  description = "skillspkgs vendored category — third-party Claude Code skills with no upstream Nix flake (caveman, clojure-skills, daymade, humanizer, malli, opinionated-software-engineering, rust-best-practices, shadow-cljs, skill-creator, superpowers, trailofbits, typescript-strict, update-changelog).";
+  description = "skillspkgs vendored category — third-party Claude Code skills with no upstream Nix flake (caveman, clojure-skills, daymade, humanizer, malli, opinionated-software-engineering, pstack, rust-best-practices, shadow-cljs, skill-creator, superpowers, tla-check, trailofbits, typescript-strict, update-changelog).";
 
   # Standalone `?dir=pkgs` face for the whole vendored category. The root flake
   # never reads this — it plain-`import`s ./default.nix (see that file's header).
@@ -48,6 +48,10 @@
       url = "github:chaploud/clojure-skills";
       flake = false;
     };
+    cursor-plugins-src = {
+      url = "github:cursor/plugins";
+      flake = false;
+    };
     daymade-skills-src = {
       url = "github:daymade/claude-code-skills";
       flake = false;
@@ -66,6 +70,10 @@
     };
     trailofbits-skills-src = {
       url = "github:trailofbits/skills";
+      flake = false;
+    };
+    younes-io-agent-skills-src = {
+      url = "github:younes-io/agent-skills";
       flake = false;
     };
   };

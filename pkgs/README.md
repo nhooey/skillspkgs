@@ -13,7 +13,7 @@ Upstream skill projects whose authors don't ship a Nix flake themselves and won'
 PRs that fall under any of these get closed:
 
 - **First-party skill content.** Don't put a `SKILL.md` directly under `pkgs/<name>/` and ship the words in this repo. If you want to maintain skill content, ship it in its own GitHub repo or use [`nhooey/nix-skills`](https://github.com/nhooey/nix-skills); then submit a wrapper here.
-- **Forks of upstream skills with local edits.** If you need to patch upstream behaviour, fix it upstream or maintain a fork in your own repo and wrap *that* repo.
+- **Forks of upstream skills with local edits.** If you need to change upstream behaviour, fix it upstream or maintain a fork in your own repo and wrap *that* repo. The one exception is a small patch that removes something unsafe to install as is, such as a run-time download, described under [Patched skills](#patched-skills).
 - **Skills that aren't reachable as a `fetchFromGitHub` snapshot.** If the source can't be pinned by `(owner, repo, rev, hash)`, it doesn't belong here.
 
 ## Layout
@@ -89,6 +89,10 @@ import ../mk-simple-vendored.nix {
 Then run `nix flake lock` inside the wrapper directory to generate the lockfile, and register the source in `pkgs/srcs.nix` as [Multi-skill upstreams](#multi-skill-upstreams) describes.
 
 `mkSkillFlake` ships only `SKILL.md`, `references/`, and `scripts/` from `src`; everything else (LICENSE, README.md, the upstream's own flake.nix if any) is filtered out. If the upstream skill needs more files than that to function, this lib (and therefore this collection) is not the right tool.
+
+## Patched skills
+
+A single-skill wrapper can pass [`mk-simple-vendored.nix`](./mk-simple-vendored.nix) a list of `patches`, applied `-p1` inside the skill directory (`a/SKILL.md`) before it is installed. Each patch lives beside the wrapper's `default.nix`, and its header names the upstream commit it applies to and lists its edits; a bump that moves that commit has to re-check every patch. `licenseFile` ships an upstream licence kept outside the skill directory, at a path under the source root, as `LICENSE` beside `SKILL.md`. Either option keeps only the wrapper's `packages`, since mkSkillFlake's apps would install the unpatched skill. [`pstack/`](./pstack) builds two patched skills from one upstream this way.
 
 ## Multi-skill upstreams
 

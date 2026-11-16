@@ -212,6 +212,10 @@
       url = "github:chaploud/clojure-skills";
       flake = false;
     };
+    cursor-plugins-src = {
+      url = "github:cursor/plugins";
+      flake = false;
+    };
     daymade-skills-src = {
       url = "github:daymade/claude-code-skills";
       flake = false;
@@ -230,6 +234,10 @@
     };
     trailofbits-skills-src = {
       url = "github:trailofbits/skills";
+      flake = false;
+    };
+    younes-io-agent-skills-src = {
+      url = "github:younes-io/agent-skills";
       flake = false;
     };
   };
@@ -268,11 +276,13 @@
         "clojure-malli-skill-src"
         "clojure-shadow-cljs-skill-src"
         "clojure-skills-src"
+        "cursor-plugins-src"
         "daymade-skills-src"
         "humanizer-src"
         "opinionated-claude-skills-src"
         "superpowers-src"
         "trailofbits-skills-src"
+        "younes-io-agent-skills-src"
       ];
 
       # The three source categories, each in its own subdirectory under
