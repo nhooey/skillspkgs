@@ -645,11 +645,11 @@
         "treefmt-nix": "treefmt-nix_6"
       },
       "locked": {
-        "lastModified": 1794812254,
-        "narHash": "sha256-sssiS+60QZ066H2q6JqlPYgZSqz9FGoNylrsl7YEAHo=",
+        "lastModified": 1794852318,
+        "narHash": "sha256-FeQfjde0y8Zw/FWB9QzhUPlUISFclCKstWCPaSSHwk4=",
         "owner": "nhooey",
         "repo": "macos-skills",
-        "rev": "a49c9f227f50d5e48307f929129bdcd661b10524",
+        "rev": "f991fe68f9a63d76e71dd8df5510bd851dc0e94a",
         "type": "github"
       },
       "original": {
