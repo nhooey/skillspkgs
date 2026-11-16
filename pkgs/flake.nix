@@ -1,5 +1,5 @@
 {
-  description = "skillspkgs vendored category — third-party Claude Code skills with no upstream Nix flake (caveman, clojure-skills, daymade, humanizer, malli, opinionated-software-engineering, shadow-cljs, skill-creator, superpowers, trailofbits).";
+  description = "skillspkgs vendored category — third-party Claude Code skills with no upstream Nix flake (caveman, clojure-skills, daymade, humanizer, malli, opinionated-software-engineering, rust-best-practices, shadow-cljs, skill-creator, superpowers, trailofbits, typescript-strict, update-changelog).";
 
   # Standalone `?dir=pkgs` face for the whole vendored category. The root flake
   # never reads this — it plain-`import`s ./default.nix (see that file's header).
@@ -18,12 +18,24 @@
       url = "github:nhooey/agent-skill-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    agent-stuff-src = {
+      url = "github:mitsuhiko/agent-stuff";
+      flake = false;
+    };
     anthropics-skills-src = {
       url = "github:anthropics/skills";
       flake = false;
     };
+    apollographql-skills-src = {
+      url = "github:apollographql/skills";
+      flake = false;
+    };
     caveman-src = {
       url = "github:JuliusBrussee/caveman";
+      flake = false;
+    };
+    citypaul-dotfiles-src = {
+      url = "github:citypaul/.dotfiles";
       flake = false;
     };
     clojure-malli-skill-src = {
@@ -65,8 +77,11 @@
       nixpkgs,
       systems,
       agent-skill-flake,
+      agent-stuff-src,
       anthropics-skills-src,
+      apollographql-skills-src,
       caveman-src,
+      citypaul-dotfiles-src,
       clojure-malli-skill-src,
       clojure-shadow-cljs-skill-src,
       clojure-skills-src,
@@ -89,9 +104,12 @@
           malli = clojure-malli-skill-src;
           "opinionated-software-engineering" = opinionated-claude-skills-src;
           "shadow-cljs" = clojure-shadow-cljs-skill-src;
+          "rust-best-practices" = apollographql-skills-src;
           "skill-creator" = anthropics-skills-src;
           superpowers = superpowers-src;
+          "typescript-strict" = citypaul-dotfiles-src;
           trailofbits = trailofbits-skills-src;
+          "update-changelog" = agent-stuff-src;
         };
       };
     in

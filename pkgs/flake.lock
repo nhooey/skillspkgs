@@ -24,6 +24,22 @@
         "type": "github"
       }
     },
+    "agent-stuff-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790543438,
+        "narHash": "sha256-tIKtwPCXCYhYza7BgRQiRK+Lv9YrI+xpDtfSPrzR3w4=",
+        "owner": "mitsuhiko",
+        "repo": "agent-stuff",
+        "rev": "0865c849befd2021490679f96a8dee58c84ac857",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mitsuhiko",
+        "repo": "agent-stuff",
+        "type": "github"
+      }
+    },
     "anthropics-skills-src": {
       "flake": false,
       "locked": {
@@ -36,6 +52,22 @@
       },
       "original": {
         "owner": "anthropics",
+        "repo": "skills",
+        "type": "github"
+      }
+    },
+    "apollographql-skills-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1793390587,
+        "narHash": "sha256-TSGowC+gRHxPqhSvT1ySu+/yZPp4R2rbYWZ3V4IadcU=",
+        "owner": "apollographql",
+        "repo": "skills",
+        "rev": "9dda1397730370aeb8df4ff8f2015c34c86b5003",
+        "type": "github"
+      },
+      "original": {
+        "owner": "apollographql",
         "repo": "skills",
         "type": "github"
       }
@@ -53,6 +85,22 @@
       "original": {
         "owner": "JuliusBrussee",
         "repo": "caveman",
+        "type": "github"
+      }
+    },
+    "citypaul-dotfiles-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790978103,
+        "narHash": "sha256-QX4KsgD6ZmB3JSnWrDJFCuVAKVPD/pNMIMTmo8G2zMg=",
+        "owner": "citypaul",
+        "repo": ".dotfiles",
+        "rev": "cd4028d57d6e4e95814f7b8ee55ca13c23a9c2f0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "citypaul",
+        "repo": ".dotfiles",
         "type": "github"
       }
     },
@@ -213,8 +261,11 @@
     "root": {
       "inputs": {
         "agent-skill-flake": "agent-skill-flake",
+        "agent-stuff-src": "agent-stuff-src",
         "anthropics-skills-src": "anthropics-skills-src",
+        "apollographql-skills-src": "apollographql-skills-src",
         "caveman-src": "caveman-src",
+        "citypaul-dotfiles-src": "citypaul-dotfiles-src",
         "clojure-malli-skill-src": "clojure-malli-skill-src",
         "clojure-shadow-cljs-skill-src": "clojure-shadow-cljs-skill-src",
         "clojure-skills-src": "clojure-skills-src",

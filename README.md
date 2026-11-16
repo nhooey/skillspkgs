@@ -121,6 +121,22 @@ The root uses plain `import` rather than `path:` / `?dir=` sub-flake inputs beca
 
 Curated unions of skills already provided by categories 1 and 2, built via `agent-skill-flake.lib.mkCombination` in `sources/combinations/<name>.nix`. Each combination is exposed under its own `combinations.<name>` output and is deliberately kept **out** of `packages.<sys>`. Other repos can import a combination directly, or use it as a `{ source = …; }` member of a larger combination.
 
+[`sources/combinations/families.nix`](./sources/combinations/families.nix) holds one combination per repository family, each built on `base`:
+
+| Combination                        | Adds to `base`                                                                                           |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `base`                             | Git, GitHub, shell, writing and Markdown hygiene, `nix-flakes`, and the coding-agent skills every run uses |
+| `skill-collections`                | Skill authoring: humanizer, skill-creator, superpowers, `coding-agent-skill-references`, Python style for bundled scripts |
+| `skill-packaging`                  | `skill-collections`, plus `nix-flake-recursive-bump-input-versions`                                      |
+| `nix-tooling`                      | `nix-flake-recursive-bump-input-versions`, `config-hygiene-shipped-defaults`, `update-changelog`         |
+| `claude-code-tools`                | `config-hygiene-shipped-defaults`, `update-changelog`, `typescript-strict`                               |
+| `applications`                     | `config-hygiene-shipped-defaults`, `update-changelog`                                                    |
+| `browser-extensions-and-game-mods` | —                                                                                                        |
+| `configuration`                    | The `github-policy-*` skills, `nix-flake-recursive-bump-input-versions`                                  |
+| `content`                          | —                                                                                                        |
+
+A repository's skills dev shell takes its family's combination as its one source, and adds a source of its own only for a language or tool the rest of its family doesn't use. `nix flake check` builds every combination (`checks.<system>.combination-<name>`), so a skill name a collection no longer has fails the check.
+
 ## How it relates to other repos
 
 - **[`nhooey/agent-skill-flake`](https://github.com/nhooey/agent-skill-flake)** — the library. Provides `mkSkillFlake`, `mkAllSkillsFlake`, `mkAggregateSkillsFlake`, `mkCombination`, and `mkSkillsEnv`. Consumed by this repo and by the first-party content repos.

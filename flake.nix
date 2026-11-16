@@ -67,7 +67,7 @@
     # dominated by duplicate nix-systems / flake-parts / devshell / treefmt-nix
     # subtrees.
     coding-agent-skills = {
-      url = "github:nhooey/coding-agent-skills";
+      url = "github:nhooey/coding-agent-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -75,7 +75,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     data-skills = {
-      url = "github:nhooey/data-skills";
+      url = "github:nhooey/data-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -83,7 +83,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     document-skills = {
-      url = "github:nhooey/document-skills";
+      url = "github:nhooey/document-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -91,7 +91,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     git-skills = {
-      url = "github:nhooey/git-skills";
+      url = "github:nhooey/git-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -99,7 +99,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     macos-skills = {
-      url = "github:nhooey/macos-skills";
+      url = "github:nhooey/macos-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -115,7 +115,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     nix-microsoft-skills = {
-      url = "github:nhooey/nix-microsoft-skills";
+      url = "github:nhooey/nix-microsoft-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -123,7 +123,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     nix-skills = {
-      url = "github:nhooey/nix-skills";
+      url = "github:nhooey/nix-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -131,7 +131,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     python-skills = {
-      url = "github:nhooey/python-skills";
+      url = "github:nhooey/python-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -139,7 +139,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     shell-skills = {
-      url = "github:nhooey/shell-skills";
+      url = "github:nhooey/shell-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -147,7 +147,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     software-design-skills = {
-      url = "github:nhooey/software-design-skills";
+      url = "github:nhooey/software-design-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -155,7 +155,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     writing-skills = {
-      url = "github:nhooey/writing-skills";
+      url = "github:nhooey/writing-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -163,7 +163,7 @@
       inputs.agent-skill-flake.follows = "agent-skill-flake";
     };
     xtdb-skills = {
-      url = "github:nhooey/xtdb-skills";
+      url = "github:nhooey/xtdb-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
@@ -180,12 +180,24 @@
     # ---- CATEGORY 1: vendored third-party sources, no upstream flake (built inline) ----
     # No rev in the URL — `flake.lock` pins these (run `nix flake update <src>`
     # to bump). Embedding a rev would double-pin and make the lock a no-op.
+    agent-stuff-src = {
+      url = "github:mitsuhiko/agent-stuff";
+      flake = false;
+    };
     anthropics-skills-src = {
       url = "github:anthropics/skills";
       flake = false;
     };
+    apollographql-skills-src = {
+      url = "github:apollographql/skills";
+      flake = false;
+    };
     caveman-src = {
       url = "github:JuliusBrussee/caveman";
+      flake = false;
+    };
+    citypaul-dotfiles-src = {
+      url = "github:citypaul/.dotfiles";
       flake = false;
     };
     clojure-malli-skill-src = {
@@ -248,8 +260,11 @@
         "devshell"
         "agent-skill-flake"
         "treefmt-nix"
+        "agent-stuff-src"
         "anthropics-skills-src"
+        "apollographql-skills-src"
         "caveman-src"
+        "citypaul-dotfiles-src"
         "clojure-malli-skill-src"
         "clojure-shadow-cljs-skill-src"
         "clojure-skills-src"
@@ -276,9 +291,12 @@
           malli = inputs.clojure-malli-skill-src;
           "opinionated-software-engineering" = inputs.opinionated-claude-skills-src;
           "shadow-cljs" = inputs.clojure-shadow-cljs-skill-src;
+          "rust-best-practices" = inputs.apollographql-skills-src;
           "skill-creator" = inputs.anthropics-skills-src;
           superpowers = inputs.superpowers-src;
+          "typescript-strict" = inputs.citypaul-dotfiles-src;
           trailofbits = inputs.trailofbits-skills-src;
+          "update-changelog" = inputs.agent-stuff-src;
         };
       };
       aggregated = import ./sources/aggregated {
@@ -292,7 +310,19 @@
           ;
         vendoredSources = vendored.sources;
         systems = import inputs.systems;
-        inherit (inputs) nix-skills git-skills;
+        # The category-2 repos the combinations pick skills from.
+        skillSources = {
+          inherit (inputs)
+            coding-agent-skills
+            document-skills
+            git-skills
+            nix-skills
+            python-skills
+            shell-skills
+            software-design-skills
+            writing-skills
+            ;
+        };
       };
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
@@ -305,6 +335,17 @@
       imports = [
         inputs.agent-skill-flake.flakeModules.devshellSkills
         inputs.treefmt-nix.flakeModule
+        # One `combination-<name>` check per combination: building its env
+        # proves every skill it names resolves and no two collide.
+        {
+          perSystem =
+            { system, ... }:
+            {
+              checks = nixpkgs.lib.mapAttrs' (
+                name: combination: nixpkgs.lib.nameValuePair "combination-${name}" combination.env.${system}
+              ) combos.combinations;
+            };
+        }
       ];
 
       # Dev-shell options consumed by the devshellSkills module above: name the
