@@ -152,6 +152,22 @@
         "type": "github"
       }
     },
+    "cursor-plugins-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1794713777,
+        "narHash": "sha256-fXXJRZnQZlTfOemfJgC0zSMxsfcvxRhGo21T09/6xic=",
+        "owner": "cursor",
+        "repo": "plugins",
+        "rev": "bf0c7cd80abdbf7fe47b634978a7d1b4071f71a7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cursor",
+        "repo": "plugins",
+        "type": "github"
+      }
+    },
     "daymade-skills-src": {
       "flake": false,
       "locked": {
@@ -269,13 +285,15 @@
         "clojure-malli-skill-src": "clojure-malli-skill-src",
         "clojure-shadow-cljs-skill-src": "clojure-shadow-cljs-skill-src",
         "clojure-skills-src": "clojure-skills-src",
+        "cursor-plugins-src": "cursor-plugins-src",
         "daymade-skills-src": "daymade-skills-src",
         "humanizer-src": "humanizer-src",
         "nixpkgs": "nixpkgs",
         "opinionated-claude-skills-src": "opinionated-claude-skills-src",
         "superpowers-src": "superpowers-src",
         "systems": "systems_2",
-        "trailofbits-skills-src": "trailofbits-skills-src"
+        "trailofbits-skills-src": "trailofbits-skills-src",
+        "younes-io-agent-skills-src": "younes-io-agent-skills-src"
       }
     },
     "superpowers-src": {
@@ -358,6 +376,22 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "younes-io-agent-skills-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783783323,
+        "narHash": "sha256-chCu/JmgzW5Y6UBfAPy8zolL9Rp3zATLEZ3lZ/zPP0U=",
+        "owner": "younes-io",
+        "repo": "agent-skills",
+        "rev": "928ac54d1dc16b3f55965fae640905f7f06a93a8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "younes-io",
+        "repo": "agent-skills",
         "type": "github"
       }
     }

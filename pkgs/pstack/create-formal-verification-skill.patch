@@ -1,0 +1,57 @@
+Edits to cursor/plugins pstack/skills/create-formal-verification-skill/SKILL.md
+at bf0c7cd80abdbf7fe47b634978a7d1b4071f71a7:
+
+- Removes the paragraph that sends TLA+ results to the pstack statechart
+  skill, which runs `mise install java` and downloads TLC at run time.
+- Names maintain-formal-verification-skill bare, without its slash.
+- Says verification tools come from the project's Nix dev shell, never a
+  global install.
+- Adds a Related skills section naming tla-check, the other
+  formal-verification skill, trailofbits-property-based-testing and
+  coding-agent-find-implicit-models.
+
+--- a/SKILL.md
++++ b/SKILL.md
+@@ -1,6 +1,6 @@
+ ---
+ name: create-formal-verification-skill
+-description: "Generate a project-local skill that formally verifies the code where a bug costs the most and tests reach the least, in any language, with whichever verification tool fits. Use for /create-formal-verification-skill, \"model-check this race\", \"prove this invariant\", or when concurrency, retries, state machines, parsers, or unsafe code need more than tests."
++description: "Generate a project-local skill that formally verifies the code where a bug costs the most and tests reach the least, in any language, with whichever verification tool fits. Use for create-formal-verification-skill, \"model-check this race\", \"prove this invariant\", or when concurrency, retries, state machines, parsers, or unsafe code need more than tests."
+ disable-model-invocation: true
+ ---
+ 
+@@ -18,6 +18,8 @@
+ 
+ Pick the tool that answers the question at the lowest cost: a model checker, a proof assistant, an SMT-backed verifier, or another tool. Whether events can happen in a bad order usually suits a model checker over a small model of the design, and TLA+ is the default for that in any language. Whether the code itself behaves for every input, as with memory safety, overflow, or a data-structure invariant, usually suits a verifier that runs on the code. If no verifier runs on this language, say so, and test the real code with generated inputs, not a hand model of the function. A property that must hold at every size, where a bound is not enough, can need a proof. Prefer a tool that the repo's developers can install and run, and tell the user why you chose it.
+ 
++Take every verification tool from the project's Nix dev shell, never from a global install.
++
+ ## What makes it good
+ 
+ - **True to the code.** Every part of the model or proof points to code that a reviewer can open. What the verification treats as one indivisible step is one indivisible step in the code. Names come from this repo.
+@@ -32,12 +34,22 @@
+ 
+ Write a project-local skill with frontmatter that names the area and says when to use it. Without frontmatter, the skill never registers. From the skill alone, the next agent must be able to tell whether a change touches the verified code, run the check, tell a real bug from a modeling error, and update the verification when a change is intended. Put the coverage record and the sync commit in the skill, and tell the next agent to move the sync commit forward only after it confirms that the verification describes the code at the new commit. Use this repo's real commands, paths, and nouns, and leave no placeholders.
+ 
+-If the check is a TLA+ model, tell the next agent to read every result with the pstack [`/statechart`](../statechart/SKILL.md) skill. It shows each invariant violation the checker finds as its shortest path in plain words. When the check passes, `/statechart` draws a chart of how the system moves between states. Refer to `/statechart` by name. Its commands, options, and file paths change between releases and machines, so copy none of them into the generated skill or its scripts.
+-
+ ## Prove it before you hand off
+ 
+ Follow the generated skill once, as the next agent would, on a scratch change that breaks the property in the real code. It must catch the break. Then drop the scratch change and confirm that the check is back where it started: passing, or failing only on the findings you will report. A verify skill that was never run is a draft. If the skill misses the break or a step does not run, fix the skill or the verification, not the scratch change.
+ 
+ ## Hand off
+ 
+-Tell the user what you verified, which tool you used and why, the bounds, what the check found in plain words, how to run it, and what it does not cover. Suggest a second target only if you found a close one. Point the user at `/maintain-formal-verification-skill` for bringing the verification back in line after changes that did not recheck it.
++Tell the user what you verified, which tool you used and why, the bounds, what the check found in plain words, how to run it, and what it does not cover. Suggest a second target only if you found a close one. Point the user at `maintain-formal-verification-skill` for bringing the verification back in line after changes that did not recheck it.
++
++## Related skills
++
++When one of these applies and it's in your skill listing, load it
++without asking. If it isn't in your listing, tell the user which skill is
++missing and ask whether to install it from the same collection this skill
++came from; don't apply it from memory.
++
++- `tla-check`: writes the TLA+ spec and TLC config and runs TLC, when the check is a TLA+ model.
++- `maintain-formal-verification-skill`: brings the verification back in line after changes that did not recheck it.
++- `trailofbits-property-based-testing`: tests the real code with generated inputs when no verifier runs on its language.
++- `coding-agent-find-implicit-models`: finds the state machines and other models the code implies but never names, as candidate targets.

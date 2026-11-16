@@ -12,6 +12,10 @@
 # where `built` is the mkSkillFlake output (full packages, incl. the `default`
 # alias) for the standalone face, and the two added views drop everything but the
 # `agent-skill-*` keys for the root package set and the combinations category.
+#
+# `patches` and `licenseFile` change the built skill derivations, so a wrapper
+# that sets either keeps only `packages` from `built`: mkSkillFlake's apps would
+# install the unpatched skill.
 {
   nixpkgs,
   agent-skill-flake,
@@ -26,9 +30,21 @@
   # sibling reference .md files that SKILL.md routes to, or a LICENSE.
   extraDirs ? [ ],
   extraFiles ? [ ],
+  # Patches applied to the skill directory before it is installed, `-p1`
+  # relative to that directory (`a/SKILL.md`). Each patch file's header names
+  # the upstream commit it applies to and lists its edits.
+  patches ? [ ],
+  # Path under `src` (not under `srcSubpath`) of the upstream licence, shipped
+  # beside SKILL.md as LICENSE, for upstreams that keep it at the repo root.
+  licenseFile ? null,
 }:
 let
-  inherit (nixpkgs.lib) filterAttrs hasPrefix mapAttrs;
+  inherit (nixpkgs.lib)
+    filterAttrs
+    hasPrefix
+    mapAttrs
+    optionalString
+    ;
 
   built = agent-skill-flake.lib.mkSkillFlake {
     inherit
@@ -41,9 +57,25 @@ let
     src = if srcSubpath == null then src else "${src}/${srcSubpath}";
   };
 
-  skillsOnly = mapAttrs (_: filterAttrs (n: _: hasPrefix "agent-skill-" n)) built.packages;
+  modified = patches != [ ] || licenseFile != null;
+
+  modify =
+    drv:
+    drv.overrideAttrs (old: {
+      inherit patches;
+      postInstall =
+        (old.postInstall or "")
+        + optionalString (licenseFile != null) ''
+          install -Dm644 ${src}/${licenseFile} \
+            "$out/share/claude-skills/${drv.passthru.flakeSkillName}/LICENSE"
+        '';
+    });
+
+  packages = if modified then mapAttrs (_: mapAttrs (_: modify)) built.packages else built.packages;
+
+  skillsOnly = mapAttrs (_: filterAttrs (n: _: hasPrefix "agent-skill-" n)) packages;
 in
-built
+(if modified then { inherit packages; } else built)
 // {
   vendoredSkills = skillsOnly;
   source.packages = skillsOnly;
