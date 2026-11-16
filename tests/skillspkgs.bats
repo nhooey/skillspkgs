@@ -172,6 +172,23 @@ write_lock() {
 pkgs/humanizer" ]
 }
 
+@test "vendored_lock_dirs includes the combinations lock that declares the input" {
+  cd "$BATS_TEST_TMPDIR"
+  write_lock pkgs "agent-stuff-src 1111111" "humanizer-src 2222222"
+  write_lock pkgs/update-changelog "agent-stuff-src 1111111"
+  write_lock pkgs/humanizer "humanizer-src 2222222"
+  write_lock sources/combinations "agent-stuff-src 1111111"
+  run vendored_lock_dirs agent-stuff-src
+  [ "$status" -eq 0 ]
+  [ "$output" = "pkgs
+pkgs/update-changelog
+sources/combinations" ]
+  run vendored_lock_dirs humanizer-src
+  [ "$status" -eq 0 ]
+  [ "$output" = "pkgs
+pkgs/humanizer" ]
+}
+
 @test "sync_overrides names each drifted input with the root's reference" {
   write_lock "$BATS_TEST_TMPDIR/root" "agent-skill-flake a000000" "git-skills b000000" \
     "nix-skills c000000" "nixpkgs d000000"
