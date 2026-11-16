@@ -92,7 +92,9 @@ let
       "nix-flakes"
     ])
     (pick "shell-skills" [
+      "shell-hygiene-commands-as-cli-tools"
       "shell-hygiene-delete-named-paths"
+      "shell-hygiene-long-options"
       "shell-hygiene-no-machine-wide-changes"
       "shell-hygiene-secrets-through-secretspec"
       "shell-hygiene-symbolic-permission-modes"
