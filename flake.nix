@@ -330,7 +330,7 @@
       # The devshell-skills module bundles agent-skill-flake's OWN devshell
       # flakeModule, so we do NOT import `inputs.devshell.flakeModule` here too
       # (that would double-import the devshell module). The `devshell` input
-      # itself stays declared above (now following agent-skill-flake's copy)
+      # itself stays declared above (following agent-skill-flake's copy)
       # as an `infrastructureInputs` member.
       imports = [
         inputs.agent-skill-flake.flakeModules.devshellSkills
