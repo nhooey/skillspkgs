@@ -1,0 +1,495 @@
+#!/usr/bin/env bash
+# skillspkgs: the maintenance commands of this repository, on the dev
+# shell's PATH. `skillspkgs --help` lists the commands and
+# `skillspkgs <command> --help` gives each one's options.
+#
+# Sourcing the script defines its functions without running it, which is
+# how tests/skillspkgs.bats reaches them.
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: skillspkgs <command> [options]
+
+Commands:
+  bump-chain        Move aggregated skill repos to their newest commits here,
+                    in nur-packages and in skills dev shells
+  bump-vendored     Move vendored *-src inputs to their newest commits in
+                    every lock that declares them
+  sync-aggregated   Pin sources/aggregated/flake.lock to the root lock's revs
+  check-aggregated  Run `nix flake check` on the sources/aggregated sub-flake
+  help [COMMAND]    Show this help, or a command's
+
+Options:
+  -h, --help        Show this help
+EOF
+}
+
+usage_bump_chain() {
+  cat <<'EOF'
+Usage: skillspkgs bump-chain -m MESSAGE [--devshell DIR]... INPUT...
+
+Move each INPUT, an aggregated input of this flake such as git-skills, to
+its newest commit in both skillspkgs locks and build every
+agent-skills-nhooey-*-all package, then merge one PR here and one in
+nur-packages that moves its skillspkgs lock.
+
+Options:
+  -m, --message MESSAGE  Goes into every commit message and PR body
+  --devshell DIR         A skills dev-shell flake, such as a project's
+                         skills-devshell/, whose own lock pins skill repos;
+                         it gets the named inputs it declares
+  -h, --help             Show this help
+
+Environment:
+  NUR_PACKAGES_DIR  Checkout of nhooey/nur-packages
+                    (default: ~/git/github/nhooey/nur-packages)
+  SKILLS_DEVSHELLS  Colon-separated dev-shell dirs, added to --devshell
+EOF
+}
+
+usage_bump_vendored() {
+  cat <<'EOF'
+Usage: skillspkgs bump-vendored INPUT...
+
+Move each INPUT, a vendored *-src input such as humanizer-src, to its
+newest commit in the root lock, then pin pkgs/flake.lock and every
+pkgs/<name>/flake.lock that declares it to the same rev. Leaves the
+changed locks unstaged.
+
+Options:
+  -h, --help  Show this help
+EOF
+}
+
+usage_sync_aggregated() {
+  cat <<'EOF'
+Usage: skillspkgs sync-aggregated
+
+Pin every input sources/aggregated/flake.lock shares with the root lock,
+agent-skill-flake included, to the root lock's rev, which is what
+checks.<system>.aggregated-subflake-in-sync asks for.
+
+Options:
+  -h, --help  Show this help
+EOF
+}
+
+usage_check_aggregated() {
+  cat <<'EOF'
+Usage: skillspkgs check-aggregated
+
+Run `nix flake check` on the sources/aggregated sub-flake, which the root
+`nix flake check` doesn't do. Run it after changing the sub-flake.
+
+Options:
+  -h, --help  Show this help
+EOF
+}
+
+# Exit 0 after printing usage on --help, and 2 on any other argument.
+# The first argument names the usage function.
+no_args() {
+  local usage_fn=$1
+  shift
+  case "${1:-}" in
+  "") ;;
+  -h | --help)
+    "$usage_fn"
+    exit 0
+    ;;
+  *)
+    echo "unexpected argument: $1" >&2
+    "$usage_fn" >&2
+    exit 2
+    ;;
+  esac
+}
+
+# Set `inputs` from the arguments. Exits 0 on --help and 2 on a flag or
+# no input. The first argument names the usage function.
+parse_inputs() {
+  local usage_fn=$1
+  shift
+  inputs=()
+  while [ $# -gt 0 ]; do
+    case "$1" in
+    -h | --help)
+      "$usage_fn"
+      exit 0
+      ;;
+    -*)
+      echo "unknown flag: $1" >&2
+      "$usage_fn" >&2
+      exit 2
+      ;;
+    *)
+      inputs+=("$1")
+      shift
+      ;;
+    esac
+  done
+  if [ ${#inputs[@]} -eq 0 ]; then
+    "$usage_fn" >&2
+    exit 2
+  fi
+}
+
+# Set `brings`, `devshells` and `inputs` from the bump-chain command line
+# and SKILLS_DEVSHELLS. Exits 0 on --help and 2 on bad usage.
+parse_bump_chain_args() {
+  brings=""
+  devshells=()
+  inputs=()
+  while [ $# -gt 0 ]; do
+    case "$1" in
+    -m | --message | --devshell)
+      if [ $# -lt 2 ]; then
+        echo "$1 needs a value" >&2
+        usage_bump_chain >&2
+        exit 2
+      fi
+      if [ "$1" = --devshell ]; then
+        devshells+=("$2")
+      else
+        brings=$2
+      fi
+      shift 2
+      ;;
+    -h | --help)
+      usage_bump_chain
+      exit 0
+      ;;
+    -*)
+      echo "unknown flag: $1" >&2
+      usage_bump_chain >&2
+      exit 2
+      ;;
+    *)
+      inputs+=("$1")
+      shift
+      ;;
+    esac
+  done
+  if [ -n "${SKILLS_DEVSHELLS:-}" ]; then
+    local extra
+    IFS=: read -r -a extra <<<"$SKILLS_DEVSHELLS"
+    devshells+=("${extra[@]}")
+  fi
+  if [ -z "$brings" ] || [ ${#inputs[@]} -eq 0 ]; then
+    usage_bump_chain >&2
+    exit 2
+  fi
+}
+
+# The skillspkgs checkout to work in: the one holding the current
+# directory, or else the dev shell's project root.
+repo_root() {
+  local root
+  for root in "$(git rev-parse --show-toplevel 2>/dev/null)" "${PRJ_ROOT:-}"; do
+    if [ -n "$root" ] && [ -f "$root/sources/aggregated/flake.lock" ]; then
+      printf '%s\n' "$root"
+      return
+    fi
+  done
+  echo "not in a skillspkgs checkout" >&2
+  exit 2
+}
+
+# The locked rev of a root input, or "" when the flake doesn't declare it
+# or the input follows another.
+locked_rev() {
+  jq -r --arg i "$2" '.nodes.root.inputs[$i] as $n
+    | if ($n | type) == "string" then .nodes[$n].locked.rev else "" end' "$1/flake.lock"
+}
+
+# The locked GitHub reference of a root input, such as
+# github:nhooey/git-skills/<rev>, or "" when the flake doesn't declare it,
+# the input follows another, or it isn't a GitHub input.
+pinned_ref() {
+  jq -r --arg i "$2" '.nodes.root.inputs[$i] as $n
+    | if ($n | type) == "string" then .nodes[$n].locked
+        | if .type == "github" then "github:\(.owner)/\(.repo)/\(.rev)" else "" end
+      else "" end' "$1/flake.lock"
+}
+
+# The root inputs a flake's lock declares, one per line.
+lock_inputs() {
+  jq -r '.nodes.root.inputs | keys[]' "$1/flake.lock"
+}
+
+# Each of the directories after the first argument whose flake.lock
+# declares that input, one per line.
+lock_dirs_declaring() {
+  local input=$1 dir
+  shift
+  for dir in "$@"; do
+    [ -f "$dir/flake.lock" ] && [ -n "$(locked_rev "$dir" "$input")" ] && printf '%s\n' "$dir"
+  done
+  return 0
+}
+
+# One "<input> <reference>" line for each input the sub-flake at $2 locks at
+# a different rev from the flake at $1, skipping nixpkgs and systems, which
+# the in-sync check doesn't compare. Names an input $1 doesn't lock on
+# stderr.
+sync_overrides() {
+  local root=$1 sub=$2 name ref
+  while read -r name; do
+    case "$name" in nixpkgs | systems) continue ;; esac
+    [ -n "$(locked_rev "$sub" "$name")" ] || continue
+    ref=$(pinned_ref "$root" "$name")
+    if [ -z "$ref" ]; then
+      echo "$name: $root doesn't lock it as a GitHub input; left as it is" >&2
+      continue
+    fi
+    if [ "$(locked_rev "$root" "$name")" != "$(locked_rev "$sub" "$name")" ]; then
+      printf '%s %s\n' "$name" "$ref"
+    fi
+  done < <(lock_inputs "$sub")
+}
+
+# "git-skills ab89fea and nix-skills bb57f90", from one "<input> <rev>"
+# argument per moved input.
+moved_summary() {
+  printf '%s\n' "$@" | sed -e '$!s/$/,/' | paste -sd ' ' - | sed -E 's/, ([^,]*)$/ and \1/'
+}
+
+# "update-git-skills-ab89fea-nix-skills-bb57f90", from the same arguments.
+moved_branch() {
+  echo "update-$(printf '%s\n' "$@" | tr ' ' - | paste -sd - -)"
+}
+
+# A commit message from a title and a body, with the co-author trailer.
+commit_message() {
+  printf '%s\n\n%s\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n' "$1" "$2"
+}
+
+# A PR body from a commit body, with the Claude Code footer.
+pr_body() {
+  printf '%s\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n' "$1"
+}
+
+build_all() {
+  local attrs
+  attrs=$(nix eval --json ".#packages.$system" --apply \
+    'p: builtins.filter (n: builtins.match "agent-skills-nhooey-.*-all" n != null) (builtins.attrNames p)' |
+    jq -r '.[] | ".#" + .')
+  # shellcheck disable=SC2086 # one flake reference per word
+  nix build --no-link $attrs
+}
+
+# Commit the staged change, push a branch, open a PR and merge it.
+merge_pr() {
+  local branch=$1 title=$2 body=$3
+  git switch -q -c "$branch"
+  commit_message "$title" "$body" | git commit -q -F -
+  git push -q -u origin "$branch"
+  gh pr create --title "$title" --body "$(pr_body "$body")"
+  gh pr merge --merge --delete-branch
+}
+
+# Both skillspkgs locks (the root and sources/aggregated) are pinned to the
+# same revs, so checks.<system>.aggregated-subflake-in-sync keeps passing.
+#
+# A dev shell gets only the named inputs it declares. Its repo gets a PR
+# and a merge when it has an origin remote, and otherwise a commit on its
+# current branch, which must not have other changes to the lock.
+#
+# After it finishes, the nur-packages input on MyNixOS still has to be
+# updated, released and switched to; a dev shell picks its skills up on its
+# next load.
+cmd_bump_chain() {
+  parse_bump_chain_args "$@"
+
+  # Resolve now, before changing directory. A dev shell with an origin
+  # remote must be on its default branch, so its PR starts there.
+  local i d base
+  for i in "${!devshells[@]}"; do
+    d=$(cd "${devshells[$i]}" && pwd -P)
+    devshells[i]=$d
+    if git -C "$d" remote get-url origin >/dev/null 2>&1; then
+      base=$(git -C "$d" symbolic-ref --short refs/remotes/origin/HEAD | sed 's|^origin/||')
+      if [ "$(git -C "$d" branch --show-current)" != "$base" ]; then
+        echo "$d isn't on $base; switch it there first" >&2
+        exit 2
+      fi
+    fi
+    if ! git -C "$d" diff --quiet -- flake.lock; then
+      echo "$d/flake.lock has uncommitted changes" >&2
+      exit 2
+    fi
+  done
+
+  local nur root
+  nur=${NUR_PACKAGES_DIR:-$HOME/git/github/nhooey/nur-packages}
+  root=$(repo_root)
+  system=$(nix eval --impure --raw --expr builtins.currentSystem)
+
+  # skillspkgs
+  cd "$root"
+  git switch -q master && git pull -q --ff-only
+  local moved=() input old rev
+  for input in "${inputs[@]}"; do
+    old=$(locked_rev . "$input")
+    if [ -z "$old" ]; then
+      echo "$input isn't an input of skillspkgs" >&2
+      exit 2
+    fi
+    nix flake update "$input"
+    rev=$(locked_rev . "$input")
+    if [ "$rev" = "$old" ]; then
+      echo "$input is already at ${rev:0:7}" >&2
+      continue
+    fi
+    nix flake lock ./sources/aggregated --override-input "$input" "$(pinned_ref . "$input")"
+    moved+=("$input ${rev:0:7}")
+  done
+  if [ ${#moved[@]} -eq 0 ]; then
+    echo "nothing to move" >&2
+    exit 0
+  fi
+  nix build --no-link ".#checks.$system.aggregated-subflake-in-sync"
+  build_all
+
+  local summary sp
+  summary=$(moved_summary "${moved[@]}")
+  git add flake.lock sources/aggregated/flake.lock
+  merge_pr "$(moved_branch "${moved[@]}")" "Update $summary" "$brings
+
+Every \`agent-skills-nhooey-*-all\` package builds, and \`aggregated-subflake-in-sync\` passes."
+  git switch -q master && git pull -q --ff-only
+  sp=$(git rev-parse --short HEAD)
+
+  # nur-packages
+  cd "$nur"
+  git switch -q master && git pull -q --ff-only
+  nix flake update skillspkgs
+  build_all
+  git add flake.lock
+  merge_pr "update-skillspkgs-$sp" "Update skillspkgs to $sp" "Brings in $summary. $brings"
+  git switch -q master && git pull -q --ff-only
+  git log --oneline -1
+
+  # Skills dev shells that pin the skill repos themselves.
+  local dir names title
+  for dir in "${devshells[@]}"; do
+    names=()
+    for input in "${inputs[@]}"; do
+      [ -n "$(locked_rev "$dir" "$input")" ] && names+=("$input")
+    done
+    if [ ${#names[@]} -eq 0 ]; then
+      echo "$dir pins none of ${inputs[*]}" >&2
+      continue
+    fi
+    cd "$dir"
+    nix flake update "${names[@]}"
+    git diff --quiet -- flake.lock && continue
+    git add flake.lock
+    title="Update ${names[*]} in the skills dev shell"
+    if git remote get-url origin >/dev/null 2>&1; then
+      base=$(git symbolic-ref --short refs/remotes/origin/HEAD | sed 's|^origin/||')
+      merge_pr "update-skills-devshell-$sp" "$title" "Brings in $summary. $brings"
+      git switch -q "$base" && git pull -q --ff-only
+    else
+      commit_message "$title" "Brings in $summary. $brings" | git commit -q -F -
+    fi
+    git log --oneline -1
+  done
+}
+
+cmd_bump_vendored() {
+  parse_inputs usage_bump_vendored "$@"
+  cd "$(repo_root)"
+
+  # Check every input before moving any.
+  local input
+  for input in "${inputs[@]}"; do
+    case "$input" in
+    *-src) ;;
+    *)
+      echo "$input isn't a vendored *-src input; bump-chain moves aggregated repos" >&2
+      exit 2
+      ;;
+    esac
+    if [ -z "$(locked_rev . "$input")" ]; then
+      echo "$input isn't an input of skillspkgs" >&2
+      exit 2
+    fi
+  done
+
+  local ref dir dirs
+  for input in "${inputs[@]}"; do
+    nix flake update "$input"
+    ref=$(pinned_ref . "$input")
+    dirs=$(lock_dirs_declaring "$input" pkgs pkgs/*)
+    while read -r dir; do
+      if [ -n "$dir" ]; then
+        nix flake lock "./$dir" --override-input "$input" "$ref"
+      fi
+    done <<<"$dirs"
+  done
+  git status --short -- flake.lock 'pkgs/*flake.lock'
+}
+
+cmd_sync_aggregated() {
+  no_args usage_sync_aggregated "$@"
+  cd "$(repo_root)"
+  local overrides name ref args=()
+  overrides=$(sync_overrides . sources/aggregated)
+  while read -r name ref; do
+    if [ -n "$name" ]; then
+      args+=(--override-input "$name" "$ref")
+    fi
+  done <<<"$overrides"
+  if [ ${#args[@]} -eq 0 ]; then
+    echo "sources/aggregated already locks the root's revs" >&2
+    return 0
+  fi
+  nix flake lock ./sources/aggregated "${args[@]}"
+}
+
+cmd_check_aggregated() {
+  no_args usage_check_aggregated "$@"
+  cd "$(repo_root)"
+  nix flake check ./sources/aggregated
+}
+
+main() {
+  local cmd=${1:-}
+  [ $# -eq 0 ] || shift
+  case "$cmd" in
+  bump-chain | bump-vendored | sync-aggregated | check-aggregated)
+    "cmd_${cmd//-/_}" "$@"
+    ;;
+  help)
+    case "${1:-}" in
+    "") usage ;;
+    bump-chain | bump-vendored | sync-aggregated | check-aggregated)
+      "usage_${1//-/_}"
+      ;;
+    *)
+      echo "unknown command: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+    esac
+    ;;
+  -h | --help)
+    usage
+    ;;
+  "")
+    usage >&2
+    exit 2
+    ;;
+  *)
+    echo "unknown command: $cmd" >&2
+    usage >&2
+    exit 2
+    ;;
+  esac
+}
+
+if [ "${BASH_SOURCE[0]}" = "$0" ]; then
+  main "$@"
+fi
