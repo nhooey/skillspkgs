@@ -444,6 +444,33 @@
                 ''
             );
 
+          # The same check `nix flake check ./sources/aggregated` runs, over the
+          # root's copy of the aggregated repos, which the check above holds at
+          # the sub-flake's revs: consume them as a dev-shell skills source and
+          # build the reconcile app over every skill they expose.
+          checks.aggregated-as-skills-source =
+            let
+              devshell = agent-skill-flake.lib.mkDevshellSkillsFlake {
+                inherit nixpkgs;
+                systems = [ system ];
+                name = "aggregated-check";
+                sources = [
+                  {
+                    source = {
+                      packages.${system} = aggregated.aggregatedFor "packages" system;
+                      legacyPackages.${system} = aggregated.aggregatedFor "legacyPackages" system;
+                    };
+                  }
+                ];
+              };
+            in
+            pkgs.writeText "aggregated-as-skills-source" (
+              builtins.toJSON {
+                packages = builtins.attrNames devshell.packages.${system};
+                reconcile = devshell.apps.${system}.reconcile.program;
+              }
+            );
+
           checks.home-manager-module = import ./tests/home-manager-module.nix { inherit pkgs; };
 
           # Lint scripts/bump-skills-chain and unit-test its pure functions.
