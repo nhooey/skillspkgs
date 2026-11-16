@@ -16,7 +16,7 @@ Each subdirectory under `pkgs/` is a thin wrapper that:
 - Delegates the skill build + install/uninstall/preview/reap apps to `agent-skill-flake` via `lib.mkSkillFlake`.
 - Can be installed independently as a standalone flake — no aggregation step required.
 
-See [`pkgs/README.md`](./pkgs/README.md) for the wrapper charter, the ~20-line `flake.nix` template, and pinning rules. That subdirectory is wrappers-only.
+See [`pkgs/README.md`](./pkgs/README.md) for the wrapper charter, the wrapper template, and pinning rules. That subdirectory is wrappers-only.
 
 ### Quick start
 
@@ -53,7 +53,7 @@ nix build github:nhooey/skillspkgs?dir=pkgs/humanizer          # produce ./resul
           programs.agent-skills = {
             enable = true;
             skills = [
-              humanizer.packages.${pkgs.system}.default
+              humanizer.packages.${pkgs.stdenv.hostPlatform.system}.default
             ];
           };
         })
@@ -97,7 +97,7 @@ Every flake **input** that isn't listed in `infrastructureInputs` (the inputs th
 
 After editing, run `nix flake lock` in each directory so both `flake.lock` files pin the new input.
 
-Both locks must also pin each repo (and `agent-skill-flake`) at the same rev: the root's `checks.<system>.aggregated-subflake-in-sync` fails when the sub-flake declares a different repo set or has drifted, and prints the `nix flake lock ./sources/aggregated --override-input …` to re-pin it. When you bump a repo in the root lock, bump it in `sources/aggregated/flake.lock` too. The sub-flake's own `nix flake check ./sources/aggregated` evaluates it as a dev-shell skills source.
+Both locks must also pin each repo (and `agent-skill-flake`) at the same rev: the root's `checks.<system>.aggregated-subflake-in-sync` fails when the sub-flake declares a different repo set or has drifted, and prints the `nix flake lock ./sources/aggregated --override-input …` to re-pin it. When you bump a repo in the root lock, bump it in `sources/aggregated/flake.lock` too. The sub-flake's own `nix flake check ./sources/aggregated` evaluates it as a dev-shell skills source; the root `nix flake check` doesn't run it, so run it by hand after changing the sub-flake.
 
 ### Bumping aggregated repos
 
@@ -136,6 +136,19 @@ Curated unions of skills already provided by categories 1 and 2, built via `agen
 | `content`                          | —                                                                                                        |
 
 A repository's skills dev shell takes its family's combination as its one source, and adds a source of its own only for a language or tool the rest of its family doesn't use. `nix flake check` builds every combination (`checks.<system>.combination-<name>`), so a skill name a collection no longer has fails the check.
+
+## Dev shell
+
+`nix develop` enters the dev shell and reconciles the skills `skills-devshell/` declares. It carries these commands; `menu` lists them:
+
+| Command                  | What it does                                                                     |
+|--------------------------|----------------------------------------------------------------------------------|
+| `check`                  | Run `nix flake check`                                                            |
+| `fmt`                    | Format the tree with treefmt                                                     |
+| `update-flake`           | Update all flake inputs and rewrite `flake.lock`                                 |
+| `reconcile-skills`       | Install, update and sweep the dev shell's skills, as entering it does            |
+| `update-skills-devshell` | Bump the `skills-devshell/` lock (the skill set), then reconcile the skills      |
+| `reap-skills`            | Remove every skill the dev shell installed (`--yes` skips the prompt)            |
 
 ## How it relates to other repos
 

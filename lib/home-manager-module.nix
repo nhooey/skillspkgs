@@ -26,7 +26,7 @@ in
       default = [ ];
       example = lib.literalExpression ''
         [
-          inputs.humanizer.packages.''${pkgs.system}.default
+          inputs.humanizer.packages.''${pkgs.stdenv.hostPlatform.system}.default
         ]
       '';
       description = ''
