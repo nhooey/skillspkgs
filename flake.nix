@@ -283,21 +283,7 @@
         inherit nixpkgs agent-skill-flake;
         # Locked sources keyed by pkgs/<name> dir; each module slices its own
         # subpath (e.g. skill-creator reads `skills/skill-creator`).
-        srcs = {
-          caveman = inputs.caveman-src;
-          "clojure-skills" = inputs.clojure-skills-src;
-          daymade = inputs.daymade-skills-src;
-          humanizer = inputs.humanizer-src;
-          malli = inputs.clojure-malli-skill-src;
-          "opinionated-software-engineering" = inputs.opinionated-claude-skills-src;
-          "shadow-cljs" = inputs.clojure-shadow-cljs-skill-src;
-          "rust-best-practices" = inputs.apollographql-skills-src;
-          "skill-creator" = inputs.anthropics-skills-src;
-          superpowers = inputs.superpowers-src;
-          "typescript-strict" = inputs.citypaul-dotfiles-src;
-          trailofbits = inputs.trailofbits-skills-src;
-          "update-changelog" = inputs.agent-stuff-src;
-        };
+        srcs = import ./pkgs/srcs.nix inputs;
       };
       aggregated = import ./sources/aggregated {
         inherit nixpkgs inputs infrastructureInputs;

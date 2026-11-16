@@ -86,7 +86,7 @@ import ../mk-simple-vendored.nix {
 }
 ```
 
-Then run `nix flake lock` inside the wrapper directory to generate the lockfile, and register the source in both `srcs` maps as [Multi-skill upstreams](#multi-skill-upstreams) describes.
+Then run `nix flake lock` inside the wrapper directory to generate the lockfile, and register the source in `pkgs/srcs.nix` as [Multi-skill upstreams](#multi-skill-upstreams) describes.
 
 `mkSkillFlake` ships only `SKILL.md`, `references/`, and `scripts/` from `src`; everything else (LICENSE, README.md, the upstream's own flake.nix if any) is filtered out. If the upstream skill needs more files than that to function, this lib (and therefore this collection) is not the right tool.
 
@@ -97,7 +97,7 @@ Some upstreams ship many skills in one repo (`daymade`, `superpowers`, `trailofb
 - **Point `mkAllSkillsFlake` at the tree root and let it recurse.** `discoverSkills` descends through grouping directories and treats any directory holding a `SKILL.md` as a leaf, so a single call finds every skill — no per-suite loop. Root it at whichever directory contains the skills: `${src}/skills` for a flat `skills/<skill>/` layout, or `${src}/plugins` for a plugin-marketplace layout like `trailofbits/skills` (`plugins/<plugin>/skills/<skill>/`). When a repo ships several parallel copies of its skills, root at the most complete tree.
 - **Set `source.owner` to the lowercased GitHub username.** It becomes the package-key namespace (`agent-skill-<owner>-<skill>`), so two upstreams' same-named skills don't collide. The namespace validator rejects anything outside `^[a-z0-9][a-z0-9-]*$`, so `JuliusBrussee` is passed as `juliusbrussee`.
 - **Re-add referenced content the whitelist drops.** `mkAllSkillsFlake` ships only `SKILL.md`, `references/`, and `scripts/`. If a skill keeps material elsewhere — e.g. `trailofbits/skills` uses `resources/` and loose companion `.md` files — pass `extraDirs` / `extraFiles` to ship it.
-- **Register the source in both `srcs` maps.** Add the `*-src` input and its `srcs` entry to the root [`flake.nix`](../flake.nix) — and to that file's `infrastructureInputs` list, so it isn't mistaken for an aggregated category-2 repo — *and* to this directory's standalone [`flake.nix`](./flake.nix). `pkgs/default.nix` auto-discovers every `pkgs/<name>/` subdir and forces `srcs.<name>`, so a wrapper missing from either map breaks that face with `attribute '<name>' missing`.
+- **Register the source.** Add its entry to [`srcs.nix`](./srcs.nix), and declare the `*-src` input in both the root [`flake.nix`](../flake.nix) — adding it to that file's `infrastructureInputs` list too, so it isn't mistaken for an aggregated category-2 repo — and this directory's standalone [`flake.nix`](./flake.nix). Both flakes build their `srcs` map from `srcs.nix`. `pkgs/default.nix` auto-discovers every `pkgs/<name>/` subdir and forces `srcs.<name>`, so a wrapper missing from `srcs.nix` breaks evaluation with `attribute '<name>' missing`.
 
 ## Pinning rules
 
