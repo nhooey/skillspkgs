@@ -106,11 +106,11 @@ Some upstreams ship many skills in one repo (`daymade`, `superpowers`, `trailofb
 ## Pinning rules
 
 - The `<skill>-src` url names only `github:<owner>/<repo>`, with no rev. The lockfile pins the commit (`rev` and `narHash`); a rev in the url as well would double-pin and make the lock a no-op.
-- The same source is locked in three places: the wrapper's `flake.lock`, `pkgs/flake.lock` and the root `flake.lock`. Bump all three in the same commit, as `skillspkgs bump-vendored` does. One PR per wrapper.
+- The same source is locked in three places: the wrapper's `flake.lock`, `pkgs/flake.lock` and the root `flake.lock`, and in a fourth, `sources/combinations/flake.lock`, when the combinations face builds the skill from its `*-src` input. Bump them all in the same commit, as `skillspkgs bump-vendored` does. One PR per wrapper.
 
 ## Computing the hash
 
-`nix flake lock` does it for you the first time. To bump, run `skillspkgs bump-vendored <skill>-src` in the dev shell: it moves the root lock to the newest commit and pins `pkgs/flake.lock` and every wrapper lock that declares the source to the same rev, then lists the locks it changed for you to stage.
+`nix flake lock` does it for you the first time. To bump, run `skillspkgs bump-vendored <skill>-src` in the dev shell: it moves the root lock to the newest commit and pins `pkgs/flake.lock`, every wrapper lock and `sources/combinations/flake.lock` that declares the source to the same rev, then lists the locks it changed for you to stage.
 
 ## Review
 
