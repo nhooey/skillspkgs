@@ -79,8 +79,9 @@ usage_check_aggregated() {
   cat <<'EOF'
 Usage: skillspkgs check-aggregated
 
-Run `nix flake check` on the sources/aggregated sub-flake, which the root
-`nix flake check` doesn't do. Run it after changing the sub-flake.
+Run `nix flake check` on the sources/aggregated sub-flake, against its
+own lock. The root `nix flake check` runs the same skills-source check
+over the root's copy of the aggregated repos.
 
 Options:
   -h, --help  Show this help
