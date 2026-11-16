@@ -359,6 +359,13 @@
         { system, ... }:
         let
           pkgs = nixpkgs.legacyPackages.${system};
+          # scripts/skillspkgs as a command; `nix`, `git` and `gh` come from
+          # the user's own PATH, as they do for the rest of their work.
+          skillspkgs-tool = pkgs.writeShellApplication {
+            name = "skillspkgs";
+            runtimeInputs = [ pkgs.jq ];
+            text = builtins.readFile ./scripts/skillspkgs;
+          };
         in
         {
           # Categories 2 (aggregated) + 1 (vendored), per-skill packages only.
@@ -373,6 +380,13 @@
           devshells.default.packages = [
             pkgs.jq
             pkgs.python3
+          ];
+          devshells.default.commands = [
+            {
+              category = "maintenance";
+              package = skillspkgs-tool;
+              help = "Bump skill inputs and keep the sources/aggregated lock in step (skillspkgs --help)";
+            }
           ];
 
           # `sources/aggregated/flake.{nix,lock}` is a second copy of the
@@ -423,8 +437,8 @@
                   cat >&2 <<'EOF'
                   sources/aggregated/flake.{nix,lock} has drifted from the root flake:
                     ${lib.concatStringsSep "\n  " problems}
-                  Declare the same repos in both, then pin the sub-flake to the root's revs:
-                    nix flake lock ./sources/aggregated --override-input <name> github:nhooey/<name>/<rev>
+                  Declare the same repos in both, then pin the sub-flake to the root's revs
+                  by running `skillspkgs sync-aggregated` in the dev shell.
                   EOF
                   exit 1
                 ''
@@ -459,15 +473,15 @@
 
           checks.home-manager-module = import ./tests/home-manager-module.nix { inherit pkgs; };
 
-          # Lint scripts/bump-skills-chain and unit-test its pure functions.
-          checks.bump-skills-chain =
-            pkgs.runCommand "bump-skills-chain-test"
+          # Lint scripts/skillspkgs and unit-test its pure functions.
+          checks.skillspkgs-tool =
+            pkgs.runCommand "skillspkgs-tool-test"
               {
                 src = nixpkgs.lib.fileset.toSource {
                   root = ./.;
                   fileset = nixpkgs.lib.fileset.unions [
-                    ./scripts/bump-skills-chain
-                    ./tests/bump-skills-chain.bats
+                    ./scripts/skillspkgs
+                    ./tests/skillspkgs.bats
                   ];
                 };
                 nativeBuildInputs = [
@@ -478,8 +492,8 @@
               }
               ''
                 cd $src
-                shellcheck --external-sources scripts/bump-skills-chain tests/bump-skills-chain.bats
-                bats tests/bump-skills-chain.bats
+                shellcheck --external-sources scripts/skillspkgs tests/skillspkgs.bats
+                bats tests/skillspkgs.bats
                 touch $out
               '';
 
