@@ -483,6 +483,13 @@
 
           checks.home-manager-module = import ./tests/home-manager-module.nix { inherit pkgs; };
 
+          # The skill folders the base combination installs, which every family
+          # includes, against the list in tests/combination-base-skills.txt.
+          checks.combination-base-skills = pkgs.runCommand "combination-base-skills" {
+            installed = combos.combinations.base.env.${system};
+            expected = ./tests/combination-base-skills.txt;
+          } (builtins.readFile ./tests/combination-base-skills.sh);
+
           # Lint scripts/skillspkgs and unit-test its pure functions.
           checks.skillspkgs-tool =
             pkgs.runCommand "skillspkgs-tool-test"
