@@ -230,11 +230,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794863664,
-        "narHash": "sha256-ztk0+76ga1H+Wp8J55nXd+QX13W6WbbMzKaB40J6dls=",
+        "lastModified": 1794983814,
+        "narHash": "sha256-loNECIB1rRqib2hgpKL4ZX3+D2+QLxDcQJkf6r3MfQo=",
         "owner": "nhooey",
         "repo": "coding-agent-skills",
-        "rev": "7fddfc2d33021e48ddb1ea8f7bacd858db8704ad",
+        "rev": "e3db745605ba77ecefc23ede3982ed4bf7563fe8",
         "type": "github"
       },
       "original": {
