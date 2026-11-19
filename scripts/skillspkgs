@@ -53,9 +53,9 @@ usage_bump_vendored() {
 Usage: skillspkgs bump-vendored INPUT...
 
 Move each INPUT, a vendored *-src input such as humanizer-src, to its
-newest commit in the root lock, then pin pkgs/flake.lock and every
-pkgs/<name>/flake.lock that declares it to the same rev. Leaves the
-changed locks unstaged.
+newest commit in the root lock, then pin pkgs/flake.lock, every
+pkgs/<name>/flake.lock and sources/combinations/flake.lock that declares
+it to the same rev. Leaves the changed locks unstaged.
 
 Options:
   -h, --help  Show this help
@@ -79,8 +79,9 @@ usage_check_aggregated() {
   cat <<'EOF'
 Usage: skillspkgs check-aggregated
 
-Run `nix flake check` on the sources/aggregated sub-flake, which the root
-`nix flake check` doesn't do. Run it after changing the sub-flake.
+Run `nix flake check` on the sources/aggregated sub-flake, against its
+own lock. The root `nix flake check` runs the same skills-source check
+over the root's copy of the aggregated repos.
 
 Options:
   -h, --help  Show this help
@@ -227,6 +228,14 @@ lock_dirs_declaring() {
     [ -f "$dir/flake.lock" ] && [ -n "$(locked_rev "$dir" "$input")" ] && printf '%s\n' "$dir"
   done
   return 0
+}
+
+# Each lock under the current directory, a skillspkgs checkout, that
+# declares the vendored input $1 besides the root's, one directory per
+# line: pkgs/, each pkgs/<name>/ and sources/combinations/, whose
+# standalone face builds some vendored skills from their *-src inputs.
+vendored_lock_dirs() {
+  lock_dirs_declaring "$1" pkgs pkgs/* sources/combinations
 }
 
 # One "<input> <reference>" line for each input the sub-flake at $2 locks at
@@ -422,14 +431,14 @@ cmd_bump_vendored() {
   for input in "${inputs[@]}"; do
     nix flake update "$input"
     ref=$(pinned_ref . "$input")
-    dirs=$(lock_dirs_declaring "$input" pkgs pkgs/*)
+    dirs=$(vendored_lock_dirs "$input")
     while read -r dir; do
       if [ -n "$dir" ]; then
         nix flake lock "./$dir" --override-input "$input" "$ref"
       fi
     done <<<"$dirs"
   done
-  git status --short -- flake.lock 'pkgs/*flake.lock'
+  git status --short -- flake.lock 'pkgs/*flake.lock' sources/combinations/flake.lock
 }
 
 cmd_sync_aggregated() {

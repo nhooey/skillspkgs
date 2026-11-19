@@ -97,7 +97,7 @@ Every flake **input** that isn't listed in `infrastructureInputs` (the inputs th
 
 After editing, run `nix flake lock` in each directory so both `flake.lock` files pin the new input.
 
-Both locks must also pin each repo (and `agent-skill-flake`) at the same rev: the root's `checks.<system>.aggregated-subflake-in-sync` fails when the sub-flake declares a different repo set or has drifted. `skillspkgs sync-aggregated` pins the sub-flake to the root's revs. The sub-flake's own `nix flake check` evaluates it as a dev-shell skills source; the root `nix flake check` doesn't run it, so run `skillspkgs check-aggregated` after changing the sub-flake.
+Both locks must also pin each repo (and `agent-skill-flake`) at the same rev: the root's `checks.<system>.aggregated-subflake-in-sync` fails when the sub-flake declares a different repo set or has drifted. `skillspkgs sync-aggregated` pins the sub-flake to the root's revs. The sub-flake's own `nix flake check` evaluates it as a dev-shell skills source. The root `nix flake check` runs the same check over the root's copy of the aggregated repos (`checks.<system>.aggregated-as-skills-source`); `skillspkgs check-aggregated` runs it on the sub-flake itself, against its own lock.
 
 ### Bumping aggregated repos
 

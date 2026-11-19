@@ -57,6 +57,8 @@ let
     (pick "coding-agent-skills" [
       "coding-agent-headless-in-checkout"
       "coding-agent-plans-as-graph"
+      "coding-agent-questions-as-first-class-prompts"
+      "coding-agent-route-feedback-to-skills-over-memory"
       "coding-agent-scratchpad-scripts"
       "coding-agent-session-build-limits"
     ])

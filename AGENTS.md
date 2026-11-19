@@ -4,6 +4,6 @@ A Nix aggregator for agent skills. `pkgs/` wraps third-party skill repositories 
 
 ## Build and test
 
-- `nix develop`: the dev shell, with the `check`, `fmt`, `update-flake` and `skillspkgs` commands, and the project's skills installed into `.agents/skills/` from the `skills-devshell/` sub-flake.
-- `nix flake check`: builds every combination and every aggregated skill, checks that the root and `sources/aggregated/` locks pin the same revisions, runs the home-manager module's activation script against fake skills (`tests/home-manager-module.nix`), lints `scripts/skillspkgs` and runs its bats tests (`tests/skillspkgs.bats`), and fails on any file `nix fmt` would change.
+- `nix develop`: the dev shell, with the `check`, `fmt`, `update-flake` and `skillspkgs` commands, and the project's skills installed into `.agents/skills/` from the `skills-devshell/` sub-flake: the `skill-packaging` family's combination, with no additions.
+- `nix flake check`: builds every combination and every aggregated skill, checks that the root and `sources/aggregated/` locks pin the same revisions, builds the dev-shell reconcile app over the aggregated skills as `sources/aggregated/`'s own check does, runs the home-manager module's activation script against fake skills (`tests/home-manager-module.nix`), lints `scripts/skillspkgs` and runs its bats tests (`tests/skillspkgs.bats`), and fails on any file `nix fmt` would change.
 - `nix fmt`: formats every file.
