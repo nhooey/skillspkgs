@@ -3,11 +3,11 @@
     "agent-plugins-nixpkgs": {
       "flake": false,
       "locked": {
-        "lastModified": 1793459592,
-        "narHash": "sha256-CWlFFbXDtWi0y+BaSLhjVUlVuJFUJ4grBPOjkjlTV8k=",
+        "lastModified": 1795795216,
+        "narHash": "sha256-mWGTQonc8n+/MjEPiyLH5RR4ShFUva2tmomNoDhalE4=",
         "owner": "nhooey",
         "repo": "agent-plugins-nixpkgs",
-        "rev": "fbee5045ee86cd644b1a2bccf6f301485e9f737d",
+        "rev": "ab7c9956468fac41653ab9e8dafa692b3329cf74",
         "type": "github"
       },
       "original": {
@@ -61,11 +61,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795035595,
-        "narHash": "sha256-Y9u0Gcs27mDts5Nwju29B3l3v2bm5NUASgXthF9XQtc=",
+        "lastModified": 1795208825,
+        "narHash": "sha256-IZJg4YBqhMz0aJjFHsNeWXU19UuxvfmJ+BAng2nII4Y=",
         "owner": "nhooey",
         "repo": "agent-skill-flake",
-        "rev": "3715545caa18eef623ae070b21a4159f24fb84fc",
+        "rev": "2c21db1b531b5dccbe715a2803bd678a612aa803",
         "type": "github"
       },
       "original": {
@@ -87,11 +87,11 @@
         "treefmt-nix": "treefmt-nix_11"
       },
       "locked": {
-        "lastModified": 1792663323,
-        "narHash": "sha256-a/yujIeodi2c7jXcdpHE6Fr9CAN+ev0i759lsSC7W6Q=",
+        "lastModified": 1795208825,
+        "narHash": "sha256-IZJg4YBqhMz0aJjFHsNeWXU19UuxvfmJ+BAng2nII4Y=",
         "owner": "nhooey",
         "repo": "agent-skill-flake",
-        "rev": "8d5a9a5d8d2211fa077268fd8f48066d94cce6a7",
+        "rev": "2c21db1b531b5dccbe715a2803bd678a612aa803",
         "type": "github"
       },
       "original": {
@@ -130,11 +130,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1795706386,
-        "narHash": "sha256-S86BoFM1k/QX8c/Nt6qnY7PquSrVfwNwSkFAoWpeGF4=",
+        "lastModified": 1795788167,
+        "narHash": "sha256-Yqm818vnJBtO1sLqoiXBa7quQl7d8UisjHtpHNP4/Ro=",
         "owner": "nhooey",
         "repo": "coding-agent-skills",
-        "rev": "2c6b60896be7deb737e9bdadb79551986282fa48",
+        "rev": "dab2c22791003cc93a8d40474616e19ddf149207",
         "type": "github"
       },
       "original": {
@@ -636,11 +636,11 @@
         "treefmt-nix": "treefmt-nix_5"
       },
       "locked": {
-        "lastModified": 1795706408,
-        "narHash": "sha256-kpHa906WHXTGNh9ve5iDPfF3lirTXi86YOfLakSJ5QU=",
+        "lastModified": 1795791898,
+        "narHash": "sha256-FIpP1sdj6e8RlsZok9t8dNbu9aQ245JXkK8H/pNyj+U=",
         "owner": "nhooey",
         "repo": "git-skills",
-        "rev": "68af82342756907f28e22fe49be2a7d5dd707f1d",
+        "rev": "15485a1852e30710f344b12c0e8a0a1880dbb667",
         "type": "github"
       },
       "original": {
@@ -874,11 +874,11 @@
         "treefmt-nix": "treefmt-nix_12"
       },
       "locked": {
-        "lastModified": 1793439196,
-        "narHash": "sha256-QE2PgHLLIf0QyOZjX5NHYQaX96mUvZ/WUjClqmQTj/A=",
+        "lastModified": 1795098405,
+        "narHash": "sha256-6SRgCt9gL/O4KQ09Uz0tS6n5CE1ItTS+1QmmPJR8Ml0=",
         "owner": "nhooey",
         "repo": "skill-authoring-skills",
-        "rev": "d8cfdb77b3536a97ef4757ac2d06d4ff1ba3b580",
+        "rev": "12d31ec014b58d9f530dcf60c1470d4b1e3c7029",
         "type": "github"
       },
       "original": {
@@ -903,11 +903,11 @@
         "treefmt-nix": "treefmt-nix_16"
       },
       "locked": {
-        "lastModified": 1793439196,
-        "narHash": "sha256-QE2PgHLLIf0QyOZjX5NHYQaX96mUvZ/WUjClqmQTj/A=",
+        "lastModified": 1795098405,
+        "narHash": "sha256-6SRgCt9gL/O4KQ09Uz0tS6n5CE1ItTS+1QmmPJR8Ml0=",
         "owner": "nhooey",
         "repo": "skill-authoring-skills",
-        "rev": "d8cfdb77b3536a97ef4757ac2d06d4ff1ba3b580",
+        "rev": "12d31ec014b58d9f530dcf60c1470d4b1e3c7029",
         "type": "github"
       },
       "original": {
@@ -931,11 +931,11 @@
         "treefmt-nix": "treefmt-nix_14"
       },
       "locked": {
-        "lastModified": 1795182526,
-        "narHash": "sha256-U0Z69H0V4sG8zKeHE0G/jUBR6n/y0/8CqafnE9yAtrs=",
+        "lastModified": 1795794145,
+        "narHash": "sha256-9aepSNCg9StVMM30DYgV0Q6Kvqs3YkUvm573J49W9GM=",
         "owner": "nhooey",
         "repo": "software-design-skills",
-        "rev": "51f3e4c4733fb382dce88784be72b42322314368",
+        "rev": "ba73ded846ee979986a9e25f6f2362b25226c4d7",
         "type": "github"
       },
       "original": {
@@ -1500,11 +1500,11 @@
         "treefmt-nix": "treefmt-nix_15"
       },
       "locked": {
-        "lastModified": 1795095434,
-        "narHash": "sha256-U7oR7Gi2Rnuiq9Us07HKCz86B9vUJ3wFgbzeU4eOq6E=",
+        "lastModified": 1795794448,
+        "narHash": "sha256-96U1UGkoSLYSIVvj+JgE5fEX6uLY2HAbH9tnCqyIEKs=",
         "owner": "nhooey",
         "repo": "writing-skills",
-        "rev": "cc8728068ad46bb35ef3ca6cd933dedc23283834",
+        "rev": "8a453dce900461a1517eaba2404ddb9dae8e26f6",
         "type": "github"
       },
       "original": {
